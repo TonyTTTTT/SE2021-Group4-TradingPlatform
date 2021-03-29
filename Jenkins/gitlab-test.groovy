@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Compile') {
             steps {
-                echo 'Compile the source code' 
+                echo 'first stage' 
             }
         }
     }
