@@ -18,13 +18,13 @@ class AlgorithmTester():
 
     def _create_algo(self, algo_id: str):
         if algo_id not in self.loaded_algo:
-            algo_data = load_algo_info(algo_id)                 # 用 `load_algo_info` 從 Data Source 載入 algo 資訊
+            algo_info = load_algo_info(algo_id)                 # 用 `load_algo_info` 從 Data Source 載入 algo_info 資訊
             algo_type = getattr(                                # 讀取 algo 算法，得到一個 algo_type
-                importlib.import_module(algo_data.path),      
-                algo_data.class_name
-            )                                                   
+                importlib.import_module(algo_info.path),            # 從 algo_info 取得 algo 所在路徑, import 成 module
+                algo_info.class_name                                # 從 algo_info 取得 algo class_name, import 成 algo_type,
+            )                                                       # 有了 algo_type 後就可以用 algo_type 定義 algo instance
             self.loaded_algo[algo_id] = algo_type               # 儲存已經載入過的 algo
         algo = self.loaded_algo[algo_id]()                      # 建立 algo instance NOTE:initialize 時不帶參數
-        return algo                                             # return algo_type
+        return algo                                             # return algo instance
 
 

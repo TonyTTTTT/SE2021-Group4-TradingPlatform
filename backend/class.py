@@ -3,11 +3,11 @@ from dataclasses import dataclass
 
 @dataclass
 class TradeAction():
-    product_id: int
-    datetime: Calendar
-    position: int
-    price: float
-    tag: str
+    product_id : int
+    datetime   : Calendar
+    position   : int
+    price      : float
+    tag        : str
 
 
 @dataclass
