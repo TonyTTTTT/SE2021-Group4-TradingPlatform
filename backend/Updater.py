@@ -2,6 +2,7 @@ import requests
 import csv
 from datetime import datetime
 
+
 class Updater:
     today = str(datetime.today().date()).replace('-','/')
     url = 'https://www.taifex.com.tw/cht/3/dlFutDataDown'
@@ -27,6 +28,7 @@ class Updater:
                                  data[4], data[5], data[6],
                                  data[9], 0])
                 f.close()
+                
         return content_list
 
 
