@@ -5,7 +5,7 @@ from typing import List
 class ParameterSet:
     id: int
     algo_id: int
-    parameters: List
+    parameters: list[ParameterValue]
 
 @dataclass
 class ParameterValue:
