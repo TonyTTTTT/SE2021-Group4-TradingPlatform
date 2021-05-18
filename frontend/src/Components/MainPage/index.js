@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container,Row,Col } from 'react-bootstrap';
+import NavigationBar from "./NavigationBar/navigationBar";
 
 class MainPage extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class MainPage extends React.Component {
                     </Col>
                     
                     <Col xs={8}>
-                        <div>Navigation Bar</div>
+                        <NavigationBar/>
                         <div>Content</div>
                         <div>Console</div>
                     </Col>
