@@ -1,10 +1,9 @@
 import { navigationBarState } from "../state.template";
 
-export default function (state = { ...navigationBarState }, action) {
-    switch (action.type) {
-        case "NAVIGATIONBAR_TEST": {
-            state = { ...state };
-            return state;
-        }
+export default function navigationBarReducer(state = { ...navigationBarState }, action) {
+    const {type, data} = action
+    switch (type) {
+        default:
+            return state
     }
 }

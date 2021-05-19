@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container,Row,Col } from 'react-bootstrap';
-import NavigationBar from "./NavigationBar/navigationBar";
+import NavigationBar from "./Content/NavigationBar/navigationBar";
+import Content from "./Content/content";
 import SideArea from "./SideArea/sideArea"
 import TagArea from "./TagArea/tagArea"
 class MainPage extends React.Component {
@@ -19,8 +20,7 @@ class MainPage extends React.Component {
                     </Col>
                     
                     <Col xs={8}>
-                        <NavigationBar/>
-                        <div>Content</div>
+                        <Content/>
                         <div>Console</div>
                     </Col>
                 </Row>
