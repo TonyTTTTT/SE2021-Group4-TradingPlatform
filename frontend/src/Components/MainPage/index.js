@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container,Row,Col } from 'react-bootstrap';
 import NavigationBar from "./NavigationBar/navigationBar";
-
+import SideArea from "./SideArea/sideArea"
+import TagArea from "./TagArea/tagArea"
 class MainPage extends React.Component {
     constructor(props) {
         super(props);
@@ -13,8 +14,8 @@ class MainPage extends React.Component {
             <Container>
                 <Row>
                     <Col xs={4}>
-                        <div>SideArea</div>
-                        <div>TagArea</div>
+                        <SideArea/>
+                        <TagArea/>
                     </Col>
                     
                     <Col xs={8}>
