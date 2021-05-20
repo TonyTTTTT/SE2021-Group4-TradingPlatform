@@ -11,7 +11,7 @@ class TagArea extends React.Component {
 	render() {
 		return(
 			<Container>
-				<input type="submit" value="SingleTest"/>
+				<input type="submit" value="Test"/>
 				<input type="submit" value="Save Parameter"/>
 			</Container>
 		);
