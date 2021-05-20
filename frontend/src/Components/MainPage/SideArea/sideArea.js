@@ -12,6 +12,7 @@ class SideArea extends React.Component {
         let pram_set = [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']]]
         return (
             <Container>
+            <Row><input type="submit" value="Single Test"/><input type="submit" value="Batch Test"/></Row>
             <Table striped bordered>
                 <thead>
                     <tr>
