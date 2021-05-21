@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
-    Checkbox, FormControlLabel, IconButton, lighten, Paper, Table, TableBody,
-    TableCell, TableContainer,
-    TableHead, TablePagination,
-    TableRow,
-    TableSortLabel,
-    Toolbar,
-    Tooltip,
-    Typography, withStyles
+    Checkbox, FormControlLabel, IconButton, lighten,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer, TableHead,
+    TablePagination,
+    TableRow, TableSortLabel, Toolbar, Tooltip, Typography,
+    withStyles
 } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import clsx from "clsx";
 import Switch from "react-bootstrap/Switch";
+import PropTypes from "prop-types";
+import clsx from "clsx";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -158,7 +159,7 @@ class EnhancedTableToolbar extends Component {
                     </Typography>
                 ) : (
                     <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                        Trade Actions
+                        Performance
                     </Typography>
                 )}
 
@@ -185,6 +186,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
+
 const styles = theme => ({
     root: {
         width: '100%',
@@ -209,7 +211,7 @@ const styles = theme => ({
     },
 });
 
-class TradeTab extends Component {
+class Performance extends Component {
 
     state = {
         order: 'asc',
@@ -355,4 +357,4 @@ class TradeTab extends Component {
     }
 }
 
-export default withStyles(styles)(TradeTab);
+export default withStyles(styles)(Performance);

@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import {AppBar, Box, Tab, Tabs, Typography, withStyles} from "@material-ui/core";
 import * as PropTypes from "prop-types";
+import EquityTab from "../Components/equityTab";
+import ProfitTab from "../Components/profitTab";
+import Performance from "../Components/performance";
+import TradeTab from "../Components/tradeTab";
+import ReportTab from "../Components/reportTab";
+import Switch from "react-bootstrap/Switch";
 
 class TabPanel extends Component {
     render() {
@@ -66,6 +72,7 @@ class NavigationBar extends Component {
         const {value} = this.state
         const {classes} = this.props
         return (
+
             <div className={classes.root}>
                 <AppBar position="static">
                     <Tabs
@@ -74,35 +81,39 @@ class NavigationBar extends Component {
                         onChange={this.handleChange}
                         aria-label="nav tabs example"
                     >
-                        <LinkTab label="equity" href="/equity" {...a11yProps(0)} />
-                        <LinkTab label="profit" href="/profit" {...a11yProps(1)} />
-                        <LinkTab label="performance" href="/performance" {...a11yProps(2)} />
-                        <LinkTab label="tradeActions" href="/tradeActions" {...a11yProps(3)} />
-                        <LinkTab label="reports" href="/reports" {...a11yProps(4)} />
+                        <LinkTab label="equity" href="/main/equity" {...a11yProps(0)} />
+                        <LinkTab label="profit" href="/main/profit" {...a11yProps(1)} />
+                        <LinkTab label="performance" href="/main/performance" {...a11yProps(2)} />
+                        <LinkTab label="tradeActions" href="/main/tradeActions" {...a11yProps(3)} />
+                        <LinkTab label="reports" href="/main/reports" {...a11yProps(4)} />
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
-                    Equity Curve
+                    <EquityTab/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    Profit By Time
+                    <ProfitTab/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    Performance
+                    <Performance/>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
-                    Trade Actions
+                    <TradeTab/>
                 </TabPanel>
                 <TabPanel value={value} index={4}>
-                    Algo Reports
+                    <ReportTab/>
                 </TabPanel>
             </div>
+
         );
     }
 
     handleChange = (event, newValue) => {
+        // this.props.changeTab(newValue);
         this.setState({value: newValue});
     };
 }
 
-export default withStyles(styles)(NavigationBar);
+// export default connect(state => ({tabNum: state.tabNum}),
+//     {changeTab: changeTab})(withStyles(styles)(NavigationBar));
+export default withStyles(styles)(NavigationBar)
