@@ -10,7 +10,7 @@ class HomePage extends React.Component {
     }
     render() {
         return (
-            <Container>
+            <Container style={{height:400,width:800}}>
                 <Header></Header>
                 <Menu></Menu>
             </Container>
