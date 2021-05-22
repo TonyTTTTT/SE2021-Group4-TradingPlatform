@@ -6,28 +6,21 @@ class Header extends React.Component {
         this.state = {
         };
     }
+
+
     render() {
         return (
             <Row style={{margin:"10px"}}>
                 <Col>
                     <Button variant="dark">Algorithms</Button>{' '}
-                    <Button variant="secondary">Reports</Button>{' '}
+                    <Button variant="dark" >Reports</Button>{' '}
                 </Col>
                 <Col>
-                    <Button style={{textAlign: "center"}}>New</Button>{' '}
+                    
                 </Col>
                 <Col>
-                    <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            Dropdown Button
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                    <Button>New</Button>{' '}
+                    <Button onClick={()=>{this.props.setDeleteClick(true)}}>Delete</Button>{' '}
                 </Col>
             </Row>
 
