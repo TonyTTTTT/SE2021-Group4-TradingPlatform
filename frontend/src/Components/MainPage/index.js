@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container,Row,Col } from 'react-bootstrap';
+import { Container,Row,Col,Button } from 'react-bootstrap';
 import NavigationBar from "./Content/NavigationBar/navigationBar";
 import Content from "./Content/content";
 import SideArea from "./SideArea/sideArea"
-import TagArea from "./TagArea/tagArea"
+
 class MainPage extends React.Component {
     constructor(props) {
         super(props);
@@ -14,12 +14,14 @@ class MainPage extends React.Component {
         return (
             <Container>
                 <Row>
-                    <Col xs={4}>
+                    <Col><Button variant="outline-dark" size="lg" block href="/">Home</Button></Col>
+                </Row>
+                <Row>
+                    <Col xs={3}>
                         <SideArea/>
-                        <TagArea/>
                     </Col>
                     
-                    <Col xs={8}>
+                    <Col xs={9}>
                         <Content/>
                         <div>Console</div>
                     </Col>
