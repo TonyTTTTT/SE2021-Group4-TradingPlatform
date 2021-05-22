@@ -1,0 +1,33 @@
+.logbox{
+	background: white; 
+	border:1px solid gray;
+	overflow-y: auto;
+	width: 100%;
+	height: 150px;
+}
+.logbox ul{
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.logbox li{
+	padding:4px;
+	cursor:default;
+}
+.logbox li:hover{
+	background-color: #bbb;
+}
+.logbox li span {
+	float: left;
+	width: 80px;
+}
+.logbox::-webkit-scrollbar{
+	width: 8px;  
+	border:1px solid #333;
+}
+.logbox::-webkit-scrollbar-track{
+	background: rgba(0, 0, 0, 0.1);
+}
+.logbox::-webkit-scrollbar-thumb{
+	background: gray;
+}
