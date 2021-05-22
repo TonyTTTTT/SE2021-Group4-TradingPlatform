@@ -9,6 +9,5 @@ class ParameterSet:
 
 @dataclass
 class ParameterValue:
-    id: int
     type: str
     value: object
