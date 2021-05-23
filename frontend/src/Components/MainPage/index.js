@@ -1,6 +1,5 @@
 import React from 'react';
-import { Container,Row,Col } from 'react-bootstrap';
-import NavigationBar from "./Content/NavigationBar/navigationBar";
+import { Container,Row,Col,Button } from 'react-bootstrap';
 import Content from "./Content/content";
 import SideArea from "./SideArea/sideArea"
 import TagArea from "./TagArea/tagArea"
@@ -14,6 +13,11 @@ class MainPage extends React.Component {
     render() {
         return (
             <Container fluid>
+                <Row>
+                <Col>
+                    <Button variant="outline-dark"  href="/" block>Home</Button>
+                </Col>
+                </Row>
                 <Row>
                     <Col xs={4}>
                         <SideArea/>

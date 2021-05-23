@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Row,Col,Dropdown, Table, Button } from 'react-bootstrap';
 
 class TagArea extends React.Component {
 	constructor(props) {
@@ -9,11 +9,16 @@ class TagArea extends React.Component {
 		};
 	}
 	render() {
+        const styleObj = {
+            fontSize: 8,
+        }
 		return(
-			<Container>
-				<input type="submit" value="Test"/>
-				<input type="submit" value="Save Parameter"/>
-			</Container>
+			<Col>
+            <Row>
+                <Button variant="danger" style={styleObj}>Run Test</Button>{' '}
+                <Button variant="success" style={styleObj}>Save Parameters</Button>
+            </Row>
+            </Col>
 		);
 	}
 }export default TagArea;
