@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row,Col,Dropdown, Table, Button } from 'react-bootstrap';
+import { Scrollbars } from "rc-scrollbars";
 import { Link } from 'react-router-dom';
 import HomePage from '../../HomePage';
 // import Button from '@material-ui/core/Button'
@@ -12,18 +13,31 @@ class SideArea extends React.Component {
         };
     }
     render() {  
+        let algo_name = "BH Algo"
         let pram_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
-        ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], ['age', 'numeric', 'int'] ]
+        ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
+        ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small']] ]
         const styleObj = {
             fontSize: 8,
         }
+        // const response = fetch("http://localhost:5000/", {mode:'no-cors'});
+        // if(response){
+        //     console.log("hello world");
+        //     console.log(response);
+        // }
+        const scrollBarStyle = { width: 300, height: 420 };
         return (
             <Col style={styleObj}>
+                <Row>
+                    <h1>{algo_name}</h1>
+                </Row>
                 <Row>
                     <Button variant="outline-primary" style={{fontSize: 12}}>Single Test</Button>{' '}
                     <Button variant="outline-primary" style={{fontSize: 12}}>Batch Test</Button>
                 </Row>
-                <Row><Table striped bordered size="sm">
+                <Row>
+                <Scrollbars style={scrollBarStyle}>
+                <Table striped bordered size="sm">
                     <thead>
                         <tr>
                             <th colSpan="2">Algo Info</th>
@@ -74,10 +88,8 @@ class SideArea extends React.Component {
                     <tbody>
                         {display_param(pram_set)}
                     </tbody>
-                </Table></Row>
-                <Row>
-                    <Button variant="danger" style={styleObj}>Run Test</Button>{' '}
-                    <Button variant="success" style={styleObj}>Save Parameters</Button>
+                </Table>
+                </Scrollbars>
                 </Row>
             </Col>
         );
