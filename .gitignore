@@ -2,6 +2,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,flask,react,vim
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,flask,react,vim
 
+### React.js ###
+*/node_modules/
+frontend/package-lock.json
+
 ### Flask ###
 instance/*
 !instance/.gitignore
