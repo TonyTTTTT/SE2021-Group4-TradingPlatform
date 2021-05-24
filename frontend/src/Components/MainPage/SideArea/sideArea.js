@@ -96,7 +96,7 @@ class SideArea extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {display_param(this.state.param_set)}
+                        {display_param(param_set)}
                     </tbody>
                 </Table>
                 </Scrollbars>
