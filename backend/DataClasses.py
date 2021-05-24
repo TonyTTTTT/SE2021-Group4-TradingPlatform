@@ -31,7 +31,7 @@ class ParameterSet:
 
 # Report
 @dataclass
-class Report:
+class ReportInfo:
     algo_id     : int
     path        : str
 
