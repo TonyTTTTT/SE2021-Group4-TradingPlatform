@@ -21,13 +21,13 @@ import ContentReducer from "./content";
 //});
 
 // export default rootReducer;
-const initState={
+// const initState={
 
-}
-export default function (state = { ...initState }, action) {
-    switch (action.type) {
-        case "SET_FILELIST_MODAL": {     
-            return state;
-        }
-    }
-}
+// }
+// export default function (state = { ...initState }, action) {
+//     switch (action.type) {
+//         case "SET_FILELIST_MODAL": {     
+//             return state;
+//         }
+//     }
+// }

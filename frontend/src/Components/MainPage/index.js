@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container,Row,Col,Button } from 'react-bootstrap';
-import NavigationBar from "./Content/NavigationBar/navigationBar";
 import Content from "./Content/content";
 import SideArea from "./SideArea/sideArea"
 import TagArea from "./TagArea/tagArea"
