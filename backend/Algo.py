@@ -1,10 +1,18 @@
+from DataClasses import *
 from dataclasses import dataclass
+from typing import List
 
 @dataclass
 class Algo:
     id: int
-    class_name: str
-    version: str
-    apply_product: str
-    parameter_set_id: int
-    path: str
+    version: int
+    pset: ParameterSet
+
+    def set_version(self, version: int) -> None:
+        pass # TODO
+
+    def set_parameters(self, pset: ParameterSet) -> None:
+        pass # TODO
+
+    def run(self) -> List[TradeAction]:
+        pass # TODO
