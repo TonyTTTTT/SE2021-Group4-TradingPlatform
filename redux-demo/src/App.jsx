@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import 'antd/dist/antd.css'
 import Count from "./containers/Count";
 import Person from "./containers/Person";
 
