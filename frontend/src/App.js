@@ -14,7 +14,7 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    <ul>
+                    <ul style ={{margin:0}}>
                         <li style={{display:'none'}}><Link to="/">Home</Link></li>
                         <li style={{display:'none'}}><Link to="/main">Main</Link></li>
                     </ul>
