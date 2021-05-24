@@ -1,11 +1,12 @@
 import importlib
+from DataClasses import *
 
-class AlgorithmTester():
+class AlgorithmTester:
     def __init__(self):
         self.loaded_algo = {} # 儲存已經載入過的 algo
     
-    def single_test(self, algo_id: str, algo_version, algo_parameter_set):
-        algo = self._create_algo(algo_id)()     # 從 algo_type 建立一個 algo instance
+    def single_test(self, algo_id: int, algo_version, algo_parameter_set):
+        algo = self._create_algo(algo_id)       # 從 algo_type 建立一個 algo instance
         algo.set_version(algo_version)          # 設定 algo version
         algo.set_parameter(algo_parameter_set)  # 設定 algo 參數
         trade_actions = self.algo.run()         # NOTE: run() 是否要帶入 AssetData?
@@ -16,7 +17,7 @@ class AlgorithmTester():
             ta = self.single_test(algo_id, algo_version, ps)     # 執行 sigle test
             yield calculator.get_batch_result(ta)                # 用 `calculator` 產生 sigle test 的 trade_result
 
-    def _create_algo(self, algo_id: str):
+    def _create_algo(self, algo_id: int):
         if algo_id not in self.loaded_algo:
             algo_info = load_algo_info(algo_id)                 # 用 `load_algo_info` 從 Data Source 載入 algo_info 資訊
             algo_type = getattr(                                # 讀取 algo 算法，得到一個 algo_type
@@ -26,5 +27,3 @@ class AlgorithmTester():
             self.loaded_algo[algo_id] = algo_type               # 儲存已經載入過的 algo
         algo = self.loaded_algo[algo_id]()                      # 建立 algo instance NOTE:initialize 時不帶參數
         return algo                                             # return algo instance
-
-
