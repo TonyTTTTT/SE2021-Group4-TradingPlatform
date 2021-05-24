@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class Updater:
-    today = str(datetime.today().date()).replace('-','/')
+    today = str(datetime.today().date()).replace('-', '/')
     url = 'https://www.taifex.com.tw/cht/3/dlFutDataDown'
     # queryStartDate&queryEndDate must be 'yyyy/mm/dd'
     data = {'down_type': '1', 'commodity_id': 'TX',
@@ -28,7 +28,7 @@ class Updater:
                                  data[4], data[5], data[6],
                                  data[9], 0])
                 f.close()
-                
+
         return content_list
 
 

@@ -2,6 +2,7 @@ from DataClasses import *
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class Algo:
     id: int
@@ -9,10 +10,10 @@ class Algo:
     pset: ParameterSet
 
     def set_version(self, version: int) -> None:
-        pass # TODO
+        pass  # TODO
 
     def set_parameters(self, pset: ParameterSet) -> None:
-        pass # TODO
+        pass  # TODO
 
     def run(self) -> List[TradeAction]:
-        pass # TODO
+        pass  # TODO

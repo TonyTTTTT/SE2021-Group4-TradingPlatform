@@ -2,9 +2,11 @@ from flask import Flask, request, redirect, url_for, jsonify, send_from_director
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     return '<h1>Hello, Flask!</h1>'
+
 
 @app.route('/report', methods=['GET'])
 def reports():
