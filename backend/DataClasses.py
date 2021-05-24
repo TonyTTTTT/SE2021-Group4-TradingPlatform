@@ -32,7 +32,9 @@ class ParameterSet:
 # Report
 @dataclass
 class ReportInfo:
+    id          : int
     algo_id     : int
+    title       : str
     path        : str
 
 # Product
