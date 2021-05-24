@@ -3,6 +3,7 @@ import { Container, Row,Col,Dropdown, Table, Button } from 'react-bootstrap';
 import { Scrollbars } from "rc-scrollbars";
 import { Link } from 'react-router-dom';
 import HomePage from '../../HomePage';
+import axios from "axios";
 // import Button from '@material-ui/core/Button'
 
 
@@ -10,21 +11,30 @@ class SideArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            param_set: []
         };
+    }
+    componentDidMount() {
+        // const ROOT_PATH = '/api1';
+        axios.get('http://localhost:5000/test').then(
+            response => {
+                // this.run(response.data)
+                const param_set = response.data;
+                this.setState({param_set});
+                console.log(response.data);
+            },
+            error => console.log(error.message)
+        )
+
     }
     render() {  
         let algo_name = "BH Algo"
-        let pram_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
+        let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
         ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
         ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small']] ]
         const styleObj = {
             fontSize: 8,
         }
-        // const response = fetch("http://localhost:5000/", {mode:'no-cors'});
-        // if(response){
-        //     console.log("hello world");
-        //     console.log(response);
-        // }
         const scrollBarStyle = { width: 300, height: 420 };
         return (
             <Col style={styleObj}>
@@ -86,7 +96,7 @@ class SideArea extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {display_param(pram_set)}
+                        {display_param(this.state.param_set)}
                     </tbody>
                 </Table>
                 </Scrollbars>
