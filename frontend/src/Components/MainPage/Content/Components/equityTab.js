@@ -52,7 +52,7 @@ export default class EquityTab extends Component {
 
 
         const option = {
-            animationDuration: 10000,
+            animationDuration: 0,
             dataset: [{
                 id: 'dataset_raw',
                 source: _rawData
@@ -104,7 +104,7 @@ export default class EquityTab extends Component {
 
     render() {
         return (
-            <div id='equity' ref={c => this.equity = c} style={{width: '800px', height: '600px'}}/>
+            <div id='equity' ref={c => this.equity = c} style={{width: '100%', height: '600px'}}/>
         );
     }
 }

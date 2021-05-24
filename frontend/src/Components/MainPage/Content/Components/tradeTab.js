@@ -126,6 +126,7 @@ const toolbarStyles = (theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
+        background: 'linear-gradient(45deg, #1597bb 30%, #8fd6e1 90%)',
     },
     highlight:
         theme.palette.type === 'light'
@@ -142,6 +143,13 @@ const toolbarStyles = (theme) => ({
     },
 });
 
+const WhiteTypography = withStyles({
+        root: {
+            color: '#FFFFFF'
+        }
+    }
+)(Typography)
+
 class EnhancedTableToolbar extends Component {
     render() {
         const {classes} = this.props
@@ -153,13 +161,13 @@ class EnhancedTableToolbar extends Component {
                 })}
             >
                 {numSelected > 0 ? (
-                    <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+                    <WhiteTypography className={classes.title} color="inherit" variant="subtitle1" component="div">
                         {numSelected} selected
-                    </Typography>
+                    </WhiteTypography>
                 ) : (
-                    <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                    <WhiteTypography className={classes.title} variant="h6" id="tableTitle" component="div">
                         Trade Actions
-                    </Typography>
+                    </WhiteTypography>
                 )}
 
                 {numSelected > 0 ? (

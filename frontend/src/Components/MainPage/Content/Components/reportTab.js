@@ -1,35 +1,316 @@
 import React, {Component} from 'react';
-import Stackedit from "stackedit-js";
+import PropTypes from 'prop-types';
+import {
+    Checkbox, IconButton, lighten, Paper, Table, TableBody,
+    TableCell, TableContainer,
+    TableHead, TableRow,
+    Toolbar,
+    Tooltip,
+    Typography, withStyles
+} from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
+import clsx from "clsx";
+import {Edit} from "@material-ui/icons";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Report from "./report";
+import ReportDialog from "./reportDialog";
 
-export default class ReportTab extends Component {
+function createData(title, lastModified) {
+    return {title, lastModified};
+}
 
-    state = {showMd: true, content: ''}
+let rows = [
+    createData('Eclair', "Mayday 5th, 2021"),
+    createData('Cupcake', "April 1rd, 2020"),
+    createData('Gingerbread', "Mayday 4th, 2017"),
+];
 
-    componentDidMount() {
-        const stackedit = new Stackedit();
-        stackedit.openFile({
-            name: 'filename',
-            content: {
-                text: this.md.value
+class EnhancedTableHead extends Component {
+    render() {
+        const {onSelectAllClick, numSelected, rowCount} = this.props;
+        const headCells = [
+            {id: 'title', numeric: false, disablePadding: true, label: 'Title'},
+            {id: 'lastModified', numeric: false, disablePadding: false, label: 'Last Modified'},
+            {id: 'edit', numeric: false, disablePadding: false, label: 'Edit'},
+        ];
+        return (
+            <TableHead>
+                <TableRow>
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                            inputProps={{'aria-label': 'select all reports'}}
+                        />
+                    </TableCell>
+                    {headCells.map((headCell) => (
+                        <TableCell
+                            key={headCell.id}
+                            align={headCell.id === 'title' ? 'left' : 'right'}
+                            padding={headCell.disablePadding ? 'none' : 'default'}
+                        >
+                            {headCell.label}
+                        </TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+        );
+    }
+}
+
+EnhancedTableHead.propTypes = {
+    classes: PropTypes.object.isRequired,
+    numSelected: PropTypes.number.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    rowCount: PropTypes.number.isRequired,
+};
+
+const toolbarStyles = (theme) => ({
+    root: {
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(1),
+        background: 'linear-gradient(45deg, #1597bb 30%, #8fd6e1 90%)',
+    },
+    highlight:
+        theme.palette.type === 'light'
+            ? {
+                color: theme.palette.secondary.main,
+                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
             }
-        })
-        stackedit.on('fileChange', file => {
-            this.md.value = file.content.text
-        })
-        stackedit.on('close', () => {
-            console.log(this.md.value)
-            this.setState({showMd: false})
-        })
+            : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.secondary.dark,
+            },
+    title: {
+        flex: '1 1 100%',
+    },
+});
+
+const WhiteTypography = withStyles({
+        root: {
+            color: '#FFFFFF'
+        }
+    }
+)(Typography)
+
+class EnhancedTableToolbar extends Component {
+
+    handleDelete = () => {
+        this.props.handleDelete()
+    }
+
+    handleAddReport = () => {
+        this.props.handleAddReport()
     }
 
     render() {
-        const {showMd} = this.state
+        const {classes} = this.props
+        const {numSelected} = this.props;
         return (
-            <div style={{width: '600px', height: '800px'}}>
-                {
-                    showMd ? <textarea ref={c => this.md = c} /> : ''
-                }
+            <Toolbar
+                className={clsx(classes.root, {
+                    [classes.highlight]: numSelected > 0,
+                })}
+            >
+                {numSelected > 0 ? (
+                    <WhiteTypography className={classes.title} color="inherit" variant="subtitle1" component="div">
+                        {numSelected} selected
+                    </WhiteTypography>
+                ) : (
+                    <WhiteTypography className={classes.title} variant="h6" id="tableTitle" component="div">
+                        Reports
+                    </WhiteTypography>
+                )}
+
+                {numSelected > 0 ? (
+                    <Tooltip title="Delete" onClick={this.handleDelete}>
+                        <IconButton aria-label="delete">
+                            <DeleteIcon/>
+                        </IconButton>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title="Add Report" onClick={this.handleAddReport}>
+                        <IconButton aria-label="add report">
+                            <AddCircleOutlineIcon/>
+                        </IconButton>
+                    </Tooltip>
+                )}
+            </Toolbar>
+        );
+    };
+}
+
+EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+
+EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+};
+const styles = theme => ({
+    root: {
+        width: '100%',
+    },
+    paper: {
+        width: '100%',
+        marginBottom: theme.spacing(2),
+    },
+    table: {
+        minWidth: 750,
+    },
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+});
+
+class ReportTab extends Component {
+
+    state = {
+        selected: [],
+        rowsPerPage: rows.length,
+        editFilename: '',
+        editMode: false,
+        openDialog: false
+    }
+
+    handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelecteds = rows.map((n) => n.title);
+            this.setState({selected: newSelecteds})
+            return;
+        }
+        this.setState({selected: []})
+    };
+
+    handleClick = (event, name) => {
+        const {selected} = this.state
+        const selectedIndex = selected.indexOf(name);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
+        }
+        this.setState({selected: newSelected})
+    };
+
+    handleChangePage = (event, newPage) => {
+        this.setState({page: newPage})
+    };
+
+    handleEdit = (title) => {
+        this.setState({editFilename: title, editMode: true})
+    }
+
+    closeEdit = (content) => {
+        const {editFilename} = this.state
+        this.setState({editMode: false})
+        console.log(editFilename + ': ' + content)
+    }
+
+    addReport = (title) => {
+        if (title.length > 0) {
+            rows = [...rows, createData(title, new Date().toLocaleString())]
+        }
+        this.setState({openDialog: false, rowsPerPage: rows.length})
+    }
+
+    showDialog = () => {
+        this.setState({openDialog: true})
+    }
+
+    deleteReport = () => {
+        const {selected} = this.state
+        if (selected.length > 0) {
+            rows = rows.filter(value => !selected.includes(value.title))
+            this.setState({selected: [], rowsPerPage: rows.length})
+        }
+    }
+
+    isSelected = (name) => this.state.selected.indexOf(name) !== -1;
+
+    render() {
+        const {classes} = this.props
+        const {rowsPerPage, selected, editMode, editFilename, openDialog} = this.state
+        const emptyRows = rowsPerPage - rows.length;
+        return (
+            <div className={classes.root}>
+                <Paper className={classes.paper}>
+                    <EnhancedTableToolbar numSelected={selected.length} handleAddReport={this.showDialog} handleDelete={this.deleteReport}/>
+                    <TableContainer>
+                        <Table
+                            className={classes.table}
+                            aria-labelledby="tableTitle"
+                            size='medium'
+                            aria-label="enhanced table"
+                        >
+                            <EnhancedTableHead
+                                classes={classes}
+                                numSelected={selected.length}
+                                onSelectAllClick={this.handleSelectAllClick}
+                                rowCount={rows.length}
+                            />
+                            <TableBody>
+                                {rows.map((row, index) => {
+                                    const isItemSelected = this.isSelected(row.title);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                                    return (
+                                        <TableRow
+                                            hover
+                                            // role="checkbox"
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.title}
+                                            selected={isItemSelected}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    onClick={(event) => this.handleClick(event, row.title)}
+                                                    checked={isItemSelected}
+                                                    inputProps={{'aria-labelledby': labelId}}
+                                                />
+                                            </TableCell>
+                                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                                                {row.title}
+                                            </TableCell>
+                                            <TableCell align="right">{row.lastModified}</TableCell>
+                                            <TableCell align="right" onClick={() => this.handleEdit(row.title)}><Edit/></TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                {emptyRows > 0 && (
+                                    <TableRow style={{height: 53 * emptyRows}}>
+                                        <TableCell colSpan={6}/>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Paper>
+                {editMode ? <Report filename={editFilename}
+                                    text={editFilename}
+                                    close={this.closeEdit}
+                /> : ''}
+                <ReportDialog open={openDialog} handleClose={this.addReport}/>
             </div>
         );
     }
 }
+
+export default withStyles(styles)(ReportTab);
