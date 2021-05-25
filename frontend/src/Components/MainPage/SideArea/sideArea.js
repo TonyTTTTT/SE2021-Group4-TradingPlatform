@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row,Col,Dropdown, Table, Button } from 'react-bootstrap';
+import { Container, Row,Col,Dropdown, Table, Button, Tab, Tabs, Nav } from 'react-bootstrap';
 import { Scrollbars } from "rc-scrollbars";
 import { Link } from 'react-router-dom';
 import HomePage from '../../HomePage';
@@ -41,66 +41,77 @@ class SideArea extends React.Component {
                 <Row>
                     <h1>{algo_name}</h1>
                 </Row>
-                <Row>
-                    <Button variant="outline-primary" style={{fontSize: 12}}>Single Test</Button>{' '}
-                    <Button variant="outline-primary" style={{fontSize: 12}}>Batch Test</Button>
-                </Row>
-                <Row style={{height:"70%"}}>
-                <Scrollbars>
-                <Table striped bordered size="sm">
-                    <thead>
-                        <tr>
-                            <th colSpan="2">Algo Info</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>version</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>ApplyProduct</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Parameter Set ID</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                    <thead>
-                        <tr>
-                            <th colSpan="2">Product Setting</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Product</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Start Date</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>End Date</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>slip</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                    <thead>
-                        <tr>
-                            <th colSpan="2">Algo Parameters</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {display_param(param_set)}
-                    </tbody>
-                </Table>
-                </Scrollbars>
-                </Row>
+                <Tab.Container defaultActiveKey="switch test" id="switch test"
+                style={{height: "100%"}}>
+                    <Nav variant="tabs" className="flex-row">
+                        <Nav.Item>
+                        <Nav.Link eventKey="Single Test">Single Test</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                        <Nav.Link eventKey="Batch Test">Batch Test</Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                    <Tab.Content style={{height:"100%"}}>
+                    <Tab.Pane eventKey="Single Test" style={{height:"100%"}}>
+                        <Row style={{height:"70%"}}>
+                        <Scrollbars>
+                        <Table striped bordered size="sm">
+                            <thead>
+                                <tr>
+                                    <th colSpan="2">Algo Info</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>version</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>ApplyProduct</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Parameter Set ID</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th colSpan="2">Product Setting</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Product</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Start Date</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>End Date</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>slip</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th colSpan="2">Algo Parameters</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {display_param(param_set)}
+                            </tbody>
+                        </Table>
+                        </Scrollbars>
+                        </Row>
+                </Tab.Pane>
+                </Tab.Content>
+                </Tab.Container>
             </Col>
         );
     }
