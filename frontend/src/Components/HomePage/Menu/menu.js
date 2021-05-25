@@ -10,9 +10,9 @@ const Menu = (props) => {
     const [gridApi, setGridApi] = useState(null);
     const [algoData, setAlgoData] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
-    const mounted = useRef(false);
-    const [key, setKey] = useState('Algo');
+    const [tabKey, setTabKey] = useState('Algo');
 
+    const mounted = useRef(false);
 
     useEffect(() => {
         if (!mounted.current) {
@@ -20,7 +20,7 @@ const Menu = (props) => {
             mounted.current = true;
           } else {
             if(props.deleteClick===true){
-                    onRemoveSelected();
+                onRemoveSelected();
             }
           }
         
@@ -29,17 +29,17 @@ const Menu = (props) => {
     const onGridReady = (params) => {
         setGridApi(params.api);
         setGridColumnApi(params.columnApi);
-        setAlgoData([   {Title:"A",Version:"1.01",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Last_Modified:"30 days ago"},
+        setAlgoData([   {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
+                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
+                        {Title:"ABC",Version:"2.10",Description:"None",Last_Modified:"15 days ago"},
+                        {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
+                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
+                        {Title:"ABC",Version:"2.10",Description:"None",Last_Modified:"15 days ago"},
+                        {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
+                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
+                        {Title:"ABC",Version:"2.10",Description:"None",Last_Modified:"15 days ago"},
+                        {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
+                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
                         {Title:"ABC",Version:"2.10",Last_Modified:"15 days ago"},
                         {Title:"A",Version:"1.01",Last_Modified:"20 days ago"},
                         {Title:"B",Version:"0.01",Last_Modified:"30 days ago"},
@@ -57,8 +57,8 @@ const Menu = (props) => {
         <Tab.Container  
             style={{height:"80%"}}
             id="controlled-tab-example"
-            activeKey={key}
-            onSelect={(k) => setKey(k)}>
+            activeKey={tabKey}
+            onSelect={(k) => setTabKey(k)}>
             <Row style={{height:"100%"}}>
                <Col style={{width:"100%"}}> 
                     <Nav variant="tabs" className="flex-row" style={{height:45}}>
@@ -77,12 +77,14 @@ const Menu = (props) => {
                                 rowSelection={'multiple'}
                                 animateRows={true}
                                 onGridReady={onGridReady}
-                                autoGroupColumnDef={{ minWidth: 200 }}
+                                autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
                                 enableRangeSelection={true}
                                 rowData={algoData} 
+                                
                                 >
-                                <AgGridColumn field ="Title" sortable={true} filter={true} rowGroup={true}></AgGridColumn>
+                                <AgGridColumn field ="Title" hide={true} sortable={true} filter={true} rowGroup={true}></AgGridColumn>
                                 <AgGridColumn field ="Version" filter={true}></AgGridColumn>
+                                <AgGridColumn field ="Description" filter={true}></AgGridColumn>
                                 <AgGridColumn field ="Last_Modified" filter={true}></AgGridColumn>
                             </AgGridReact>
                         </div>
@@ -93,12 +95,11 @@ const Menu = (props) => {
                                 defaultColDef={{flex: 1,minWidth: 100,editable: true,filter: true,resizable: true}}
                                 rowSelection={'multiple'}
                                 animateRows={true}
-                                onGridReady={onGridReady}
                                 autoGroupColumnDef={{ minWidth: 200 }}
                                 enableRangeSelection={true}
-                                rowData={algoData} 
+                                rowData={algoData}
                                 >
-                                <AgGridColumn field ="Title" sortable={true} filter={true} rowGroup={true}></AgGridColumn>
+                                <AgGridColumn field ="Title" filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
                                 <AgGridColumn field ="Version" filter={true}></AgGridColumn>
                                 <AgGridColumn field ="Last_Modified" filter={true}></AgGridColumn>
                             </AgGridReact>
