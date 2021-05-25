@@ -2,8 +2,6 @@ import atexit
 import os
 import json
 
-with open("info.json") as f:
-    data = json.load(f)
 
 class DataFileManager():
     def __init__(self):
@@ -49,6 +47,13 @@ class DataFileManager():
         return report_id
 
     def _find_report(self, report_id):
+        """
+        input:
+            * report_id: int
+        output:
+            if report_id is valid, return report_info dictionary,
+            else return None
+        """
         return next(filter(lambda report: report['id'] == report_id, self.data['report']), None)
     
 
