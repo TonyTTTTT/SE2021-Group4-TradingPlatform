@@ -6,9 +6,6 @@ import json
 class DataFileManager():
     def __init__(self):
         self.info_path = "./info.json"
-        self.next_algo_id = 0
-        self.next_report_id = 0
-        self.next_parameter_set_id = 0
         self._load_info()
         atexit.register(self._save_info)
 
@@ -18,9 +15,6 @@ class DataFileManager():
         """
         with open(self.info_path, 'r') as f:
             self.data = json.load(f)
-            self.next_report_id = len(self.data['report'])
-            self.next_algo_id = len(self.data['algo'])
-            self.next_parameter_set_id = len(self.data['parameter_set'])
 
     def _save_info(self):
         """
@@ -29,7 +23,31 @@ class DataFileManager():
         with open(self.info_path, 'w') as f:
             json.dump(self.data, f, indent=2)
 
-    def save_report(self, report_id=int, content: str) -> int:
+    def _generate_algo_id(self) -> int:
+        """
+        output:
+            * an unique algo_id: int
+        """
+        pass
+        return 0
+
+    def _generate_report_id(self) -> int:
+        """
+        output:
+            * an unique report_id: int
+        """
+        pass
+        return 0
+
+    def _generate_parameter_set_id(self) -> int:
+        """
+        output:
+            * an unique parameter_set_id: int
+        """
+        pass
+        return 0
+
+    def save_report(self, report_id: int, content: str) -> int:
         """
         input:
             * content: markdown string
@@ -46,7 +64,7 @@ class DataFileManager():
             print("down writing to", report['path'])
         return report_id
 
-    def _find_report(self, report_id):
+    def _find_report(self, report_id: int):
         """
         input:
             * report_id: int
@@ -56,7 +74,6 @@ class DataFileManager():
         """
         return next(filter(lambda report: report['id'] == report_id, self.data['report']), None)
     
-
     def delete_report(self, report_id: int) -> None:
         """
         input:
