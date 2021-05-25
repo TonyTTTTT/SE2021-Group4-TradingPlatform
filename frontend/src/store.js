@@ -15,8 +15,8 @@ const reducers = combineReducers({
     //app : appReducer,
     //console: consoleReducer,
     //content: contentReducer,
-    //header: headerReducer,
-    //menu: menuReducer,
+    header: headerReducer,
+    menu: menuReducer,
     //sideArea: sideAreaReducer,
     //tagArea: tagAreaReducer,
     navigationBar: navigationBarReducer

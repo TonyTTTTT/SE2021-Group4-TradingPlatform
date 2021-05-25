@@ -1,9 +1,26 @@
 import React ,{ useState, useEffect, useRef}from 'react';
 import { AgGridColumn, AgGridReact} from 'ag-grid-react';
 import { Row, Col, Nav, Tab } from 'react-bootstrap';
+import { connect } from "react-redux";
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
+
+const mapStateToProps = state =>{
+    return { 
+        menu : state.menu
+    };
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        signalDeleteAlgo : () => {
+            dispatch({
+                type: "DELETE_ALGO"
+            });
+        }
+    };
+};
 
 const Menu = (props) => { 
 
@@ -11,6 +28,7 @@ const Menu = (props) => {
     const [algoData, setAlgoData] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
     const [tabKey, setTabKey] = useState('Algo');
+    //const [deleteSignal, setDeleteSignal] = useState(false);
 
     const mounted = useRef(false);
 
@@ -19,12 +37,14 @@ const Menu = (props) => {
             // do componentDidMount logic
             mounted.current = true;
           } else {
-            if(props.deleteClick===true){
-                onRemoveSelected();
-            }
+           
           }
+        if(props.menu.deleteSignal===true){
+            gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
+            props.signalDeleteAlgo();
+        }
         
-    }, [props.deleteClick,gridApi])
+    }, [gridApi,props.menu.deleteSignal])
 
     const onGridReady = (params) => {
         setGridApi(params.api);
@@ -47,10 +67,7 @@ const Menu = (props) => {
                     ])
         
     };
-    const onRemoveSelected = () => {
-        var selectedData = gridApi.getSelectedRows();
-        var res = gridApi.applyTransaction({ remove: selectedData });
-    };
+   
 
     
     return (
@@ -111,4 +128,4 @@ const Menu = (props) => {
         </Tab.Container>
     );
 }
-export default Menu;
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
