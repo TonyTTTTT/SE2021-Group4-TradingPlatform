@@ -15,11 +15,11 @@ class MainPage extends React.Component {
         return (
             <Container fluid style={{height:window.innerHeight,width:window.innerWidth}}>
                 <Row style={{height:"100%"}}>
-                    <Col xs={4} style={{height:"100%"}}>
+                    <Col sm={4} style={{height:"100%"}}>
                         <SideArea/>
                         <TagArea/>
                     </Col>
-                    <Col xs={8} style={{height: "100%"}}>
+                    <Col sm={8} style={{height: "100%"}}>
                         <Container>
                             <Content/>
                             <Console/>
