@@ -11,13 +11,14 @@ class TagArea extends React.Component {
 	render() {
         const styleObj = {
             fontSize: 8,
+            height: "0%",
         }
 		return(
-			<Col>
-            <Row>
+			<Col style={{fontSize:8, height:"0%"}}>
+           	 <Row>
                 <Button variant="danger" style={styleObj}>Run Test</Button>{' '}
                 <Button variant="success" style={styleObj}>Save Parameters</Button>
-            </Row>
+        	</Row>
             </Col>
 		);
 	}

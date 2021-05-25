@@ -2,6 +2,7 @@ import csv
 from dateutil.parser import parse
 import numpy as np
 
+
 class AssetData:
     path = '../input-data/TXF.csv'
 
@@ -24,7 +25,7 @@ class AssetData:
                     data_all['volume'].append(int(data[6]))
                     data_all['delta'].append(int(data[7]))
             f.close()
-            
+
             return data_all
         else:
             for data in r:
@@ -40,14 +41,13 @@ class AssetData:
                         data_all['volume'].append(int(data[6]))
                         data_all['delta'].append(int(data[7]))
             f.close()
-        
+
             return data_all
 
 
 a = AssetData()
 asset_data_period = a.load(start='2021-03-01', end='2021-05-17')
 asset_data_all = a.load()
-
 
 # A list that each elemnt is an dictonary
 #        for i in range(1, len(data_all)):
@@ -64,7 +64,7 @@ asset_data_all = a.load()
 #                data_new.append(tmp)
 #            elif start <= tmp['time'] <= end:
 #                data_new.append(tmp)
-                
+
 # A numpy array, all the type in it must be same
 #        if start == None and end == None:
 #            for data in r:
