@@ -32,12 +32,12 @@ class SideArea extends React.Component {
         let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
         ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
         ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small']] ]
-        const styleObj = {
-            fontSize: 8,
-        }
-        const scrollBarStyle = { width: 300, height: 420 };
+
         return (
-            <Col style={styleObj}>
+            <Col style={{fontSize:8, height:"90%"}}>
+                <Row>
+                    <Button variant="outline-dark" href="/">Home</Button>
+                </Row>
                 <Row>
                     <h1>{algo_name}</h1>
                 </Row>
@@ -45,8 +45,8 @@ class SideArea extends React.Component {
                     <Button variant="outline-primary" style={{fontSize: 12}}>Single Test</Button>{' '}
                     <Button variant="outline-primary" style={{fontSize: 12}}>Batch Test</Button>
                 </Row>
-                <Row>
-                <Scrollbars style={scrollBarStyle}>
+                <Row style={{height:"70%"}}>
+                <Scrollbars>
                 <Table striped bordered size="sm">
                     <thead>
                         <tr>

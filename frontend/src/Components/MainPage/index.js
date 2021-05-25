@@ -14,13 +14,8 @@ class MainPage extends React.Component {
     render() {
         return (
             <Container fluid style={{height:window.innerHeight,width:window.innerWidth}}>
-                <Row>
-                    <Col>
-                        <Button variant="outline-dark" href="/" block>Home</Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={4}>
+                <Row style={{height:"100%"}}>
+                    <Col xs={4} style={{height:"100%"}}>
                         <SideArea/>
                         <TagArea/>
                     </Col>
