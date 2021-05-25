@@ -5,7 +5,7 @@ import json
 with open("info.json") as f:
     data = json.load(f)
 
-class FileManager():
+class DataFileManager():
     def __init__(self):
         self.info_path = "./info.json"
         self.next_algo_id = 0
@@ -31,7 +31,7 @@ class FileManager():
         with open(self.info_path, 'w') as f:
             json.dump(self.data, f, indent=2)
 
-    def save_report(self, content: str, report_id=int) -> int:
+    def save_report(self, report_id=int, content: str) -> int:
         """
         input:
             * content: markdown string
