@@ -1,4 +1,3 @@
-﻿
 # A Test Report
 
 ```python

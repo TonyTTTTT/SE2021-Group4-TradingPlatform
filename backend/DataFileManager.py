@@ -85,6 +85,35 @@ class DataFileManager():
         self.data['report'] = [report for report in self.data['report'] if report['id'] != report_id]
         if report is not None and os.path.exists(report['path']):
             os.remove(report['path'])
+    
+    def get_all_report(self):
+        """
+        input:
+            * void
+        output:
+            * A list that contain all report info: list
+        """
+        return self.data["report"]
+    
+    def get_report(self, report_id: int):
+        """
+        input:
+            * report_id: int
+        output:
+            * The report content: str
+        """
+        report_info = self._find_report(report_id)
+        if os.path.exists(report_info['path']):
+            with open(report_info['path'], 'r') as f:
+                report = f.read()
+            return report
+        else:
+            return -1
+            
+        
+        
+    
+        
 
 
     
@@ -92,7 +121,7 @@ class DataFileManager():
 
 
 if __name__  == "__main__":
-    fm = FileManager()
-    fm.delete_report(1)
+    fm = DataFileManager()
+    fm.delete_report(2)
 
 
