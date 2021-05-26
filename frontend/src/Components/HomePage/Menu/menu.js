@@ -18,19 +18,32 @@ const mapDispatchToProps = dispatch => {
             dispatch({
                 type: "DELETE_ALGO"
             });
-        }
+        },
+        setSelectedAlgoID :(id) =>{
+            dispatch({
+                type: "SET_SELECTED_ALGO_ID",
+                payload:{
+                    AlgoID :id
+                }
+            });
+        },
+        toggleUpdate : () => {
+            dispatch({
+                type: "SIGNAL_UPDATE"
+            });
+        },
     };
 };
 
 const Menu = (props) => { 
 
     const [gridApi, setGridApi] = useState(null);
-    const [algoData, setAlgoData] = useState(null);
+    const [selectedRow,setSelectedRow] = useState(null)
     const [gridColumnApi, setGridColumnApi] = useState(null);
     const [tabKey, setTabKey] = useState('Algo');
-    //const [deleteSignal, setDeleteSignal] = useState(false);
-
+    
     const mounted = useRef(false);
+    var countClick = 0;
 
     useEffect(() => {
         if (!mounted.current) {
@@ -40,32 +53,37 @@ const Menu = (props) => {
            
           }
         if(props.menu.deleteSignal===true){
-            gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
+            gridApi.applyTransaction({ remove: selectedRow });
             props.signalDeleteAlgo();
         }
-        
-    }, [gridApi,props.menu.deleteSignal])
+    
+    }, [gridApi,selectedRow,props.menu.deleteSignal])
+
+
+    const onRowSelected = ()=>{
+
+        if(gridApi.getSelectedRows()[0]!=undefined){
+            setSelectedRow(gridApi.getSelectedRows());
+            props.setSelectedAlgoID(gridApi.getSelectedRows()[0].AlgoID)
+        }
+        //console.log(selectedRow.AlgoID);
+        // console.log(selectedRow);
+        // if(countClick >= 1) {
+        //     if( gridApi.getSelectedRows().id === selectedRow.id){
+        //         console.log("doubleClick");
+        //     }
+        //         countClick = 0;
+        // }else{
+        //     countClick ++ ;
+        //     console.log("1");
+        //     setTimeout(()=>{},1000).then(function(){countClick--;console.log("2");})
+            
+        // }
+    }
 
     const onGridReady = (params) => {
         setGridApi(params.api);
-        setGridColumnApi(params.columnApi);
-        setAlgoData([   {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Description:"None",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Description:"None",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Description:"None",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Description:"None",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Description:"None",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Last_Modified:"15 days ago"},
-                        {Title:"A",Version:"1.01",Last_Modified:"20 days ago"},
-                        {Title:"B",Version:"0.01",Last_Modified:"30 days ago"},
-                        {Title:"ABC",Version:"2.10",Last_Modified:"15 days ago"},
-                    ])
-        
+        setGridColumnApi(params.columnApi);   
     };
    
 
@@ -90,14 +108,16 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Algo" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 100,editable: true,filter: true,resizable: true}}
-                                rowSelection={'multiple'}
+                                defaultColDef={{flex: 1,minWidth: 100,filter: true,resizable: true}}
+                                rowSelection={'single'}
                                 animateRows={true}
                                 onGridReady={onGridReady}
                                 autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
                                 enableRangeSelection={true}
-                                rowData={algoData} 
-                                
+                                //enableCellChangeFlash={true}
+                                onRowSelected={onRowSelected}
+                                rowData={props.menu.algoData}
+                        
                                 >
                                 <AgGridColumn field ="Title" hide={true} sortable={true} filter={true} rowGroup={true}></AgGridColumn>
                                 <AgGridColumn field ="Version" filter={true}></AgGridColumn>
@@ -110,14 +130,14 @@ const Menu = (props) => {
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
                                 defaultColDef={{flex: 1,minWidth: 100,editable: true,filter: true,resizable: true}}
-                                rowSelection={'multiple'}
+                                rowSelection={'single'}
                                 animateRows={true}
                                 autoGroupColumnDef={{ minWidth: 200 }}
                                 enableRangeSelection={true}
-                                rowData={algoData}
+                                rowData={props.menu.reportData}
                                 >
-                                <AgGridColumn field ="Title" filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
-                                <AgGridColumn field ="Version" filter={true}></AgGridColumn>
+                                <AgGridColumn field ="Algo" hide={true} filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
+                                <AgGridColumn field ="Title" filter={true} sortable={true}  ></AgGridColumn>
                                 <AgGridColumn field ="Last_Modified" filter={true}></AgGridColumn>
                             </AgGridReact>
                         </div>

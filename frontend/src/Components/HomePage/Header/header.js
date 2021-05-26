@@ -1,11 +1,14 @@
-import React, {useState, useRef}from 'react';
+import React, {useState, useRef, version}from 'react';
 import {Container, Row, Col, Modal , Button, InputGroup, FormControl} from 'react-bootstrap';
 import { connect } from "react-redux";
 import { consoleState } from '../../../state.template';
 
-function mapStateToProps({header}) {
-    return { header };
+const mapStateToProps = state =>{
+    return { 
+        header : state.header
+    };
 }
+
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -14,7 +17,7 @@ const mapDispatchToProps = dispatch => {
                 type: "DELETE_ALGO"
             });
         },
-        addAlgo : (title,version,description,content,updateTime) => {
+        addAlgo : (title,version,description,content,lastModifiedTime) => {
             dispatch({
                 type: "ADD_ALGO",
                 payload:{
@@ -22,29 +25,47 @@ const mapDispatchToProps = dispatch => {
                     Version: version,
                     Description : description,
                     Content: content,
-                    LastUpdate: updateTime,
+                    Last_Modified: lastModifiedTime,
                 }
             });
         },
-        signalUpdateAlgo : () => {
+        updateAlgo : (content,lastModifiedTime) => {
             dispatch({
-                type: "UPDATE_ALGO"
+                type: "UPDATE_ALGO",
+                payload:{
+                    Content:content,
+                    Last_Modified:lastModifiedTime
+                }
             });
         }
     };
 };
 
 const Header = (props) => {
-    const [selectedFile, setSelectedFile] = useState();
-	const [isFilePicked, setIsFilePicked] = useState(false);
-    const [show,setShow]= useState(false)
+    //const [selectedFile, setSelectedFile] = useState();
+	//const [isFilePicked, setIsFilePicked] = useState(false);
+    const [show,setShow] = useState(false);
+    const [modalInput,setModalInput] = useState({title:null,version:null,description:null});
     
     var newInput;
     var updateInput;
     var promiseInfo = {};
 
-    const onNewButtonClick = async() => {
-        showModal();
+    const readFile = (file)=> {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+      
+          reader.onload = res => {
+            resolve(res.target.result);
+          };
+          reader.onerror = err => reject(err);
+      
+          reader.readAsText(file);
+        });
+    }
+
+    const onNewButtonClick = () => {
+        setShow(true);
     };
 
     const onUpdateButtonClick = () => {
@@ -55,21 +76,27 @@ const Header = (props) => {
         props.signalDeleteAlgo();
     };
 
-    const onNewInputChange = (event) => {
-		setSelectedFile(event.target.files[0]);
-		setIsFilePicked(true);
+    const onNewInputChange =  async (event) => {
+		//setSelectedFile(event.target.files[0]);
+		//setIsFilePicked(true);
+        var UTCtime = event.target.files[0].lastModifiedDate;
+        var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
+        const content = await readFile(event.target.files[0]);
+        props.addAlgo(modalInput.title,modalInput.version,modalInput.description,content,dateTime);
+    
 	};
 
-    const onUpdateInputChange = (event) => {
-		setSelectedFile(event.target.files[0]);
-		setIsFilePicked(true);
-        console.log("selected file:");
-        console.log(selectedFile);
+    const onUpdateInputChange = async (event) => {
+
+        var UTCtime = event.target.files[0].lastModifiedDate;
+        var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
+        const content = await readFile(event.target.files[0]);
+        props.updateAlgo(content,dateTime);
 	};
     
-    
-    const showModal = async () => {
-        setShow(true);
+    const onConfirmButtonClick = () =>{
+        newInput.click();
+        setShow(false);
     }
 
     return (
@@ -102,25 +129,28 @@ const Header = (props) => {
                         <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroup-sizing-sm">Title</InputGroup.Text>
                         </InputGroup.Prepend>
-                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" 
+                        onChange={ e => setModalInput({...modalInput, title : e.target.value })} />
                     </InputGroup>
                     <InputGroup size="sm" className="mb-3">
                         <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroup-sizing-sm">Version</InputGroup.Text>
                         </InputGroup.Prepend>
-                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" 
+                         onChange={ e => setModalInput({...modalInput, version : e.target.value })} />
                     </InputGroup>
                     <InputGroup size="sm" className="mb-3">
                         <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroup-sizing-sm">Description</InputGroup.Text>
                         </InputGroup.Prepend>
-                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" 
+                         onChange={ e => setModalInput({...modalInput, description : e.target.value })} />
                     </InputGroup>
                     </div>
                     
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick= {()=>{newInput.click();setShow(false);}}>
+                    <Button variant="primary" onClick= {onConfirmButtonClick}>
                         Confirm
                     </Button>
                     <Button variant="secondary" onClick={()=>{setShow(false);}}>

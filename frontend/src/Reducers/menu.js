@@ -15,8 +15,37 @@ export default function (state = { ...menuState }, action) {
             return state;
         }
         case "UPDATE_ALGO": {
+            
+            //find selected Row by Selected AlgoID
+            //state.updateSignal = !state.updateSignal;
+             for (var i in state.algoData) {
+               
+                if (state.algoData[i].AlgoID === state.selectedAlgoID) {
+                    state = { ...state };
+                    var newData = {
+                        AlgoID: state.algoData[i].AlgoID,
+                        Title: state.algoData[i].Title,
+                        Version: state.algoData[i].Version,
+                        Description: state.algoData[i].Description,
+                        Content: action.payload.Content,
+                        Last_Modified: action.payload.Last_Modified
+                    }
+                    //state.deleteSignal = !state.deleteSignal;
+                    //console.log(i);
+                    state.algoData.splice(i, 1);
+                    state.algoData = state.algoData.concat(newData)
+                    
+                    
+                    return state;
+                }
+            }
+            return state;
+        }
+       
+        case "SET_SELECTED_ALGO_ID": {
             state = { ...state };
-            state.updateSignal = !state.updateSignal;
+    
+            state.selectedAlgoID = action.payload.AlgoID;
             return state;
         }
         default:
