@@ -13,7 +13,7 @@ class AssetData:
         # A dictionary that each elment is a list
         data_all = dict(time=[], contract=[], open=[], high=[], low=[],
                         close=[], volume=[], delta=[])
-        if start == None and end == None:
+        if start is None and end is None:
             for data in r:
                 if data[0] != '' and data[0] != 'time':
                     data_all['time'].append(data[0])

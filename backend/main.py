@@ -8,7 +8,6 @@ cors = CORS(app)
 df_manager = DataFileManager()
 
 
-
 @app.route('/')
 def index():
     return '<h1>Hello, Flask!</h1>'
@@ -29,12 +28,15 @@ def get_report(report_id: int):
     try:
         df_manager = DataFileManager()
         report = df_manager.get_report(report_id)
-        if(report != -1):
-            return CommonResult(LogLevel.INFO, "Success get the report of report_id:{}".format(report_id), report).to_json()
+        if (report != -1):
+            return CommonResult(LogLevel.INFO, "Success get the report of report_id:{}".format(report_id),
+                                report).to_json()
         else:
             return CommonResult(LogLevel.INFO, "The report of report_id:{} not exist".format(report_id), None).to_json()
     except:
-        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting the report of report_id:{}".format(report_id), None).to_json()
+        return CommonResult(LogLevel.ERROR,
+                            "Some uncertain err occur when requesting the report of report_id:{}".format(report_id),
+                            None).to_json()
 
 
 @app.route('/get-all-report', methods=['get'])
@@ -44,7 +46,8 @@ def get_all_report():
         res = df_manager.get_all_report()
         return CommonResult(LogLevel.INFO, "Success get all report_info", res).to_json()
     except:
-        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info", None).to_json()
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info",
+                            None).to_json()
 
 
 @app.route('/get-repor-list', methods=['get'])
@@ -59,7 +62,7 @@ def create_report(title, algo_id):
     if report_id is not None:
         return CommonResult(LogLevel.INFO, 'Create report', report_id).to_json()
     else:
-        return CommonResult(LogLevel.Error, 'Duplicated title').to_json()
+        return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
 
 
 @app.route('/save-report', method=['POST'])

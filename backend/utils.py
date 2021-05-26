@@ -1,4 +1,3 @@
-import json
 from flask import jsonify
 
 META_INFO_PATH = './info.json'
@@ -9,11 +8,12 @@ ALGO_ID = 'algo_id'
 ID = 'id'
 
 
-class LogLevel():
+class LogLevel:
     ERROR = 0
     WARNING = 1
     INFO = 2
     DEBUG = 3
+
 
 class CommonResult:
     def __init__(self, code: int, msg: str, data: object = None):

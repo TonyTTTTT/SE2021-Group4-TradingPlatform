@@ -44,7 +44,7 @@ class DataFileManager():
         output:
             * an unique algo_id: int
         """
-        return int(time.time()*100)
+        return int(time.time() * 100)
 
     def _generate_report_id(self) -> int:
         """
@@ -60,8 +60,7 @@ class DataFileManager():
         output:
             * an unique parameter_set_id: int
         """
-        return int(time.time()*100)
-
+        return int(time.time() * 100)
 
     # def create_report(self, title: str, algo_id: int) -> int:
     #     """
@@ -108,7 +107,7 @@ class DataFileManager():
             else return None
         """
         return next(filter(lambda report: report['id'] == report_id, self.data['report']), None)
-    
+
     def delete_report(self, report_id: int) -> None:
         """
         input:
@@ -120,7 +119,7 @@ class DataFileManager():
         self.data['report'] = [report for report in self.data['report'] if report['id'] != report_id]
         if report is not None and os.path.exists(report['path']):
             os.remove(report['path'])
-    
+
     def get_all_report(self):
         """
         input:
@@ -129,7 +128,7 @@ class DataFileManager():
             * A list that contain all report info: list
         """
         return self.data["report"]
-    
+
     def get_report(self, report_id: int):
         """
         input:
@@ -144,11 +143,6 @@ class DataFileManager():
             return report
         else:
             return -1
-            
-        
-        
-    
-        
 
     def get_report_list(self, algo_id: int):
         report_ids = self.algo_id2report_ids[algo_id]
@@ -163,7 +157,7 @@ class DataFileManager():
             * title: report's title
             * algo_id: algo_id that this report relates to
         output:
-            report_id: int, -1 if fail
+            report_id: None if fail
         """
         report_path = Path(REPORT_DIR) / (title + '.md')
         exists = report_path.exists()
@@ -174,15 +168,11 @@ class DataFileManager():
             self.data[REPORT].append(report_info.__dict__)
             self.algo_id2report_ids[algo_id].append(report_id)
             self.report_id2report_info[report_id] = report_info.__dict__
-            self._save_info()
             return report_id
         else:
             return None
 
 
-if __name__  == "__main__":
+if __name__ == "__main__":
     fm = DataFileManager()
     lete_report(162202302826)
-
-
-
