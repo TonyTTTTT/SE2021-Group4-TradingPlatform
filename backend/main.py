@@ -76,7 +76,7 @@ def save_report():
         report_id = df_manager.save_report(report_id, md_content)
         if report_id == -1:
             return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
-        return CommonResult(LogLevel.DEBUG, "Saved report No. {}".format(report_id)}, None).to_json()
+        return CommonResult(LogLevel.DEBUG, "Saved report No. {}".format(report_id), None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
 
