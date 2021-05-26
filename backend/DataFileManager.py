@@ -94,7 +94,7 @@ class DataFileManager():
         report = self._find_report(report_id)
         if report is None:
             return -1
-        with open(report['path'], 'w', encoding='utf-8-sig') as f:
+        with open(report['path'], 'w', encoding='utf-8') as f:
             f.write(content)
         return report_id
 

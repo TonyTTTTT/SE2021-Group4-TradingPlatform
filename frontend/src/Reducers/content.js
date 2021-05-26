@@ -6,5 +6,6 @@ export default function (state = { ...contentState }, action) {
             state = { ...state };
             return state;
         }
+        default: return state
     }
 }

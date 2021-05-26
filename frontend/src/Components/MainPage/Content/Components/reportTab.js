@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-    Checkbox, IconButton, lighten, Paper, Table, TableBody,
-    TableCell, TableContainer,
-    TableHead, TableRow,
+    Checkbox,
+    IconButton,
+    lighten,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     Toolbar,
     Tooltip,
-    Typography, withStyles
+    Typography,
+    withStyles
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import clsx from "clsx";
@@ -14,16 +22,17 @@ import {Edit} from "@material-ui/icons";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Report from "./report";
 import ReportDialog from "./reportDialog";
+import axios from "axios";
 
-function createData(title, lastModified) {
-    return {title, lastModified};
+function createData(title, lastModified, id) {
+    return {title, lastModified, id};
 }
 
-let rows = [
-    createData('Eclair', "Mayday 5th, 2021"),
-    createData('Cupcake', "April 1rd, 2020"),
-    createData('Gingerbread', "Mayday 4th, 2017"),
-];
+/*let rows = [
+    createData('Eclair', "Mayday 5th, 2021", 1),
+    createData('Cupcake', "April 1rd, 2020", 2),
+    createData('Gingerbread', "Mayday 4th, 2017", 3),
+];*/
 
 class EnhancedTableHead extends Component {
     render() {
@@ -172,17 +181,29 @@ const styles = theme => ({
 
 class ReportTab extends Component {
 
+    componentDidMount() {
+        axios.get('/api2/get-report-list', {params: {algo_id: 7}}).then(
+            response => {
+                const {data: {data}} = response
+                this.setState({rows: data})
+                // console.log(rows)
+            },
+            error => console.log(error.message)
+        )
+    }
+
     state = {
         selected: [],
-        rowsPerPage: rows.length,
         editFilename: '',
         editMode: false,
-        openDialog: false
+        openDialog: false,
+        rows: []
     }
 
     handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.title);
+            const {rows} = this.state
+            const newSelecteds = rows.map((n) => n.id);
             this.setState({selected: newSelecteds})
             return;
         }
@@ -213,21 +234,61 @@ class ReportTab extends Component {
         this.setState({page: newPage})
     };
 
-    handleEdit = (title) => {
-        this.setState({editFilename: title, editMode: true})
+    handleEdit = (reportId, title) => {
+        axios.get('/api2/get-report/' + reportId).then(
+            response => {
+                if (response.data.code === 2) {
+                    const text = response.data.data
+                    this.setState({editFilename: title, editReportId: reportId, editMode: true, text})
+                } else {
+                    console.log(response.data.msg)
+                }
+            },
+            error => console.log(error.message)
+        )
     }
 
     closeEdit = (content) => {
-        const {editFilename} = this.state
+        const {editFilename, editReportId} = this.state
+        axios.post('/api2/save-report', {report_id: editReportId, content}).then(
+            response => {
+                if (response.data.code === 2) {
+                    this.setState({editFilename: '', editReportId: null})
+                } else {
+                    console.log(response.data.msg)
+                }
+            },
+            error => {
+                console.log(error.message)
+            }
+        )
         this.setState({editMode: false})
-        console.log(editFilename + ': ' + content)
     }
 
     addReport = (title) => {
         if (title.length > 0) {
-            rows = [...rows, createData(title, new Date().toLocaleString())]
+            let formData = new FormData();
+            formData.append('title', title);
+            formData.append('algo_id', 7)
+            axios.post('/api2/create-report', formData,
+                {headers: {"Content-Type": "multipart/form-data"}},).then(
+                response => {
+                    if (response.data.code === 2) {
+                        const {data: {data}} = response
+                        const {rows} = this.state
+                        const newRows = [...rows, createData(title, new Date().toLocaleString(), data)]
+                        console.log(data)
+                        this.setState({rows: newRows})
+                    } else {
+                        console.log(response.data.msg)
+                    }
+                },
+                error => {
+                    console.log(error.message)
+                }
+            )
         }
-        this.setState({openDialog: false, rowsPerPage: rows.length})
+        this.setState({openDialog: false})
     }
 
     showDialog = () => {
@@ -237,8 +298,19 @@ class ReportTab extends Component {
     deleteReport = () => {
         const {selected} = this.state
         if (selected.length > 0) {
-            rows = rows.filter(value => !selected.includes(value.title))
-            this.setState({selected: [], rowsPerPage: rows.length})
+            const {rows} = this.state
+            let newRows = rows
+            selected.map(report_id => {
+                    axios.delete('/api2/delete-report/' + report_id).then(
+                        response => {
+                            console.log(response.data.msg)
+                            newRows = newRows.filter(value => value.id !== report_id)
+                            this.setState({rows: newRows, selected: []})
+                        },
+                        error => console.log(error.message)
+                    )
+                }
+            )
         }
     }
 
@@ -246,12 +318,14 @@ class ReportTab extends Component {
 
     render() {
         const {classes} = this.props
-        const {rowsPerPage, selected, editMode, editFilename, openDialog} = this.state
+        const {selected, editMode, editFilename, editReportId, openDialog, rows, text} = this.state
+        const rowsPerPage = rows.length
         const emptyRows = rowsPerPage - rows.length;
         return (
             <div className={classes.root}>
                 <Paper className={classes.paper}>
-                    <EnhancedTableToolbar numSelected={selected.length} handleAddReport={this.showDialog} handleDelete={this.deleteReport}/>
+                    <EnhancedTableToolbar numSelected={selected.length} handleAddReport={this.showDialog}
+                                          handleDelete={this.deleteReport}/>
                     <TableContainer>
                         <Table
                             className={classes.table}
@@ -267,7 +341,7 @@ class ReportTab extends Component {
                             />
                             <TableBody>
                                 {rows.map((row, index) => {
-                                    const isItemSelected = this.isSelected(row.title);
+                                    const isItemSelected = this.isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
@@ -276,12 +350,12 @@ class ReportTab extends Component {
                                             // role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.title}
+                                            key={row.id}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
-                                                    onClick={(event) => this.handleClick(event, row.title)}
+                                                    onClick={(event) => this.handleClick(event, row.id)}
                                                     checked={isItemSelected}
                                                     inputProps={{'aria-labelledby': labelId}}
                                                 />
@@ -290,7 +364,7 @@ class ReportTab extends Component {
                                                 {row.title}
                                             </TableCell>
                                             <TableCell align="right">{row.lastModified}</TableCell>
-                                            <TableCell align="right" onClick={() => this.handleEdit(row.title)}><Edit/></TableCell>
+                                            <TableCell align="right" onClick={() => this.handleEdit(row.id, row.title)}><Edit/></TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -304,7 +378,7 @@ class ReportTab extends Component {
                     </TableContainer>
                 </Paper>
                 {editMode ? <Report filename={editFilename}
-                                    text={editFilename}
+                                    text={text}
                                     close={this.closeEdit}
                 /> : ''}
                 <ReportDialog open={openDialog} handleClose={this.addReport}/>
