@@ -5,7 +5,7 @@ export const consoleState={
 
 }
 export const contentState={
-
+    reports: []
 }
 export const headerState={
     selectedFile: null,

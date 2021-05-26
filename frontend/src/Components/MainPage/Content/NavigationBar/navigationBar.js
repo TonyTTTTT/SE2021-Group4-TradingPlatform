@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {AppBar, Box, Tab, Tabs, Typography, withStyles} from "@material-ui/core";
+import {AppBar, Box, Container, Tab, Tabs, Typography, withStyles} from "@material-ui/core";
 import * as PropTypes from "prop-types";
 import EquityTab from "../Components/equityTab";
 import ProfitTab from "../Components/profitTab";
 import Performance from "../Components/performance";
 import TradeTab from "../Components/tradeTab";
 import ReportTab from "../Components/reportTab";
-import Switch from "react-bootstrap/Switch";
 
 class TabPanel extends Component {
     render() {
@@ -59,7 +58,7 @@ class LinkTab extends Component {
 const styles = (theme) => ({
     root: {
         flexGrow: 1,
-        backgroundColor: theme.palette.background.paper
+        backgroundColor: theme.palette.background
     }
 });
 
@@ -73,7 +72,7 @@ class NavigationBar extends Component {
         const {classes} = this.props
         return (
 
-            <div className={classes.root}>
+            <Container className={classes.root}>
                 <AppBar position="static">
                     <Tabs
                         variant="fullWidth"
@@ -103,7 +102,7 @@ class NavigationBar extends Component {
                 <TabPanel value={value} index={4}>
                     <ReportTab/>
                 </TabPanel>
-            </div>
+            </Container>
 
         );
     }

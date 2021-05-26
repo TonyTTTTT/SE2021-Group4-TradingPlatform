@@ -59,7 +59,7 @@ export default class ProfitTab extends Component {
 
     render() {
         return (
-            <div id='equity' ref={c => this.profit = c} style={{width: '100%', height: '600px'}}/>
+            <div id='equity' ref={c => this.profit = c} style={{width: '100%', height: '500px'}}/>
         );
     }
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import {Container, Row, Col, Button} from 'react-bootstrap';
-import Content from "./Content/content";
+import {Container, Row, Col} from 'react-bootstrap';
 import SideArea from "./SideArea/sideArea"
 import TagArea from "./TagArea/tagArea"
 import Console from "./Console/console"
+import NavigationBar from "./Content/NavigationBar/navigationBar";
 
 class MainPage extends React.Component {
     constructor(props) {
@@ -13,17 +13,15 @@ class MainPage extends React.Component {
 
     render() {
         return (
-            <Container fluid style={{height:window.innerHeight,width:window.innerWidth}}>
-                <Row style={{height:"100%"}}>
-                    <Col sm={4} style={{height:"100%"}}>
+            <Container fluid style={{height: window.innerHeight, width: window.innerWidth}}>
+                <Row style={{height: "100%"}}>
+                    <Col sm={4} style={{height: "100%", width: "100%"}}>
                         <SideArea/>
                         <TagArea/>
                     </Col>
-                    <Col sm={8} style={{height: "100%"}}>
-                        <Container>
-                            <Content/>
-                            <Console/>
-                        </Container>
+                    <Col sm={8} style={{height: "100%", width: "100%"}}>
+                        <NavigationBar/>
+                        <Console/>
                     </Col>
                 </Row>
             </Container>

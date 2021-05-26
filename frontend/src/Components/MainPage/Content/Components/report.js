@@ -16,6 +16,8 @@ export default class Report extends Component {
         })
         stackedit.on('fileChange', file => {
             this.md.value = file.content.text
+            // console.log(this.md.value)
+            this.setState({content: this.md.value})
         })
         stackedit.on('close', () => {
             this.props.close(this.md.value)
