@@ -1,6 +1,6 @@
 import atexit
-import os
 import json
+import os
 import time
 from pathlib import Path
 
@@ -42,24 +42,43 @@ class DataFileManager():
         output:
             * an unique algo_id: int
         """
-        pass
-        return 0
+        return int(time.time()*100)
 
     def _generate_report_id(self) -> int:
         """
         output:
             * an unique report_id: int
         """
-        pass
-        return 0
+        return int(time.time()*100)
 
     def _generate_parameter_set_id(self) -> int:
         """
         output:
             * an unique parameter_set_id: int
         """
-        pass
-        return 0
+        return int(time.time()*100)
+
+
+    def create_report(self, title: str, algo_id: int) -> int:
+        """
+        input:
+            * title: report's title
+            * algo_id: algo_id that this report relates to
+        output:
+            report_id: int, -1 if fail
+        """
+        report_id = self._generate_report_id()
+        if report_id == -1:
+            return -1
+        report_path = "report_files/{}.{}.md".format(algo_id, report_id)
+        report = { "id": report_id,
+                   "algo_id": algo_id,
+                   "title": title,
+                   "path": report_path }
+        self.data['report'].append(report)
+        with open(report_path, 'w', encoding='utf-8-sig') as f:
+            f.write("# {}\n".format(title))
+        return report_id
 
     def save_report(self, report_id: int, content: str) -> int:
         """
@@ -71,11 +90,9 @@ class DataFileManager():
         """
         report = self._find_report(report_id)
         if report is None:
-            print("report not found")
             return -1
         with open(report['path'], 'w', encoding='utf-8-sig') as f:
             f.write(content)
-            print("down writing to", report['path'])
         return report_id
 
     def _find_report(self, report_id: int):
@@ -122,7 +139,7 @@ class DataFileManager():
 
 
 if __name__  == "__main__":
-    fm = FileManager()
-    fm.delete_report(1)
+    fm = DataFileManager()
+    fm.delete_report(162202302826)
 
 
