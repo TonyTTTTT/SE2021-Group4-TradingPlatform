@@ -9,6 +9,12 @@ ALGO_ID = 'algo_id'
 ID = 'id'
 
 
+class LogLevel():
+    ERROR = 0
+    WARNING = 1
+    INFO = 2
+    DEBUG = 3
+
 class CommonResult:
     def __init__(self, code: int, msg: str, data: object = None):
         self.code = code  # {0: Error, 1: Warning, 2: Info, 3: Debug}

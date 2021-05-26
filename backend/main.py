@@ -1,18 +1,12 @@
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
 from flask_cors import CORS
 from DataFileManager import DataFileManager
-from backend.utils import CommonResult
+from backend.utils import CommonResult, LogLevel
 
 app = Flask(__name__)
 cors = CORS(app)
 df_manager = DataFileManager()
 
-
-class LogLevel():
-    ERROR = 0
-    WARNING = 1
-    INFO = 2
-    DEBUG = 3
 
 
 @app.route('/')
