@@ -50,22 +50,25 @@ def get_all_report():
                             None).to_json()
 
 
-@app.route('/get-repor-list', methods=['get'])
-def get_report_list(algo_id):
-    report_list = df_manager.get_report_list(algo_id)
+@app.route('/get-report-list', methods=['get'])
+def get_report_list():
+    algo_id = request.values.get('algo_id')
+    report_list = df_manager.get_report_list(int(algo_id))
     return CommonResult(LogLevel.INFO, 'Loaded report list', report_list).to_json()
 
 
 @app.route('/create-report', methods=['post'])
-def create_report(title, algo_id):
-    report_id = df_manager.create_report(title, algo_id)
+def create_report():
+    title = request.form.get('title')
+    algo_id = request.form.get('algo_id')
+    report_id = df_manager.create_report(title, int(algo_id))
     if report_id is not None:
         return CommonResult(LogLevel.INFO, 'Create report', report_id).to_json()
     else:
         return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
 
 
-@app.route('/save-report', method=['POST'])
+@app.route('/save-report', methods=['POST'])
 def save_report():
     args = request.args.to_dict()
     report_id = args.pop("report_id", None)
@@ -75,7 +78,7 @@ def save_report():
     return CommonResult(LogLevel.INFO, "Saved report", None).to_json()
 
 
-@app.route('/delete-report/<report_id>', method=['DELETE'])
+@app.route('/delete-report/<report_id>', methods=['DELETE'])
 def delete_report(report_id):
     try:
         df_manager.delete_report(report_id)
