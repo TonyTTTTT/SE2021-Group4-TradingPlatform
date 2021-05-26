@@ -32,6 +32,14 @@ def get_all_report():
 def get_report(report_id:int):
     return
 
+@app.route('/getReportList', methods=['get'])
+def get_report_list(algo_id):
+    raise NotImplementedError
+
+@app.route('/createReport', methods=['get', 'post'])
+def create_report(title):
+    raise NotImplementedError
+
 @app.route('/delete-report/<report_id>', method=['DELETE'])
 def delete_report(report_id):
     try:
