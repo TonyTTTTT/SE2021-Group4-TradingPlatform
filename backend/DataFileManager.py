@@ -175,4 +175,4 @@ class DataFileManager():
 
 if __name__ == "__main__":
     fm = DataFileManager()
-    lete_report(162202302826)
+    fm.delete_report(162202302826)
