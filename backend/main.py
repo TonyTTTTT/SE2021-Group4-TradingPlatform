@@ -5,7 +5,6 @@ from utils import CommonResult, LogLevel
 
 app = Flask(__name__)
 cors = CORS(app)
-df_manager = DataFileManager()
 
 
 @app.route('/')
@@ -24,6 +23,7 @@ def index():
 
 @app.route('/get-report/<report_id>', methods=['get'])
 def get_report(report_id: int):
+    df_manager = DataFileManager()
     report_id = int(report_id)
     try:
         df_manager = DataFileManager()
@@ -41,6 +41,7 @@ def get_report(report_id: int):
 
 @app.route('/get-all-report', methods=['get'])
 def get_all_report():
+    df_manager = DataFileManager()
     try:
         df_manager = DataFileManager()
         res = df_manager.get_all_report()
@@ -52,6 +53,7 @@ def get_all_report():
 
 @app.route('/get-report-list', methods=['get'])
 def get_report_list():
+    df_manager = DataFileManager()
     algo_id = request.values.get('algo_id')
     report_list = df_manager.get_report_list(int(algo_id))
     return CommonResult(LogLevel.INFO, 'Loaded report list', report_list).to_json()
@@ -59,6 +61,7 @@ def get_report_list():
 
 @app.route('/create-report', methods=['post'])
 def create_report():
+    df_manager = DataFileManager()
     title = request.form.get('title')
     algo_id = request.form.get('algo_id')
     report_id = df_manager.create_report(title, int(algo_id))
@@ -70,6 +73,7 @@ def create_report():
 
 @app.route('/save-report', methods=['POST'])
 def save_report():
+    df_manager = DataFileManager()
     args = request.args.to_dict()
     report_id = args.pop("report_id", None)
     md_content = args.pop("content", None)
@@ -86,8 +90,9 @@ def save_report():
 
 @app.route('/delete-report/<report_id>', methods=['DELETE'])
 def delete_report(report_id):
+    df_manager = DataFileManager()
     try:
-        df_manager.delete_report(report_id)
+        df_manager.delete_report(int(report_id))
         return CommonResult(LogLevel.INFO, "Deleted report No. {}".format(report_id), None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()

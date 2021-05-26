@@ -7,9 +7,16 @@ from pathlib import Path
 from DataClasses import ReportInfo
 from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-class DataFileManager():
+class DataFileManager(metaclass=Singleton):
     def __init__(self):
+        print("init DFM")
         self.info_path = META_INFO_PATH
         self._load_info()
         atexit.register(self._save_info)
@@ -38,6 +45,8 @@ class DataFileManager():
         """
         with open(self.info_path, 'w') as f:
             json.dump(self.data, f, indent=2)
+        print("info.json saved")
+        print(self.data)
 
     def _generate_algo_id(self) -> int:
         """
@@ -117,8 +126,10 @@ class DataFileManager():
         """
         report = self._find_report(report_id)
         self.data['report'] = [report for report in self.data['report'] if report['id'] != report_id]
+        print(self.data['report'])
         if report is not None and os.path.exists(report['path']):
             os.remove(report['path'])
+        print(self.data)
 
     def get_all_report(self):
         """
