@@ -75,7 +75,13 @@ def save_report():
     md_content = args.pop("content", None)
     if report_id is None or md_content is None:
         return CommonResult(LogLevel.ERROR, "Invalid input in 'save-report'", None).to_json()
-    return CommonResult(LogLevel.INFO, "Saved report", None).to_json()
+    try:
+        report_id = df_manager.save_report(report_id, md_content)
+        if report_id == -1:
+            return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
+        return CommonResult(LogLevel.DEBUG, "Saved report No. {}".format(report_id), None).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
 
 
 @app.route('/delete-report/<report_id>', methods=['DELETE'])
