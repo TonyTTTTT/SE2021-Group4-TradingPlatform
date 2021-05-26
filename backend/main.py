@@ -23,6 +23,7 @@ def index():
 
 @app.route('/get-report/<report_id>', methods=['get'])
 def get_report(report_id: int):
+    df_manager = DataFileManager()
     report_id = int(report_id)
     try:
         report = df_manager.get_report(report_id)
@@ -39,6 +40,7 @@ def get_report(report_id: int):
 
 @app.route('/get-all-report', methods=['get'])
 def get_all_report():
+    df_manager = DataFileManager()
     try:
         res = df_manager.get_all_report()
         return CommonResult(LogLevel.INFO, "Success get all report_info", res).to_json()
