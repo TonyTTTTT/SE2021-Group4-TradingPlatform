@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
 from flask_cors import CORS
 from DataFileManager import DataFileManager
-from backend.utils import CommonResult, LogLevel
+from utils import CommonResult, LogLevel
 
 app = Flask(__name__)
 cors = CORS(app)

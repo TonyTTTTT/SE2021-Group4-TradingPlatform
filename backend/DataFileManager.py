@@ -4,8 +4,8 @@ import os
 import time
 from pathlib import Path
 
-from backend.DataClasses import ReportInfo
-from backend.utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
+from DataClasses import ReportInfo
+from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
 
 
 class DataFileManager():
