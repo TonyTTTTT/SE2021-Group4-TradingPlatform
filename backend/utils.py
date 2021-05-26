@@ -1,4 +1,5 @@
 import json
+from flask import jsonify
 
 META_INFO_PATH = './info.json'
 REPORT_DIR = './report_files'
@@ -15,4 +16,4 @@ class CommonResult:
         self.data = data  # json object
 
     def to_json(self):
-        return json.dumps(self.__dict__)
+        return jsonify(code=self.code, msg=self.msg, data=self.data)
