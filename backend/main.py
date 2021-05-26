@@ -1,12 +1,11 @@
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
 from flask_cors import CORS
 from DataFileManager import DataFileManager
-
-
+from backend.utils import CommonResult
 
 app = Flask(__name__)
 cors = CORS(app)
-
+df_manager = DataFileManager()
 
 @app.route('/')
 def index():
@@ -32,11 +31,16 @@ def get_report(report_id:int):
 
 @app.route('/getReportList', methods=['get'])
 def get_report_list(algo_id):
-    raise NotImplementedError
+    report_list = df_manager.get_report_list(algo_id)
+    return CommonResult(2, 'ok', report_list).to_json()
 
-@app.route('/createReport', methods=['get', 'post'])
-def create_report(title):
-    raise NotImplementedError
+@app.route('/createReport', methods=['post'])
+def create_report(title, algo_id):
+    report_id = df_manager.create_report(title, algo_id)
+    if report_id is not None:
+        return CommonResult(2, 'ok', report_id).to_json()
+    else:
+        return CommonResult(0, 'duplicated title').to_json()
 
 @app.route('/delete-report/<report_id>', method=['DELETE'])
 def delete_report(report_id):
@@ -45,7 +49,6 @@ def delete_report(report_id):
         return jsonify({"code": 3, "msg": "Deleted report No. {}".format(report_id), "data": None})
     except:
         return jsonify({"code": 0, "msg": "Error Deleting report", "data": None})
-
 
 @app.route('/save-report', method=['POST'])
 def save_report():
@@ -61,6 +64,9 @@ def save_report():
         return jsonify({"code": 3, "msg": "Saved report No. {}".format(report_id)}, "data": None)
     except:
         return jsonify({"code": 0, "msg": "Error saving report", "data": None})
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 

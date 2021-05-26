@@ -40,6 +40,7 @@ class ReportInfo:
     algo_id: int
     title: str
     path: str
+    lastModified: str
 
 
 # Product
