@@ -26,7 +26,6 @@ def index():
 def get_report(report_id: int):
     report_id = int(report_id)
     try:
-        df_manager = DataFileManager()
         report = df_manager.get_report(report_id)
         if (report != -1):
             return CommonResult(LogLevel.INFO, "Success get the report of report_id:{}".format(report_id),
@@ -42,7 +41,6 @@ def get_report(report_id: int):
 @app.route('/get-all-report', methods=['get'])
 def get_all_report():
     try:
-        df_manager = DataFileManager()
         res = df_manager.get_all_report()
         return CommonResult(LogLevel.INFO, "Success get all report_info", res).to_json()
     except:
