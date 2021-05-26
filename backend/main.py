@@ -1,9 +1,7 @@
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
-<<<<<<< HEAD
 from flask_cors import CORS
-=======
 from DataFileManager import DataFileManager
->>>>>>> origin
+
 
 
 app = Flask(__name__)
