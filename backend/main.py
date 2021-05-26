@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
 from flask_cors import CORS
 from DataFileManager import DataFileManager
@@ -6,6 +8,7 @@ from backend.utils import CommonResult
 app = Flask(__name__)
 cors = CORS(app)
 df_manager = DataFileManager()
+
 
 @app.route('/')
 def index():
@@ -27,12 +30,15 @@ def get_report(report_id: int):
     try:
         df_manager = DataFileManager()
         report = df_manager.get_report(report_id)
-        if(report != -1):
-            return jsonify({"code": 2, "msg":"Success get the report of report_id:{}".format(report_id), "data": report})
+        if (report != -1):
+            return jsonify(
+                {"code": 2, "msg": "Success get the report of report_id:{}".format(report_id), "data": report})
         else:
-            return jsonify({"code": 2, "msg":"The report of report_id:{} not exist".format(report_id), "data":None})
+            return jsonify({"code": 2, "msg": "The report of report_id:{} not exist".format(report_id), "data": None})
     except:
-        return jsonify({"code": 0, "msg":"Some uncertain err occur when requesting the report of report_id:{}".format(report_id), "data":None})
+        return jsonify(
+            {"code": 0, "msg": "Some uncertain err occur when requesting the report of report_id:{}".format(report_id),
+             "data": None})
 
 
 @app.route('/get-all-report', methods=['get'])
@@ -42,12 +48,12 @@ def get_all_report():
         res = df_manager.get_all_report()
         return jsonify({"code": 2, "msg": "Success get all report_info", "data": res})
     except:
-        return jsonify({"code": 0, "msg":"Some uncertain err occur when requesting all the report_info", "data":None})
+        return jsonify({"code": 0, "msg": "Some uncertain err occur when requesting all the report_info", "data": None})
 
 
 @app.route('/getReportList', methods=['get'])
 def get_report_list(algo_id):
-    report_list = df_manager.get_report_list(algo_id)
+    report_list = json.dumps([report_info.__dict__ for report_info in df_manager.get_report_list(algo_id)])
     return CommonResult(2, 'ok', report_list).to_json()
 
 
@@ -78,10 +84,5 @@ def delete_report(report_id):
         return jsonify({"code": 0, "msg": "Error Deleting report", "data": None})
 
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-

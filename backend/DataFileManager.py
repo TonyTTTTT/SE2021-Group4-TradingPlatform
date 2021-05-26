@@ -161,6 +161,8 @@ class DataFileManager():
             report_id = self._generate_report_id()
             report_info = ReportInfo(report_id, algo_id, title, str(report_path), time.asctime(time.localtime()))
             self.data[REPORT].append(report_info.__dict__)
+            self.algo_id2report_ids[algo_id].append(report_id)
+            self.report_id2report_info[report_id] = report_info.__dict__
             self._save_info()
             return report_id
         else:
