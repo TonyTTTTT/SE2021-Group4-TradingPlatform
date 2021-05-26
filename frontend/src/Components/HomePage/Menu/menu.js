@@ -66,27 +66,12 @@ const Menu = (props) => {
             setSelectedRow(gridApi.getSelectedRows());
             props.setSelectedAlgoID(gridApi.getSelectedRows()[0].AlgoID)
         }
-        //console.log(selectedRow.AlgoID);
-        // console.log(selectedRow);
-        // if(countClick >= 1) {
-        //     if( gridApi.getSelectedRows().id === selectedRow.id){
-        //         console.log("doubleClick");
-        //     }
-        //         countClick = 0;
-        // }else{
-        //     countClick ++ ;
-        //     console.log("1");
-        //     setTimeout(()=>{},1000).then(function(){countClick--;console.log("2");})
-            
-        // }
     }
 
     const onGridReady = (params) => {
         setGridApi(params.api);
         setGridColumnApi(params.columnApi);   
     };
-   
-
     
     return (
         <Tab.Container  
@@ -108,11 +93,11 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Algo" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 100,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 200,filter: true,resizable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
                                 onGridReady={onGridReady}
-                                autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
+                                autoGroupColumnDef={{ minWidth: 150, headerName:"Title"}}
                                 enableRangeSelection={true}
                                 //enableCellChangeFlash={true}
                                 onRowSelected={onRowSelected}
@@ -129,10 +114,10 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Report" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 100,editable: true,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 150,editable: true,filter: true,resizable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
-                                autoGroupColumnDef={{ minWidth: 200 }}
+                                autoGroupColumnDef={{ minWidth: 150 , headerName:"Algorithm"}}
                                 enableRangeSelection={true}
                                 rowData={props.menu.reportData}
                                 >
