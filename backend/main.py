@@ -106,6 +106,12 @@ def single_test():
     df_manager = DataFileManager()
     try:
         print(request.json)
+        algo_id = int(request.json.get("algo_id", None))
+        print(algo_id)
+        # get the file path of the specific algo
+        # alto_tester = AlgorithmTester()
+        # algo_test._create_algo(algo_id)
+        # algo_tester.single_test()
         return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
