@@ -13,22 +13,15 @@ class SideArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            param_set: []
+            paramset_format: {},
+            paramset_single: {},
+            paramset_batch: {}
         };
     }
     componentDidMount() {
-        // const ROOT_PATH = '/api1';
-        axios.get('http://localhost:5000/test').then(
-            response => {
-                // this.run(response.data)
-                const param_set = response.data;
-                this.setState({param_set});
-                console.log(response.data);
-            },
-            error => console.log(error.message)
-        )
 
     }
+
     render() {  
         let algo_name = "BH Algo"
         let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 

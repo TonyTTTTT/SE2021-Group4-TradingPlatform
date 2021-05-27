@@ -1,6 +1,7 @@
 from flask import jsonify
 
 META_INFO_PATH = './info.json'
+PRODUCT_INFO_PATH = './product_info.json'
 REPORT_DIR = './report_files'
 PARAMETER_SET_DIR = './parameter_set_files'
 ALGO = 'algo'
