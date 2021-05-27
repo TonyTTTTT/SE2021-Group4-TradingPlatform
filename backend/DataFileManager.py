@@ -7,12 +7,15 @@ from pathlib import Path
 from DataClasses import ReportInfo
 from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
 
+
 class Singleton(type):
     _instances = {}
+
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
 
 class DataFileManager(metaclass=Singleton):
     def __init__(self):
@@ -148,7 +151,7 @@ class DataFileManager(metaclass=Singleton):
             * The report content: str
         """
         report_info = self._find_report(report_id)
-        if report_info != None and os.path.exists(report_info['path']):
+        if report_info is not None and os.path.exists(report_info['path']):
             with open(report_info['path'], 'r') as f:
                 report = f.read()
             return report
