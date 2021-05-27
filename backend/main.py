@@ -101,7 +101,7 @@ def get_algo_info(algo_id):
         return CommonResult(LogLevel.ERROR, message, None).to_json()
 
 
-@app.route('/single-test', methods=['post'])
+@app.route('/single-test', methods=['POST'])
 def single_test():
     df_manager = DataFileManager()
     try:
@@ -112,6 +112,7 @@ def single_test():
         # alto_tester = AlgorithmTester()
         # algo_test._create_algo(algo_id)
         # algo_tester.single_test()
+
         return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
