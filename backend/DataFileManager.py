@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 
 from DataClasses import ReportInfo
-from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
+from utils import META_INFO_PATH, PRODUCT_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
 
 
 class Singleton(type):
@@ -20,6 +20,7 @@ class Singleton(type):
 class DataFileManager(metaclass=Singleton):
     def __init__(self):
         self.info_path = META_INFO_PATH
+        self.product_info_path = PRODUCT_INFO_PATH
         self._load_info()
         atexit.register(self._save_info)
 
@@ -187,7 +188,15 @@ class DataFileManager(metaclass=Singleton):
         }
 
         return algo_info_and_parameters
-
+    
+    def get_product_info(self, product_id: int):
+        with open(self.product_info_path, 'r') as f:
+            self.product_infos = json.load(f)
+        for product_info in self.product_infos["product"]:
+            if int(product_info['id']) == int(product_id):
+                return product_info
+        
+        return -1
 
 
 
