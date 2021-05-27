@@ -12,16 +12,6 @@ cors = CORS(app)
 def index():
     return '<h1>Hello, Flask!</h1>'
 
-
-# @app.route('/report', methods=['GET'])
-# def reports():
-#     if 'name' in request.args:
-#         name = request.args['name']
-#     else:
-#         return "Error: no name field provided."
-
-#     return send_from_directory('reports', name)
-
 @app.route('/get-report/<report_id>', methods=['get'])
 def get_report(report_id: int):
     df_manager = DataFileManager()
@@ -110,5 +100,16 @@ def get_algo_info(algo_id):
         message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
         return CommonResult(LogLevel.ERROR, message, None).to_json()
 
+
+@app.route('/single-test', methods=['post'])
+def single_test():
+    df_manager = DataFileManager()
+    try:
+        print(request.json)
+        return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
+    
+    
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
