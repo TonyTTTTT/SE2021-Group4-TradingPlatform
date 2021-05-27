@@ -1,7 +1,8 @@
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
 from flask_cors import CORS
 from DataFileManager import DataFileManager
-from utils import CommonResult, LogLevel
+from utils import CommonResult, LogLevel, META_INFO_PATH
+import json
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -94,6 +95,20 @@ def delete_report(report_id):
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()
 
+# NOTE:
+# 雖然叫做 get-algo-info，但是實際上傳送的資料不是 AlgoInfo 這個 class，
+# 而是還會透過 parameter_set_id 將 parameters 展開來（廣義的algo info）
+@app.route('/get-algo-info/<algo_id>', methods=['get'])
+def get_algo_info(algo_id):
+    df_manager = DataFileManager()
+    algo_id = int(algo_id)
+    try:
+        algo_info_and_parameters = df_manager.get_algo_info_and_parameters(algo_id)
+        message = 'Get algo info of algo id {} successfully'.format(algo_id)
+        return CommonResult(LogLevel.INFO, message, algo_info_and_parameters).to_json()
+    except:
+        message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
+        return CommonResult(LogLevel.ERROR, message, None).to_json()
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
