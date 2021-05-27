@@ -148,7 +148,7 @@ class DataFileManager(metaclass=Singleton):
             * The report content: str
         """
         report_info = self._find_report(report_id)
-        if os.path.exists(report_info['path']):
+        if report_info != None and os.path.exists(report_info['path']):
             with open(report_info['path'], 'r') as f:
                 report = f.read()
             return report
