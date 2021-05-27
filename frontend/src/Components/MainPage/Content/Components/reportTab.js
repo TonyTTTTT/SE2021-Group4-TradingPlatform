@@ -23,6 +23,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Report from "./report";
 import ReportDialog from "./reportDialog";
 import axios from "axios";
+import {connect} from "react-redux";
 
 function createData(title, lastModified, id) {
     return {title, lastModified, id};
@@ -268,8 +269,10 @@ class ReportTab extends Component {
     addReport = (title) => {
         if (title.length > 0) {
             let formData = new FormData();
+            const {algoId} = this.props
             formData.append('title', title);
-            formData.append('algo_id', 7)
+            formData.append('algo_id', algoId)
+            console.log(algoId)
             axios.post('/api2/create-report', formData,
                 {headers: {"Content-Type": "multipart/form-data"}},).then(
                 response => {
@@ -387,4 +390,4 @@ class ReportTab extends Component {
     }
 }
 
-export default withStyles(styles)(ReportTab);
+export default connect(state => ({algoId: state.menu.selectedAlgoID}))(withStyles(styles)(ReportTab));

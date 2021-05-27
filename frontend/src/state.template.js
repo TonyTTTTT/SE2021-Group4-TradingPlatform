@@ -5,14 +5,13 @@ export const consoleState={
 
 }
 export const contentState={
-    reports: []
 }
 export const headerState={
     selectedFile: null,
     isFileSelected: false
 }
 export const menuState={
-    selectedAlgoID : null,
+    selectedAlgoID : 7,
     deleteSignal: false,
     algoData:[  {AlgoID:1,Title:"Algo 1",Version:"1.01",Description:"None",Content:"",Last_Modified:"2020-9-10 23:12:30"},
                 {AlgoID:2,Title:"Algo 2",Version:"0.01",Description:"None",Content:"",Last_Modified:"2020-9-20 23:12:50"},
