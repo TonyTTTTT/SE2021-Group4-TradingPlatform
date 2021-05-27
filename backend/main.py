@@ -72,9 +72,8 @@ def create_report():
 @app.route('/save-report', methods=['POST'])
 def save_report():
     df_manager = DataFileManager()
-    args = request.args.to_dict()
-    report_id = args.pop("report_id", None)
-    md_content = args.pop("content", None)
+    report_id = request.json.get("report_id", None)
+    md_content = request.json.get("content", None)
     if report_id is None or md_content is None:
         return CommonResult(LogLevel.ERROR, "Invalid input in 'save-report'", None).to_json()
     try:
