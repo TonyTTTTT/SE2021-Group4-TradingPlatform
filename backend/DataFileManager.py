@@ -19,7 +19,6 @@ class Singleton(type):
 
 class DataFileManager(metaclass=Singleton):
     def __init__(self):
-        print("init DFM")
         self.info_path = META_INFO_PATH
         self._load_info()
         atexit.register(self._save_info)
@@ -48,8 +47,6 @@ class DataFileManager(metaclass=Singleton):
         """
         with open(self.info_path, 'w') as f:
             json.dump(self.data, f, indent=2)
-        print("info.json saved")
-        print(self.data)
 
     def _generate_algo_id(self) -> int:
         """
@@ -73,27 +70,6 @@ class DataFileManager(metaclass=Singleton):
             * an unique parameter_set_id: int
         """
         return int(time.time() * 100)
-
-    # def create_report(self, title: str, algo_id: int) -> int:
-    #     """
-    #     input:
-    #         * title: report's title
-    #         * algo_id: algo_id that this report relates to
-    #     output:
-    #         report_id: int, -1 if fail
-    #     """
-    #     report_id = self._generate_report_id()
-    #     if report_id == -1:
-    #         return -1
-    #     report_path = "report_files/{}.{}.md".format(algo_id, report_id)
-    #     report = { "id": report_id,
-    #                "algo_id": algo_id,
-    #                "title": title,
-    #                "path": report_path }
-    #     self.data['report'].append(report)
-    #     with open(report_path, 'w', encoding='utf-8-sig') as f:
-    #         f.write("# {}\n".format(title))
-    #     return report_id
 
     def save_report(self, report_id: int, content: str) -> int:
         """
