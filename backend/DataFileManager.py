@@ -27,8 +27,11 @@ class DataFileManager(metaclass=Singleton):
         """
         load json data from info_path
         """
-        with open(self.info_path, 'r') as f:
-            self.data = json.load(f)
+        if os.stat(self.info_path).st_size == 0:
+            self.data = {"algo": [], "report": [], "parameter_set": []}
+        else:
+            with open(self.info_path, 'r') as f:
+                self.data = json.load(f)
         self.algo_id2report_ids = {}
         self.report_id2report_info = {}
         for i, report_info in enumerate(self.data[REPORT]):

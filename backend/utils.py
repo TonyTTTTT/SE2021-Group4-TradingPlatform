@@ -2,8 +2,10 @@ from flask import jsonify
 
 META_INFO_PATH = './info.json'
 REPORT_DIR = './report_files'
+PARAMETER_SET_DIR = './parameter_set_files'
 ALGO = 'algo'
 REPORT = 'report'
+PARAMETER_SET = 'PARAMETER_SET'
 ALGO_ID = 'algo_id'
 ID = 'id'
 
