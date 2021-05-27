@@ -186,4 +186,4 @@ class DataFileManager(metaclass=Singleton):
 
 if __name__ == "__main__":
     fm = DataFileManager()
-    fm.delete_report(162202302826)
+    # fm.delete_report(162202302826)
