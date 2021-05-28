@@ -6,25 +6,21 @@ import datetime
 # AlgoInfo
 @dataclass
 class AlgoInfo:
-    id: int
-    title: str
-    version: str
-    class_name: str
-    path: str
-    parameter_set_id: int
+    id: int                 # 這個 Algorithm 的 ID
+    title: str              
+    version: str            
     apply_product: str
-
-    @staticmethod
-    def load_algo_info(algo_id: int) -> 'AlgoInfo':
-        pass  # TODO
+    parameter_set_id: int
+    path: str               # 這個 Algorithm 的檔案路徑
+    # class_name: str
 
 
 # Parameters
 @dataclass
 class Parameter:
-    type: str
+    name: str
+    type: str       # "cat" or "num"
     value: object
-
 
 @dataclass
 class ParameterSet:
@@ -51,9 +47,7 @@ class Product:
     tick_size: float
     unit: float
     exchange_rate: float
-    # or may be datetime.datetime
-    start_time: datetime
-    end_time: datetime
+
 
 
 # TradeAction, TradeResult, TestResult, TradeStat

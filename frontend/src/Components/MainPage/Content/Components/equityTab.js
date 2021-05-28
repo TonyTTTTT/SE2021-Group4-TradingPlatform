@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import * as echarts from "echarts";
 import axios from "axios";
-import {Container} from "react-bootstrap";
 
 export default class EquityTab extends Component {
 

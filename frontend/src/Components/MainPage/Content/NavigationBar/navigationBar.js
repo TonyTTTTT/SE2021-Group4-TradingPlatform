@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import {AppBar, Box, Container, Tab, Tabs, Typography, withStyles} from "@material-ui/core";
 import * as PropTypes from "prop-types";
-import EquityTab from "../Components/equityTab";
-import ProfitTab from "../Components/profitTab";
-import Performance from "../Components/performance";
-import TradeTab from "../Components/tradeTab";
-import ReportTab from "../Components/reportTab";
 
 class TabPanel extends Component {
     render() {
@@ -69,9 +64,8 @@ class NavigationBar extends Component {
 
     render() {
         const {value} = this.state
-        const {classes} = this.props
+        const {classes, tabs} = this.props
         return (
-
             <Container className={classes.root}>
                 <AppBar position="static">
                     <Tabs
@@ -80,28 +74,13 @@ class NavigationBar extends Component {
                         onChange={this.handleChange}
                         aria-label="nav tabs example"
                     >
-                        <LinkTab label="equity" href="/main/equity" {...a11yProps(0)} />
-                        <LinkTab label="profit" href="/main/profit" {...a11yProps(1)} />
-                        <LinkTab label="performance" href="/main/performance" {...a11yProps(2)} />
-                        <LinkTab label="tradeActions" href="/main/tradeActions" {...a11yProps(3)} />
-                        <LinkTab label="reports" href="/main/reports" {...a11yProps(4)} />
+                        {tabs.map((tab, index) => <LinkTab label={tab.label} {...a11yProps(index)} />)}
                     </Tabs>
                 </AppBar>
-                <TabPanel value={value} index={0}>
-                    <EquityTab/>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <ProfitTab/>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <Performance/>
-                </TabPanel>
-                <TabPanel value={value} index={3}>
-                    <TradeTab/>
-                </TabPanel>
-                <TabPanel value={value} index={4}>
-                    <ReportTab/>
-                </TabPanel>
+
+                {tabs.map((tab, index) => (<TabPanel value={value} index={index}>
+                    {tab.content}
+                </TabPanel>))}
             </Container>
 
         );
@@ -113,6 +92,4 @@ class NavigationBar extends Component {
     };
 }
 
-// export default connect(state => ({tabNum: state.tabNum}),
-//     {changeTab: changeTab})(withStyles(styles)(NavigationBar));
 export default withStyles(styles)(NavigationBar)

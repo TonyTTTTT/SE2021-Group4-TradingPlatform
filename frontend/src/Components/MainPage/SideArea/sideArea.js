@@ -13,27 +13,47 @@ class SideArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            param_set: []
+            paramset_format: {},
+            paramset_single: {product: {name: "", start_date: "", end_date: "", slip: ""}},
+            // paramset_single: '',
+            paramset_batch: {}
         };
+    
     }
+
     componentDidMount() {
-        // const ROOT_PATH = '/api1';
-        axios.get('http://localhost:5000/test').then(
-            response => {
-                // this.run(response.data)
-                const param_set = response.data;
-                this.setState({param_set});
-                console.log(response.data);
-            },
-            error => console.log(error.message)
-        )
 
     }
+
+    handleSlipInput = (event) => {
+        this.setState({paramset_single: {product: {slip: event.target.value}}}, () => 
+            {
+                console.log(this.state.paramset_single);
+            })
+    }
+
+    handleStartDateInput = (event) => {
+        this.setState({paramset_single: {product: {start_date: event.target.value}}}, () => 
+            {
+                console.log(this.state.paramset_single);
+            })
+    }
+
+    handleEndDateInput = (event) => {
+        this.setState({paramset_single: {product: {end_date: event.target.value}}}, () => 
+            {
+                console.log(this.state.paramset_single);
+            })
+    }
+
     render() {  
         let algo_name = "BH Algo"
         let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
         ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
         ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small', 'mid']] ]
+        const input_slip = (value) => {
+            console.log("entering slip. ",value);
+        }
         return (
             <Col style={{fontSize:8, height:"90%"}}>
                 <Row>
@@ -92,15 +112,15 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><Example/></td>
+                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleStartDateInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><Example/></td>
+                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleEndDateInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>
-                                    <td><input type="slip"/></td>
+                                    <td><input onChange={this.handleSlipInput} /></td>
                                 </tr>
                             </tbody>
                             <thead>

@@ -4,6 +4,8 @@
       "id": 0,
       "title": "Buy and Hold",
       "version": "1.0",
+      "description": "",
+      "lastModified": "",
       "path": "algo_files/BuyAndHold/first_version.py"
     }
   ],

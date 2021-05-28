@@ -1,0 +1,11 @@
+{
+  "product" : [
+	{
+	  "name": "TXF",
+	  "tickSize": 1,
+	  "exchangeRate": 1,
+	  "unit": 200
+	}
+  ]
+}
+		

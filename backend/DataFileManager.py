@@ -9,15 +9,17 @@ from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR
 
 class Singleton(type):
     _instances = {}
+
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
+
 class DataFileManager(metaclass=Singleton):
     def __init__(self):
-        print("init DFM")
         self.info_path = META_INFO_PATH
+        self.product_info_path = PRODUCT_INFO_PATH
         self._load_info()
         atexit.register(self._save_info)
 
@@ -25,8 +27,11 @@ class DataFileManager(metaclass=Singleton):
         """
         load json data from info_path
         """
-        with open(self.info_path, 'r') as f:
-            self.data = json.load(f)
+        if os.stat(self.info_path).st_size == 0:
+            self.data = {"algo": [], "report": [], "parameter_set": []}
+        else:
+            with open(self.info_path, 'r') as f:
+                self.data = json.load(f)
         self.algo_id2report_ids = {}
         self.report_id2report_info = {}
 
@@ -52,8 +57,6 @@ class DataFileManager(metaclass=Singleton):
         """
         with open(self.info_path, 'w') as f:
             json.dump(self.data, f, indent=2)
-        print("info.json saved")
-        print(self.data)
 
     def _generate_algo_id(self) -> int:
         """
@@ -88,7 +91,7 @@ class DataFileManager(metaclass=Singleton):
         if not exists:
             algo_path.touch()
             algo_id = self._generate_algo_id()
-            algo_info = ALGOInfo(algo_id, title, version, "ClassName",algo_path,"Parameter Set ","Apply Product"))
+            algo_info = ALGOInfo(algo_id, title, version, "None","LastModified example",algo_path)
             self.data[ALGO].append(algo_info.__dict__) 
 
             with open(algo['path'], 'w', encoding='utf-8') as f:
@@ -200,7 +203,7 @@ class DataFileManager(metaclass=Singleton):
             * The report content: str
         """
         report_info = self._find_report(report_id)
-        if os.path.exists(report_info['path']):
+        if report_info is not None and os.path.exists(report_info['path']):
             with open(report_info['path'], 'r') as f:
                 report = f.read()
             return report
@@ -235,7 +238,40 @@ class DataFileManager(metaclass=Singleton):
         else:
             return None
 
+    def get_algo_info(self, algo_id: int):
+        return {'title': 'hi', 'version': '1.0', 'apply_product': 'hi', 'parameter_set_id': 123}
+        # print(self.data['algo'])
+        # return next(filter(lambda algo: algo['id'] == algo_id, self.data['algo']), None)
+
+    def get_parameter_set(self, parameter_set_id: int):
+        return {'id': 123, 'algo_id': 0, 'parameters': []}
+
+    def get_algo_info_and_parameters(self, algo_id: int) -> dict:
+        algo_info = self.get_algo_info(algo_id)
+
+        parameter_set_id = algo_info['parameter_set_id']
+        parameter_set = self.get_parameter_set(parameter_set_id)
+
+        algo_info_and_parameters = {
+                'name': algo_info['title'],
+                'version': algo_info['version'],
+                'product': algo_info['apply_product'],
+                'parameter': parameter_set['parameters']
+        }
+
+        return algo_info_and_parameters
+    
+    def get_product_info(self, product_id: int):
+        with open(self.product_info_path, 'r') as f:
+            self.product_infos = json.load(f)
+        for product_info in self.product_infos["product"]:
+            if int(product_info['id']) == int(product_id):
+                return product_info
+        
+        return -1
+
+
 
 if __name__ == "__main__":
     fm = DataFileManager()
-    fm.delete_report(162202302826)
+    # fm.delete_report(162202302826)
