@@ -3,7 +3,7 @@ from dateutil.parser import parse
 import numpy as np
 
 
-class AssetData:
+class AssetDataLoader:
     path = '../input-data/TXF.csv'
 
     # start&end must me 'yyyy-mm-dd'
@@ -45,8 +45,8 @@ class AssetData:
             return data_all
 
 
-a = AssetData()
-asset_data_period = a.load(start='2021-03-01', end='2021-05-17')
+a = AssetDataLoader()
+asset_data_period = a.load(start='2021-03-01', end='2021-03-16')
 asset_data_all = a.load()
 
 # A list that each elemnt is an dictonary

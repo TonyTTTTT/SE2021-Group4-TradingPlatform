@@ -26,21 +26,27 @@ class SideArea extends React.Component {
     }
 
     handleSlipInput = (event) => {
-        this.setState({paramset_single: {product: {slip: event.target.value}}}, () => 
+        const copy_paramset_single = this.state.paramset_single;
+        copy_paramset_single.product = { ...this.state.paramset_single.product, 'slip': event.target.value };
+        this.setState({paramset_single: copy_paramset_single}, () => 
             {
                 console.log(this.state.paramset_single);
             })
     }
 
     handleStartDateInput = (event) => {
-        this.setState({paramset_single: {product: {start_date: event.target.value}}}, () => 
+        const copy_paramset_single = this.state.paramset_single;
+        copy_paramset_single.product = { ...this.state.paramset_single.product, 'start_date': event.target.value };
+        this.setState({paramset_single: copy_paramset_single}, () => 
             {
                 console.log(this.state.paramset_single);
             })
     }
 
     handleEndDateInput = (event) => {
-        this.setState({paramset_single: {product: {end_date: event.target.value}}}, () => 
+        const copy_paramset_single = this.state.paramset_single;
+        copy_paramset_single.product = { ...this.state.paramset_single.product, 'end_date': event.target.value };
+        this.setState({paramset_single: copy_paramset_single}, () => 
             {
                 console.log(this.state.paramset_single);
             })
