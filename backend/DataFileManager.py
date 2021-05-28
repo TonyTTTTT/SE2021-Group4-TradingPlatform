@@ -4,8 +4,8 @@ import os
 import time
 from pathlib import Path
 
-from DataClasses import ReportInfo
-from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR
+from DataClasses import ReportInfo ,ALGOInfo
+from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR
 
 class Singleton(type):
     _instances = {}
@@ -29,6 +29,13 @@ class DataFileManager(metaclass=Singleton):
             self.data = json.load(f)
         self.algo_id2report_ids = {}
         self.report_id2report_info = {}
+
+        maxAlgoID = 0 
+        for i, algo_info in enumerate(self.data[ALGO]):
+            maxAlgoID = max(maxAlgoID,algo_info["id"])
+            if i == len(self.data[ALGO]) - 1:
+                self.next_algo_id = maxAlgoID + 1
+
         for i, report_info in enumerate(self.data[REPORT]):
             algo_id = report_info[ALGO_ID]
             report_id = report_info[ID]
@@ -53,7 +60,9 @@ class DataFileManager(metaclass=Singleton):
         output:
             * an unique algo_id: int
         """
-        return int(time.time() * 100)
+        ret_algo_id = self.next_algo_id
+        self.next_algo_id += 1
+        return ret_algo_id
 
     def _generate_report_id(self) -> int:
         """
@@ -70,6 +79,49 @@ class DataFileManager(metaclass=Singleton):
             * an unique parameter_set_id: int
         """
         return int(time.time() * 100)
+
+
+     def create_algorithm(self,title: str, version: str, algo_content: str):
+
+        algo_path = Path(REPORT_DIR) / title / ( version + '.py') 
+        exists = algo_path.exists()
+        if not exists:
+            algo_path.touch()
+            algo_id = self._generate_algo_id()
+            algo_info = ALGOInfo(algo_id, title, version, "ClassName",algo_path,"Parameter Set ","Apply Product"))
+            self.data[ALGO].append(algo_info.__dict__) 
+
+            with open(algo['path'], 'w', encoding='utf-8') as f:
+            f.write(algo_content)
+
+            return algo_id
+        else:
+            return None
+
+    def update_algorithm(self,algo_id: int , algo_content: str):
+        algorithm = self._find_algorithm(algo_id)
+        
+        # modify algofile
+        if algorithm is None:
+            return -1
+        with open(algo['path'], 'w', encoding='utf-8') as f:
+            f.write(algo_content)
+        return
+
+    def delete_algorithm(self,algo_id: int , algo_content: str): 
+
+        algorithm = self._find_algorithm(algo_id)
+        self.data[ALGO] = [algorithm for algorithm in self.data[ALGO] if algo['id'] != algo_id]
+        print(self.data[ALGO])
+        if algorithm is not None and os.path.exists(algo['path']):
+            os.remove(ALGO['path'])
+        print(self.data)
+        return
+
+    def _find_algorithm(self, algo_id: int):
+
+        return next(filter(lambda : algo['id'] == algo_id, self.data[ALGO]), None)
+    # }
 
     # def create_report(self, title: str, algo_id: int) -> int:
     #     """
