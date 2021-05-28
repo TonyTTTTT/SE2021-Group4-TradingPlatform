@@ -134,17 +134,16 @@ def delete_report(report_id):
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()
 
-# NOTE:
-# ??–ç?¶å«??? get-algo-infoï¼Œä???˜¯å¯¦é?›ä?Šå?³é?????è³???™ä?æ˜¯ AlgoInfo ??™å?? classï¼?
-# ??Œæ˜¯????????é?? parameter_set_id å°? parameters å±•é?‹ä??ï¼?å»?ç¾©ç??algo infoï¼?
 @app.route('/get-algo-info/<algo_id>', methods=['get'])
 def get_algo_info(algo_id):
+
     df_manager = DataFileManager()
     algo_id = int(algo_id)
+
     try:
-        algo_info_and_parameters = df_manager.get_algo_info_and_parameters(algo_id)
+        algo_info = df_manager._find_algorithm(algo_id)
         message = 'Get algo info of algo id {} successfully'.format(algo_id)
-        return CommonResult(LogLevel.INFO, message, algo_info_and_parameters).to_json()
+        return CommonResult(LogLevel.INFO, message, algo_info).to_json()
     except:
         message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
         return CommonResult(LogLevel.ERROR, message, None).to_json()
