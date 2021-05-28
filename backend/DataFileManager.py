@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 
 from DataClasses import ReportInfo ,AlgoInfo
-from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR
+from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR, PRODUCT_INFO_PATH, ALGO
 
 class Singleton(type):
     _instances = {}
