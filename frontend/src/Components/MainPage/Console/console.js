@@ -1,31 +1,72 @@
 import React, { Component } from 'react'
+import { connect } from "react-redux";
 import LogMessage from './logMessage'
 import './logbox.css'
+
+const mapStateToProps = state =>{
+    return { 
+        console : state.console // map props.console of this component to Redux's state.console, that is, consoleState
+    };
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        log: (data) => {
+            dispatch({
+                type: "ADD_LOG",
+                payload: {
+                    level: data.level,
+                    text: data.text
+                }
+            });
+        }
+    };
+};
 
 class Console extends Component {
     
     constructor () {
         super();
         this.state = {
-            Logs : [
-                {time: 1, level: "INFO", text: "Loaded parameter set 21451"},
-                {time: 2, level: "DEBUG", text: "Start Single Test"},
-                {time: 3, level: "INFO", text: "Finished Single Test. (Takes 1.2 sec)"},
-                {time: 4, level: "ERROR", text: "local variable 'cat' reference before assignment"},
-                {time: 5, level: "WARNING", text: "parameter 'ABC' is left blank"},
-                {time: 6, level: "WARNING", text: "parameter 'ABC' is left blank"},
-                {time: 7, level: "WARNING", text: "parameter 'ABC' is left blank"},
-                {time: 8, level: "WARNING", text: "parameter 'ABC' is left blank"},
-            ],
+            logs : [],
         }
     }
 
+    // will be called when Reducer update consoleState, bcz we bind props.console to consoleState
+    componentDidUpdate( prevProps ) {
+        // add consoleState.newlog via inner function `addLog`
+        if (prevProps.console.newlog.time != this.props.console.newlog.time) 
+            this.addLog(this.props.console.newlog);
+    }
+
+    clearConsole = () => {
+        this.setState({
+            logs: []
+        })
+    }
+
+    addLog = (data) => {
+        this.setState({
+            logs: [{
+                time: data.time,
+                level: data.level,
+                text: data.text,
+            }].concat(this.state.logs)
+        })
+    }
+
     render() {
-        const {Logs} = this.state;
-        let renderLog = Logs.map(log => <LogMessage key={log.time} log={log} />)
-        return <div className="logbox"><ul>{renderLog}</ul></div>
+        const {logs} = this.state;
+        let renderLog = logs.map(log => <LogMessage key={log.time} log={log} />)
+        return (
+            <div>
+                <div className="logbox"><ul>{renderLog}</ul></div>
+                <button onClick={this.clearConsole}>Clear</button>
+                <button onClick={()=>this.props.log({level: 2, text: 'test msg'})}>Add</button>
+            </div>
+        )
     }
 }
 
 
-export default Console
+export default connect(mapStateToProps, mapDispatchToProps)(Console);
