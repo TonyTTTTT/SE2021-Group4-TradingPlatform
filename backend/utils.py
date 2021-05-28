@@ -3,7 +3,7 @@ from flask import jsonify
 META_INFO_PATH = './info.json'
 PRODUCT_INFO_PATH = './product_info.json'
 REPORT_DIR = './report_files'
-AlGO_DIR = './algo_files'
+ALGO_DIR = './algo_files'
 ALGO = 'algo'
 REPORT = 'report'
 PARAMETER_SET = 'PARAMETER_SET'

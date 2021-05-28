@@ -4,7 +4,7 @@ import os
 import time
 from pathlib import Path
 
-from DataClasses import ReportInfo ,ALGOInfo
+from DataClasses import ReportInfo ,AlgoInfo
 from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR
 
 class Singleton(type):
@@ -84,18 +84,18 @@ class DataFileManager(metaclass=Singleton):
         return int(time.time() * 100)
 
 
-     def create_algorithm(self,title: str, version: str, algo_content: str):
+    def create_algorithm(self,title: str, version: str, algo_content: str):
 
         algo_path = Path(REPORT_DIR) / title / ( version + '.py') 
         exists = algo_path.exists()
         if not exists:
             algo_path.touch()
             algo_id = self._generate_algo_id()
-            algo_info = ALGOInfo(algo_id, title, version, "None","LastModified example",algo_path)
+            algo_info = AlgoInfo(algo_id, title, version, "None","LastModified example",algo_path)
             self.data[ALGO].append(algo_info.__dict__) 
 
             with open(algo['path'], 'w', encoding='utf-8') as f:
-            f.write(algo_content)
+                f.write(algo_content)
 
             return algo_id
         else:
