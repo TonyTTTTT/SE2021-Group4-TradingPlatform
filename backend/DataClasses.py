@@ -47,9 +47,7 @@ class Product:
     tick_size: float
     unit: float
     exchange_rate: float
-    # or may be datetime.datetime
-    start_time: datetime
-    end_time: datetime
+
 
 
 # TradeAction, TradeResult, TestResult, TradeStat
