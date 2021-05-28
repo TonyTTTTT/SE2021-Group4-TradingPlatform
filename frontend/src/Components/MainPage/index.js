@@ -45,7 +45,9 @@ class MainPage extends React.Component {
                         <TagArea/>
                     </Col>
                     <Col sm={8} style={{height: "100%", width: "100%"}}>
-                        <NavigationBar tabs={batchTabs}/>
+                        <div style={{height: "calc(100% - 200px)"}}>
+                            <NavigationBar tabs={tabs}/>
+                        </div>
                         <Console/>
                     </Col>
                 </Row>
