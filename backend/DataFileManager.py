@@ -4,7 +4,7 @@ import os
 import time
 from pathlib import Path
 
-from DataClasses import ReportInfo ,AlgoInfo
+from DataClasses import ReportInfo ,AlgoInfo, Product
 from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR, PRODUCT_INFO_PATH, ALGO
 
 class Singleton(type):
@@ -238,13 +238,16 @@ class DataFileManager(metaclass=Singleton):
         else:
             return None
 
-    def get_product_info(self, product_id: int):
+    def get_product_info(self, product_id: int) -> Product:
         with open(self.product_info_path, 'r') as f:
             self.product_infos = json.load(f)
         for product_info in self.product_infos["product"]:
             if int(product_info['id']) == int(product_id):
-                return product_info
-        
+                return Product( id=product_info['id'],
+                                name=product_info['name'],
+                                tick_size=product_info['tickSize'],
+                                unit=product_info['unit'],
+                                exchange_rate=product_info['exchangeRate'] )
         return -1
 
 
@@ -252,3 +255,5 @@ class DataFileManager(metaclass=Singleton):
 if __name__ == "__main__":
     fm = DataFileManager()
     # fm.delete_report(162202302826)
+    pinfo = fm.get_product_info(0)
+    print(pinfo)
