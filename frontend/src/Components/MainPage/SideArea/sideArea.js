@@ -74,30 +74,6 @@ class SideArea extends React.Component {
 
     }
 
-<<<<<<< HEAD
-    handleSlipInput = (event) => {
-        const copy_paramset_single = this.state.paramset_single;
-        copy_paramset_single.product = { ...this.state.paramset_single.product, 'slip': event.target.value };
-        this.setState({paramset_single: copy_paramset_single}, () => 
-            {
-                console.log(this.state.paramset_single);
-            })
-    }
-
-    handleStartDateInput = (event) => {
-        const copy_paramset_single = this.state.paramset_single;
-        copy_paramset_single.product = { ...this.state.paramset_single.product, 'start_date': event.target.value };
-        this.setState({paramset_single: copy_paramset_single}, () => 
-            {
-                console.log(this.state.paramset_single);
-            })
-    }
-
-    handleEndDateInput = (event) => {
-        const copy_paramset_single = this.state.paramset_single;
-        copy_paramset_single.product = { ...this.state.paramset_single.product, 'end_date': event.target.value };
-        this.setState({paramset_single: copy_paramset_single}, () => 
-=======
     display_option(param_name, option, test_type) {
         let list = [];
         if(test_type == "single")
@@ -273,7 +249,6 @@ class SideArea extends React.Component {
                 copy_parameter.push({"name": event.target.name, "type": "num", "from": "" , "to": parseFloat(event.target.value), "step": ""});
             }
             this.setState({parameter: copy_parameter}, () =>
->>>>>>> 74a34c3182e9acf92d85eaee048dbb9a79f1fa80
             {
                 console.log(this.state.parameter);
             });
