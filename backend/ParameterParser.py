@@ -1,9 +1,27 @@
 from typing import List
 from itertools import product
+from importlib import import_module
 from DataClasses import Parameter
 import numpy as np
 
 class ParameterParser:
+
+    def parameter_format_parse(filepath: str) -> List[dict]:
+
+        module_name = filepath.rsplit('.', 1)[0].replace('/', '.')
+        mod = import_module(module_name)
+        classBH = getattr(mod, 'BH')
+
+        output_parameters = []
+
+        for parameter in classBH.args:
+            output_parameters.append({
+                'name': parameter.name,
+                'type': parameter.type,
+                'value': parameter.value
+            })
+
+        return output_parameters
 
     # 將 input JSON dictionary 中的 parameters 項目轉換成 List[Parameter]
     def single_parameters_parse(input_json: dict) -> List[Parameter]:
@@ -80,4 +98,9 @@ input_json = {
 }
 
 print(ParameterParser.single_parameters_parse(input_json))
+"""
+
+"""
+ret = ParameterParser.parameter_format_parse('algo_files/BuyAndHold/first_version.py')
+print(ret)
 """
