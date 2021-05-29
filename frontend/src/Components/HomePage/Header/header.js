@@ -6,7 +6,8 @@ import axios from "axios";
 
 const mapStateToProps = state =>{
     return { 
-        header : state.header
+        header : state.header,
+        menu : state.menu
     };
 }
 
@@ -99,10 +100,13 @@ const Header = (props) => {
         axios.post('/api2/create-algo', formData,
         {headers: {"Content-Type": "multipart/form-data"}},).then(
         response => {
+            console.log(response)
             if (response.data.code === 2) {
-                const {data: {id}} = response;
-                 // action dispatch to menu component
-                props.addAlgo(id,modalInput.title,modalInput.version,modalInput.description,content,dateTime);
+                
+                // action dispatch to menu component
+                console.log("addAlgo  id:")
+                console.log(response.data.data)
+                props.addAlgo(response.data.data, modalInput.title, modalInput.version, modalInput.description,content,dateTime);
             } else {
                 console.log(response.data.msg)
             }
@@ -120,7 +124,29 @@ const Header = (props) => {
         var UTCtime = event.target.files[0].lastModifiedDate;
         var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
         const content = await readFile(event.target.files[0]);
-        props.updateAlgo(content,dateTime);
+        
+
+        // backend : update report 
+        let formData = new FormData();
+        console.log("header selected algoID")
+        console.log(props.menu.selectedAlgoID)
+        formData.append('algoID', props.menu.selectedAlgoID);
+        formData.append('content',content);
+       
+        axios.post('/api2/update-algo', formData,
+        {headers: {"Content-Type": "multipart/form-data"}},).then(
+        response => {
+            if (response.data.code === 2) {
+                 // action dispatch to menu component
+                 props.updateAlgo(content,dateTime);
+            } else {
+                console.log(response.data.msg)
+            }
+        },
+        error => {
+            console.log(error.message)
+        })
+
 	};
     
     const onConfirmButtonClick = () =>{
@@ -131,11 +157,11 @@ const Header = (props) => {
     return (
         <Container className="d-flex justify-content-between flex-column" style={{height:"100%",width:"100%"}}>
             <Row className="d-flex justify-content-left ">  
-                <Button variant="outline-primary"  onClick={onNewButtonClick} style={{margin:"40% 0% 10% 0%",width:100 ,height:60}}> New <input hidden type="file" name="file" onChange={onNewInputChange} ref={(input) => newInput = input}/></Button> 
+                <Button variant="outline-primary"  disabled = {props.header.enableNew} onClick={onNewButtonClick} style={{margin:"40% 0% 10% 0%",width:100 ,height:60}}> New <input hidden type="file" name="file" onChange={onNewInputChange} ref={(input) => newInput = input}/></Button> 
 
-                <Button variant="outline-primary" onClick={onUpdateButtonClick} style={{margin:"10% 0% 10% 0%",width:100,height:60}}> Update <input hidden type="file" name="file" onChange={onUpdateInputChange} ref={(input)=> updateInput = input}/></Button>
+                <Button variant="outline-primary" disabled ={props.header.enableUpdate} onClick={onUpdateButtonClick} style={{margin:"10% 0% 10% 0%",width:100,height:60}}> Update <input hidden type="file" name="file" onChange={onUpdateInputChange} ref={(input)=> updateInput = input}/></Button>
 
-                <Button variant="outline-primary" onClick={onDeleteButtonClick} style={{margin:"10% 0% 10% 0%",width:100 ,height:60}}> Delete </Button>    
+                <Button variant="outline-primary"   onClick={onDeleteButtonClick} style={{margin:"10% 0% 10% 0%",width:100 ,height:60}}> Delete </Button>    
             </Row>
 
             <Row className="d-flex justify-content-right ">

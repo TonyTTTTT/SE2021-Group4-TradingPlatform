@@ -2,7 +2,6 @@ import React ,{ useState, useEffect, useRef}from 'react';
 import { AgGridColumn, AgGridReact} from 'ag-grid-react';
 import { Row, Col, Nav, Tab } from 'react-bootstrap';
 import { connect } from "react-redux";
-import axios from "axios";
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
@@ -33,6 +32,14 @@ const mapDispatchToProps = dispatch => {
                 type: "SIGNAL_UPDATE"
             });
         },
+        setHeaderButton:(value)=>{
+            dispatch({
+                type: "SET_HEADER_BUTTON",
+                payload:{
+                    value: value
+                }
+            });
+        }
     };
 };
 
@@ -60,26 +67,38 @@ const Menu = (props) => {
     
     }, [gridApi,selectedRow,props.menu.deleteSignal])
 
-
     const onRowSelected = ()=>{
 
         if(gridApi.getSelectedRows()[0]!=undefined){
             setSelectedRow(gridApi.getSelectedRows());
             props.setSelectedAlgoID(gridApi.getSelectedRows()[0].AlgoID)
+            console.log("set selected algoID")
+            console.log(gridApi.getSelectedRows()[0].AlgoID)
         }
-    }
+        
+    };
 
     const onGridReady = (params) => {
         setGridApi(params.api);
         setGridColumnApi(params.columnApi);   
     };
 
+    const onTabSelect = (tab) => {
+        if(tab === "Algo"){
+            props.setHeaderButton(false);
+            setTabKey("Algo");
+        }else{
+            props.setHeaderButton(true);
+            setTabKey("Report");
+        }
+    }
+   
     return (
         <Tab.Container  
             style={{height:"80%"}}
             id="controlled-tab-example"
             activeKey={tabKey}
-            onSelect={(k) => setTabKey(k)}>
+            onSelect={(k) => onTabSelect(k)}>
             <Row style={{height:"100%"}}>
                <Col style={{width:"100%"}}> 
                     <Nav variant="tabs" className="flex-row" style={{height:45}}>
@@ -105,6 +124,7 @@ const Menu = (props) => {
                                 rowData={props.menu.algoData}
                         
                                 >
+                                <AgGridColumn field ="AlgoID" hide={true}></AgGridColumn>
                                 <AgGridColumn field ="Title" hide={true} sortable={true} filter={true} rowGroup={true}></AgGridColumn>
                                 <AgGridColumn field ="Version" filter={true}></AgGridColumn>
                                 <AgGridColumn field ="Description" filter={true}></AgGridColumn>
