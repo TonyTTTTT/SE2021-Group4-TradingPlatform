@@ -1,12 +1,9 @@
+from abc import abstractmethod
 from typing import List
-<<<<<<< HEAD
-from Calculator import TradeAction, ProductInfo
 from dataclasses import dataclass
-=======
-from dataclasses import dataclass
-from AssetData import AssetDataLoader 
-from DataClasses import TradeAction
->>>>>>> 74a34c3182e9acf92d85eaee048dbb9a79f1fa80
+
+from backend.AssetData import AssetDataLoader 
+from backend.DataClasses import Parameter, TradeAction
 
 
 class Algorithm: 
@@ -59,4 +56,4 @@ class Algorithm:
         if not isinstance(bs, str):
             bs = "B" if bs else "S"
 
-        self.tradelist.append(TradeAction("TXF", time_stamp, bs, contract, price, tag))
+        self.tradelist.append(TradeAction("TXF", time_stamp, bs, price, tag))
