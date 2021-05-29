@@ -1,17 +1,17 @@
 from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
 from flask_cors import CORS
-from DataFileManager import DataFileManager
-from utils import CommonResult, LogLevel, META_INFO_PATH
 import json
+
+from DataFileManager import DataFileManager
+from ParameterParser import ParameterParser
+from utils import CommonResult, LogLevel, META_INFO_PATH
 
 app = Flask(__name__)
 cors = CORS(app)
 
-
 @app.route('/')
 def index():
     return '<h1>Hello, Flask!</h1>'
-
 
 # @app.route('/report', methods=['GET'])
 # def reports():
@@ -146,24 +146,22 @@ def get_algo_info(algo_id):
     algo_id = int(algo_id)
 
     try:
-        #algo_info = df_manager.get_algo_info(algo_id)
+        algo_info = df_manager.get_algo_info(algo_id)
+        parameters = ParameterParser.parameter_format_parse(algo_info['path'])
 
-        algo_info = {
-            'name': 'BH_algo',
-            'version': '0.1',
-            'algo_id': 0,
-            'parameter': [
-                {'name': 'product', 'type': 'cat', 'value': ['TXF']},
-                {'name': 'color', 'type': 'cat', 'value': ['red', 'blue']},
-                {'name': 'height', 'type': 'num', 'value': 'float'},
-            ]
+        output_dict = {
+            'name': algo_info['title'],
+            'version': algo_info['version'],
+            'algo_id': algo_info['id'],
+            'parameter': parameters
         }
-
+        
         if algo_info is None:
             message = 'Algo info #{} not exists'.format(algo_id)
         else:
             message = 'Get algo info #{} successfully'.format(algo_id)
-        return CommonResult(LogLevel.INFO, message, algo_info).to_json()
+
+        return CommonResult(LogLevel.INFO, message, output_dict).to_json()
     except:
         message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
         return CommonResult(LogLevel.ERROR, message, None).to_json()

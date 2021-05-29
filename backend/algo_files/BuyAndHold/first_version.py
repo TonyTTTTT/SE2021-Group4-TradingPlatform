@@ -11,7 +11,8 @@ from Algorithm import Algorithm as algo
 
 class BH(algo):
     args = [
-        Parameter(name='product', type='cat', value=['TXF'])
+        Parameter(name='product', type='cat', value=['TXF']),
+        Parameter(name='long/short', type='cat', value=['long', 'short'])
     ]
 
     def __init__(self, **kwargs):
