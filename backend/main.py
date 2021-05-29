@@ -146,8 +146,23 @@ def get_algo_info(algo_id):
     algo_id = int(algo_id)
 
     try:
-        algo_info = df_manager._find_algorithm(algo_id)
-        message = 'Get algo info of algo id {} successfully'.format(algo_id)
+        #algo_info = df_manager.get_algo_info(algo_id)
+
+        algo_info = {
+            'name': 'BH_algo',
+            'version': '0.1',
+            'algo_id': 0,
+            'parameter': [
+                {'name': 'product', 'type': 'cat', 'value': ['TXF']},
+                {'name': 'color', 'type': 'cat', 'value': ['red', 'blue']},
+                {'name': 'height', 'type': 'num', 'value': 'float'},
+            ]
+        }
+
+        if algo_info is None:
+            message = 'Algo info #{} not exists'.format(algo_id)
+        else:
+            message = 'Get algo info #{} successfully'.format(algo_id)
         return CommonResult(LogLevel.INFO, message, algo_info).to_json()
     except:
         message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
