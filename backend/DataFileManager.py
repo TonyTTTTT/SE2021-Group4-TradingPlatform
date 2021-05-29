@@ -126,6 +126,9 @@ class DataFileManager(metaclass=Singleton):
             if algo['id'] == algo_id:
                 return algo
         return None
+
+    def get_algo_info(self, algo_id: int):
+        return self._find_algorithm(algo_id)
     # }
 
     # def create_report(self, title: str, algo_id: int) -> int:
