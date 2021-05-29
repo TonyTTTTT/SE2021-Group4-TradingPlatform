@@ -35,7 +35,6 @@ export default function (state = { ...menuState }, action) {
                     state.algoData.splice(i, 1);
                     state.algoData = state.algoData.concat(newData)
                     
-                    
                     return state;
                 }
             }

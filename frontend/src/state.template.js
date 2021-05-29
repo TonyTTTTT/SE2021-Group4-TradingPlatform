@@ -5,13 +5,16 @@ export const consoleState={
     newlog: {time: Date.now(), level: "INFO", text: "first log"}
 }
 export const contentState={
+
 }
 export const headerState={
     selectedFile: null,
-    isFileSelected: false
+    isFileSelected: false,
+    disableNew:false,
+    disableUpdate:false
 }
 export const menuState={
-    selectedAlgoID : 7,
+    selectedAlgoID : null,
     deleteSignal: false,
     algoData:[  {AlgoID:1,Title:"Algo 1",Version:"1.01",Description:"None",Content:"",Last_Modified:"2020-9-10 23:12:30"},
                 {AlgoID:2,Title:"Algo 2",Version:"0.01",Description:"None",Content:"",Last_Modified:"2020-9-20 23:12:50"},
