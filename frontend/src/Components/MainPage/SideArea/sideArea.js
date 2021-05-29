@@ -4,9 +4,8 @@ import { Scrollbars } from "rc-scrollbars";
 import { Link } from 'react-router-dom';
 import HomePage from '../../HomePage';
 import axios from "axios";
-// import Example from './Components/datepicker'
-// import { Example } from './Components/datepicker.js';
-// import Button from '@material-ui/core/Button'
+
+// This let is for testing
 let algo_info = {
                     "name": "BH_algo",
                     "version": "0.1",
@@ -25,10 +24,41 @@ let algo_info = {
                         {
                             "name": "height",
                             "type": "num",
-                            "value": "float",
-                        }
+                            "value": "float"
+                        },
+                        {
+                            "name": "size",
+                            "type": 'cat',
+                            "value": ['big', 'small']
+                        },
+                        {
+                            "name": "gender",
+                            "type": 'cat',
+                            "value": ['male', 'femlae']
+                        },
+                        {
+                            "name": "weight",
+                            "type": 'num',
+                            "value": 'float'
+                        },
+                        {
+                            "name": "age",
+                            "type": 'num',
+                            "value": 'int'
+                        },
+                        {
+                            "name": "shoe_size",
+                            "type": 'num',
+                            "value": 'float'
+                        },
+                        {
+                            "name": "head",
+                            "type": 'cat',
+                            "value": ['big','small', 'mid']
+                        },
                     ]
                 }; 
+
 
 class SideArea extends React.Component {
     constructor(props) {
@@ -48,9 +78,9 @@ class SideArea extends React.Component {
         let list = [];
         if(test_type == "single")
         {
-            list.push(<option disabled selected value> -- select an option -- </option>)
+            list.push(<option disabled selected value> -- select an option -- </option>);
             for(let i=0;i<option.length;i++) {
-                list.push(<option value={option[i]}>{option[i]}</option>)
+                list.push(<option value={option[i]}>{option[i]}</option>);
             }
         }
         else
@@ -65,7 +95,7 @@ class SideArea extends React.Component {
                     onChange={this.handleParamInput}
                     name={param_name}
                     />
-                )
+                );
             }
         }
         return list;
@@ -278,16 +308,9 @@ class SideArea extends React.Component {
     }
 
     render() {  
-        let algo_name = "BH Algo";
-        let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
-        ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
-        ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small', 'mid']] ]  
 
-        const input_slip = (value) => {
-            console.log("entering slip. ",value);
-        }
         return (
-            <Col style={{fontSize:8, height:"90%"}}>
+            <Col style={{height:"90%"}}>
                 <Row>
                     <Button variant="outline-dark" href="/">Home</Button>
                 </Row>
@@ -436,83 +459,3 @@ class SideArea extends React.Component {
     }
 }
 export default SideArea;
-
-// function display_option(option, test_type) {
-//     let list = [];
-//     if(test_type == "single")
-//     {
-//         for(let i=0;i<option.length;i++) {
-//             list.push(<option value="param">{option[i]}</option>)
-//         }
-//     }
-//     else
-//     {
-//         for(let i=0;i<option.length;i++) {
-//             list.push(
-//                 <Form.Check 
-//                 type='checkbox'
-//                 id={option[i]} 
-//                 label={option[i]}
-//                 />
-//             )
-//         }
-//     }
-//     return list;
-// }
-// function display_param(param_set = [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
-// ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'] ], test_type) {
-//     let list = [];
-//     if(test_type == "single")
-//     {
-//         for(let i=0;i<param_set.length;i++) {
-
-//             if(param_set[i]['type']=='catogory') {
-//                 list.push(
-//                 <tr>
-//                     <td>{param_set[i]['name']}</td>
-//                     <td>
-//                         <select>
-//                             {display_option(param_set[i]['value'],test_type)}
-//                         </select>
-//                     </td>
-//                 </tr>)
-//             }
-//             else {
-//                 list.push(
-//                 <tr>
-//                     <td>{param_set[i]['name']}({param_set[i]['value']})</td>
-//                     <td>
-//                         <input type="text" id="single-num" onChange={this.handleParamInput}/>
-//                     </td>
-//                 </tr>)
-//             }
-//         }
-//     }   
-//     else
-//     {
-//         for(let i=0;i<param_set.length;i++) {
-
-//             if(param_set[i]['type']=='catogory') {
-//                 list.push(
-//                 <tr>
-//                     <td>{param_set[i]['name']}</td>
-//                     <td>
-//                         <Form>
-//                             {display_option(param_set[i]['value'],test_type)}
-//                         </Form>
-//                     </td>
-//                 </tr>)
-//             }
-//             else {
-//                 list.push(
-//                 <tr>
-//                     <td>{param_set[i]['name']}({param_set[i]['value']})</td>
-//                     <td>
-//                         <input type="text" placeholder="from"/>{' '}<input type="text" placeholder="to"/>
-//                     </td>
-//                 </tr>)
-//             }
-//         }
-//     }
-//     return list;
-// } 
