@@ -9,7 +9,7 @@ module.exports = function (app) {
     )
     app.use('/api2',
         proxy({
-            target: 'http://localhost:5000',
+            target: 'http://localhost:4000',
             changeOrigin: true,
             pathRewrite: {'^/api2': ''}
         })

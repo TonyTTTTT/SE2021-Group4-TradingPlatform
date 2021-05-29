@@ -12,8 +12,62 @@ cors = CORS(app)
 def index():
     return '<h1>Hello, Flask!</h1>'
 
+
+# @app.route('/report', methods=['GET'])
+# def reports():
+#     if 'name' in request.args:
+#         name = request.args['name']
+#     else:
+#         return "Error: no name field provided."
+
+#     return send_from_directory('reports', name)
+
+@app.route('/create-algo', methods=['POST'])
+def create_algorithm():
+    df_manager = DataFileManager()
+
+    title = request.form.get('title')
+    version = request.form.get('version')
+    description = request.form.get('description')
+    lastModified = request.form.get('lastModified')
+    content = request.form.get('content')
+    
+    algo_id = df_manager.create_algorithm(title, version, description ,lastModified , content)
+
+    if algo_id is not None:
+        print("id"+str( algo_id))
+        return CommonResult(LogLevel.INFO, 'Create report', algo_id).to_json()
+    else:
+        return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
+
+@app.route('/update-algo', methods=['POST'])
+def update_algorithm():
+     df_manager = DataFileManager()
+     args = request.args.to_dict()
+     algo_id = args.pop("algo_id", None)
+     algo_content = args.pop("algo_content", None)
+     if algo_id is None or algo_content is None:
+         return CommonResult(LogLevel.ERROR, "Invalid update ", None).to_json()
+     try:
+         algo_id = df_manager.update_algorithm(algo_id, algo_content)
+         if algo_id == -1:
+             return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
+         return CommonResult(LogLevel.DEBUG, "Update algorithm No. {}".format(algo_id), None).to_json()
+     except:
+         return CommonResult(LogLevel.ERROR, "Error Upadating algorithm", None).to_json()
+
+@app.route('/delete-algo/<algo_id>', methods=['DELETE'])
+def algo_report(algo_id):
+    df_manager = DataFileManager()
+    try:
+        df_manager.algo_report(int(algo_id))
+        return CommonResult(LogLevel.INFO, "Deleted algorithm No. {}".format(algo_id), None).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Error Deleting algorithm", None).to_json()
+
+
 @app.route('/get-report/<report_id>', methods=['get'])
-def get_report(report_id: int):
+def get_report(report_id):
     df_manager = DataFileManager()
     report_id = int(report_id)
     try:
@@ -85,17 +139,16 @@ def delete_report(report_id):
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()
 
-# NOTE:
-# 雖然叫做 get-algo-info，但是實際上傳送的資料不是 AlgoInfo 這個 class，
-# 而是還會透過 parameter_set_id 將 parameters 展開來（廣義的algo info）
 @app.route('/get-algo-info/<algo_id>', methods=['get'])
 def get_algo_info(algo_id):
+
     df_manager = DataFileManager()
     algo_id = int(algo_id)
+
     try:
-        algo_info_and_parameters = df_manager.get_algo_info_and_parameters(algo_id)
+        algo_info = df_manager._find_algorithm(algo_id)
         message = 'Get algo info of algo id {} successfully'.format(algo_id)
-        return CommonResult(LogLevel.INFO, message, algo_info_and_parameters).to_json()
+        return CommonResult(LogLevel.INFO, message, algo_info).to_json()
     except:
         message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
         return CommonResult(LogLevel.ERROR, message, None).to_json()

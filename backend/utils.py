@@ -3,7 +3,7 @@ from flask import jsonify
 META_INFO_PATH = './info.json'
 PRODUCT_INFO_PATH = './product_info.json'
 REPORT_DIR = './report_files'
-PARAMETER_SET_DIR = './parameter_set_files'
+ALGO_DIR = './algo_files'
 ALGO = 'algo'
 REPORT = 'report'
 PARAMETER_SET = 'PARAMETER_SET'
@@ -21,7 +21,7 @@ class LogLevel:
 class CommonResult:
     def __init__(self, code: int, msg: str, data=None):
         self.code = code  # {0: Error, 1: Warning, 2: Info, 3: Debug}
-        self.msg = msg  # log message(e.g. code==2:ÁÇ∫‰ªÄÈ∫ºÂ∞ç)
+        self.msg = msg  # log message(e.g. code==2:??∫‰??È∫ºÂ??)
         self.data = data  # json object
 
     def to_json(self):

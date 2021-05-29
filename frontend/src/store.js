@@ -12,7 +12,7 @@ import tagAreaReducer from "./Reducers/tagArea"
 
 const reducers = combineReducers({
     //app : appReducer,
-    //console: consoleReducer,
+    console: consoleReducer,
     content: contentReducer,
     header: headerReducer,
     menu: menuReducer,

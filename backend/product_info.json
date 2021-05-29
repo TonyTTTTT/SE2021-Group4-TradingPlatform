@@ -1,6 +1,7 @@
 {
   "product" : [
 	{
+	  "id": 0,
 	  "name": "TXF",
 	  "tickSize": 1,
 	  "exchangeRate": 1,
