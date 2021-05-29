@@ -80,8 +80,6 @@ const Menu = (props) => {
         if(gridApi.getSelectedRows()[0]!=undefined){
             setSelectedRow(gridApi.getSelectedRows());
             props.setSelectedAlgoID(gridApi.getSelectedRows()[0].AlgoID)
-            console.log("set selected algoID")
-            console.log(gridApi.getSelectedRows()[0].AlgoID)
         }
     };
 
@@ -162,7 +160,7 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Report" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 180,editable: true,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
                                 autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm"}}

@@ -120,12 +120,11 @@ class DataFileManager(metaclass=Singleton):
             f.write(content)
         return
 
-    def delete_algorithm(self,algo_id: int , content: str): 
-
+    def delete_algorithm(self,algo_id: int): 
         algorithm = self._find_algorithm(algo_id)
-        self.data[ALGO] = [algorithm for algorithm in self.data[ALGO] if algo['id'] != algo_id]
+        self.data[ALGO] = [algo for algo in self.data[ALGO] if algo['id'] != algo_id]
         if algorithm is not None and os.path.exists(algorithm['path']):
-            os.remove(ALGO['path'])
+            os.remove(algorithm['path'])
         return
 
     def _find_algorithm(self, algo_id: int):

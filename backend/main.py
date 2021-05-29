@@ -68,8 +68,9 @@ def update_algorithm():
 @app.route('/delete-algo/<algo_id>', methods=['DELETE'])
 def delete_algo(algo_id):
     df_manager = DataFileManager()
+    print(algo_id)
     try:
-        df_manager.delete_algo(int(algo_id))
+        df_manager.delete_algorithm(int(algo_id))
         return CommonResult(LogLevel.INFO, "Deleted algorithm No. {}".format(algo_id), None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting algorithm", None).to_json()

@@ -71,7 +71,7 @@ const Header = (props) => {
     };
     const onDeleteButtonClick = () => {
         //backend : delete report 
-        axios.delete('/api2/delete-algo/' + props.menu.AlgoID).then(
+        axios.delete('/api2/delete-algo/' + props.menu.selectedAlgoID).then(
             response => {
                 //action dispatch to menu
                 props.signalDeleteAlgo();
@@ -148,7 +148,7 @@ const Header = (props) => {
             <Row className="d-flex justify-content-left ">  
                 <Button variant="outline-primary"  disabled = {props.header.enableNew} onClick={onNewButtonClick} style={{margin:"40% 0% 10% 0%",width:100 ,height:60}}> New <input hidden type="file" name="file" onChange={onNewInputChange} ref={(input) => newInput = input}/></Button> 
 
-                <Button variant="outline-primary" disabled ={props.header.enableUpdate} onClick={onUpdateButtonClick} style={{margin:"10% 0% 10% 0%",width:100,height:60}}> Update <input hidden type="file" name="file" onChange={onUpdateInputChange} ref={(input)=> updateInput = input}/></Button>
+                <Button variant="outline-primary" disabled ={props.header.enableUpdate} onClick={onUpdateButtonClick} style={{margin:"10% 0% 10% 0%",width:100,height:60}}> Update <input hidden type="file" name="file" onInput={onUpdateInputChange} ref={(input)=> updateInput = input}/></Button>
 
                 <Button variant="outline-primary"   onClick={onDeleteButtonClick} style={{margin:"10% 0% 10% 0%",width:100 ,height:60}}> Delete </Button>    
             </Row>
