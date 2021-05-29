@@ -57,7 +57,7 @@ class Product:
 @dataclass
 class TradeAction:
     product_id: int
-    datetime: str
+    time: datetime
     position: int
     price: float
     tag: str
@@ -66,11 +66,13 @@ class TradeAction:
 @dataclass
 class TradeResult:
     product_id: int
-    time: str  # ??????
+    time: datetime  # ??????
+    net_position: int
     is_long: bool  # True: ???Ë≤∑Â?åËêm, False: ???Ë≥?ÂæåË≤∑
     is_enter: bool  # True: ??≤Â†¥, False: ?á∫?†¥
     price: float  # ??πÊ†º
     profit: float  # ?ç≤?à© (?á∫?†¥??çÊ??)
+    real_profit: float
     tag: str  # ‰∫§Ê?ìÊ?ôÁ±§
 
 
