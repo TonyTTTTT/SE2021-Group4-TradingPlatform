@@ -4,7 +4,7 @@ import { Scrollbars } from "rc-scrollbars";
 import { Link } from 'react-router-dom';
 import HomePage from '../../HomePage';
 import axios from "axios";
-import Example from './Components/datepicker'
+// import Example from './Components/datepicker'
 // import { Example } from './Components/datepicker.js';
 // import Button from '@material-ui/core/Button'
 
@@ -14,46 +14,252 @@ class SideArea extends React.Component {
         super(props);
         this.state = {
             paramset_format: {},
-            paramset_single: {product: {name: "", start_date: "", end_date: "", slip: ""}},
-            // paramset_single: '',
-            paramset_batch: {}
+            product: {name: "", start_date: "", end_date: "", slip: ""},
+            parameter: [],
         };
-    
     }
 
     componentDidMount() {
 
     }
 
-    handleSlipInput = (event) => {
-        const copy_paramset_single = this.state.paramset_single;
-        copy_paramset_single.product = { ...this.state.paramset_single.product, 'slip': event.target.value };
-        this.setState({paramset_single: copy_paramset_single}, () => 
-            {
-                console.log(this.state.paramset_single);
-            })
+    display_option(param_name, option, test_type) {
+        let list = [];
+        if(test_type == "single")
+        {
+            list.push(<option disabled selected value> -- select an option -- </option>)
+            for(let i=0;i<option.length;i++) {
+                list.push(<option value={option[i]}>{option[i]}</option>)
+            }
+        }
+        else
+        {
+            // list.push(<option value=""></option>);
+            for(let i=0;i<option.length;i++) {
+                list.push(
+                    <Form.Check 
+                    type='checkbox'
+                    id="batch-cat"
+                    label={option[i]}
+                    value={option[i]}
+                    onChange={this.handleParamInput}
+                    name={param_name}
+                    />
+                )
+            }
+        }
+        return list;
     }
 
-    handleStartDateInput = (event) => {
-        const copy_paramset_single = this.state.paramset_single;
-        copy_paramset_single.product = { ...this.state.paramset_single.product, 'start_date': event.target.value };
-        this.setState({paramset_single: copy_paramset_single}, () => 
-            {
-                console.log(this.state.paramset_single);
-            })
+    display_param(param_set = [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
+    ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'] ], test_type) {
+        let list = [];
+        if(test_type == "single")
+        {
+            for(let i=0;i<param_set.length;i++) {
+
+                if(param_set[i][1]=='catogory') {
+                    list.push(
+                    <tr>
+                        <td>{param_set[i][0]}</td>
+                        <td>
+                            <select id="single-cat" name={param_set[i][0]} onChange={this.handleParamInput}>
+                                {this.display_option(param_set[i][0], param_set[i][2],test_type)}
+                            </select>
+                        </td>
+                    </tr>)
+                }
+                else {
+                    list.push(
+                    <tr>
+                        <td>{param_set[i][0]}({param_set[i][2]})</td>
+                        <td>
+                            <input type="text" id="single-num" name={param_set[i][0]} onChange={this.handleParamInput}/>
+                        </td>
+                    </tr>)
+                }
+            }
+        }   
+        else
+        {
+            for(let i=0;i<param_set.length;i++) {
+
+                if(param_set[i][1]=='catogory') {
+                    list.push(
+                    <tr>
+                        <td>{param_set[i][0]}</td>
+                        <td>
+                            <Form id="batch-cat" name={param_set[i][0]}>
+                                {this.display_option(param_set[i][0], param_set[i][2],test_type)}
+                            </Form>
+                        </td>
+                    </tr>)
+                }
+                else {
+                    list.push(
+                    <tr>
+                        <td>{param_set[i][0]}({param_set[i][2]})</td>
+                        <td>
+                            <input type="text" id="batch-num-from" name={param_set[i][0]} placeholder="from" onChange={this.handleParamInput}/>{' '}
+                            <input type="text" id="batch-num-to" name={param_set[i][0]} placeholder="to" onChange={this.handleParamInput}/>{' '}
+                            <input type="text" id="batch-num-step" name={param_set[i][0]} placeholder="step" onChange={this.handleParamInput}/>
+                        </td>
+                    </tr>)
+                }
+            }
+        }
+        return list;
+    } 
+
+    handleProductInput = (event) => {
+        if(event.target.name == "product") {
+            const copy_product = { ...this.state.product, 'name': event.target.value };
+            this.setState({product: copy_product}, () => 
+                {
+                    console.log(this.state.product);
+                    console.log(this.state);
+                });
+        }
+        else if(event.target.name == "startDate") {
+            const copy_product = { ...this.state.product, 'start_date': event.target.value };
+            this.setState({product: copy_product}, () => 
+                {
+                    console.log(this.state.product);
+                });
+        }
+        else if(event.target.name == "endDate") {
+            const copy_product = { ...this.state.product, 'end_date': event.target.value };
+            this.setState({product: copy_product}, () => 
+                {
+                    console.log(this.state.product);
+                });
+        }
+        else if(event.target.name == "slip") {
+            const copy_product = { ...this.state.product, 'slip': parseFloat(event.target.value) };
+            this.setState({product: copy_product}, () => 
+                {
+                    console.log(this.state.product);
+                });  
+        }
     }
 
-    handleEndDateInput = (event) => {
-        const copy_paramset_single = this.state.paramset_single;
-        copy_paramset_single.product = { ...this.state.paramset_single.product, 'end_date': event.target.value };
-        this.setState({paramset_single: copy_paramset_single}, () => 
+    handleParamInput = (event) => {
+        if(event.target.id == "single-num") {
+            const copy_parameter = this.state.parameter;
+            for(let i =0; i<copy_parameter.length; i++) {
+                if(copy_parameter[i].name == event.target.name) {
+                    copy_parameter.splice(i,1);
+                }
+            }
+            copy_parameter.push({"name": event.target.name, "type": "num", "value": parseFloat(event.target.value)});
+            this.setState({parameter: copy_parameter}, () =>
             {
-                console.log(this.state.paramset_single);
-            })
+                console.log(this.state.parameter);
+            });
+        }
+        else if(event.target.id == "single-cat") {
+            const copy_parameter = this.state.parameter;
+            for(let i =0; i<copy_parameter.length; i++) {
+                if(copy_parameter[i].name == event.target.name) {
+                    copy_parameter.splice(i,1);
+                }
+            }
+            copy_parameter.push({"name": event.target.name, "type": "cat", "value": event.target.value});
+            this.setState({parameter: copy_parameter}, () =>
+            {
+                console.log(this.state.parameter);
+            }); 
+        }
+        else if(event.target.id == "batch-num-from") {
+            const copy_parameter = this.state.parameter;
+            var flag = 0;
+            for(let i =0; i<copy_parameter.length; i++) {
+                if(copy_parameter[i].name == event.target.name) {
+                    flag = 1;
+                    copy_parameter[i].from = parseFloat(event.target.value);
+                }
+            }
+            if(flag == 0) {
+                copy_parameter.push({"name": event.target.name, "type": "num", "from": parseFloat(event.target.value), "to": "", "step": ""});
+            }
+            this.setState({parameter: copy_parameter}, () =>
+            {
+                console.log(this.state.parameter);
+            });
+        }
+        else if(event.target.id == "batch-num-to") {
+            const copy_parameter = this.state.parameter;
+            var flag = 0;
+            for(let i =0; i<copy_parameter.length; i++) {
+                if(copy_parameter[i].name == event.target.name) {
+                    flag = 1;
+                    copy_parameter[i].to = parseFloat(event.target.value);
+                }
+            }
+            if(flag == 0) {
+                copy_parameter.push({"name": event.target.name, "type": "num", "from": "" , "to": parseFloat(event.target.value), "step": ""});
+            }
+            this.setState({parameter: copy_parameter}, () =>
+            {
+                console.log(this.state.parameter);
+            });
+        }
+        else if(event.target.id == "batch-num-step") {
+            const copy_parameter = this.state.parameter;
+            var flag = 0;
+            for(let i =0; i<copy_parameter.length; i++) {
+                if(copy_parameter[i].name == event.target.name) {
+                    flag = 1;
+                    copy_parameter[i].step = parseFloat(event.target.value);
+                }
+            }
+            if(flag == 0) {
+                copy_parameter.push({"name": event.target.name, "type": "num", "from": "" , "to": "", "step": parseFloat(event.target.value)});
+            }
+            this.setState({parameter: copy_parameter}, () =>
+            {
+                console.log(this.state.parameter);
+            });
+        }
+        else if(event.target.id == "batch-cat") {
+            const copy_parameter = this.state.parameter;
+            var flag = 0;
+            for(let i =0; i<copy_parameter.length; i++) {
+                if(copy_parameter[i].name == event.target.name) {
+                    flag = 1;
+                    if(event.target.checked) {
+                        copy_parameter[i].value.push(event.target.value);
+                    }
+                    else {
+                        for(let j =0; j<copy_parameter[i].value.length; j++) {
+                            if(copy_parameter[i].value[j] == event.target.value) {
+                                copy_parameter[i].value.splice(j,1);
+                            }
+                        }
+                    }
+                }
+            }
+            if(flag == 0) {
+                copy_parameter.push({"name": event.target.name, "type": "cat", "value": [event.target.value]});
+            }
+            this.setState({parameter: copy_parameter}, () =>
+            {
+                console.log(this.state.parameter);
+                console.log(event.target.value, " checked: ", event.target.checked);
+            });
+        }
+    }
+
+    handleSwitchTab = (event) => {
+        this.setState({parameter: []});
+        this.setState({product: {name: "", start_date: "", end_date: "", slip: ""}}, () =>
+        {
+            console.log(this.state);
+        }) 
     }
 
     render() {  
-        let algo_name = "BH Algo"
+        let algo_name = "BH Algo";
         let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
         ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
         ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small', 'mid']] ]
@@ -69,13 +275,13 @@ class SideArea extends React.Component {
                     <h1>{algo_name}</h1>
                 </Row>
                 <Tab.Container defaultActiveKey="switch test" id="switch test"
-                style={{height: "100%"}}>
+                style={{height: "100%"}} >
                     <Nav variant="tabs" className="flex-row">
                         <Nav.Item>
-                        <Nav.Link eventKey="Single Test">Single Test</Nav.Link>
+                        <Nav.Link eventKey="Single Test" onClick={this.handleSwitchTab}>Single Test</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                        <Nav.Link eventKey="Batch Test">Batch Test</Nav.Link>
+                        <Nav.Link eventKey="Batch Test" onClick={this.handleSwitchTab}>Batch Test</Nav.Link>
                         </Nav.Item>
                     </Nav>
                     <Tab.Content style={{height:"100%"}}>
@@ -111,22 +317,22 @@ class SideArea extends React.Component {
                                 <tr>
                                     <td>Product</td>
                                     <td>
-                                        <select>
-                                            <option value="product">TXF</option>
+                                        <select name="product" onClick={this.handleProductInput}>
+                                            <option value="TXF">TXF</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleStartDateInput} /></td>
+                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleEndDateInput} /></td>
+                                    <td><input class="args-input" type="date" name="endDate" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>
-                                    <td><input onChange={this.handleSlipInput} /></td>
+                                    <td><input name="slip" onChange={this.handleProductInput} /></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -135,7 +341,7 @@ class SideArea extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {display_param(param_set, 'single')}
+                                {this.display_param(param_set, 'single')}
                             </tbody>
                         </Table>
                         </Scrollbars>
@@ -173,22 +379,22 @@ class SideArea extends React.Component {
                                 <tr>
                                     <td>Product</td>
                                     <td>
-                                        <select>
-                                            <option value="product">TXF</option>
+                                        <select name="product" onClick={this.handleProductInput}>
+                                            <option value="TXF">TXF</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><Example/></td>
+                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><Example/></td>
+                                    <td><input class="args-input" type="date" name="endDate" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>
-                                    <td><input type="slip"/></td>
+                                    <td><input name="slip" onChange={this.handleProductInput} /></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -197,7 +403,7 @@ class SideArea extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {display_param(param_set,'batch')}
+                                {this.display_param(param_set,'batch')}
                             </tbody>
                         </Table>
                         </Scrollbars>
@@ -211,82 +417,82 @@ class SideArea extends React.Component {
 }
 export default SideArea;
 
-function display_option(option, test_type) {
-    let list = [];
-    if(test_type == "single")
-    {
-        for(let i=0;i<option.length;i++) {
-            list.push(<option value="param">{option[i]}</option>)
-        }
-    }
-    else
-    {
-        for(let i=0;i<option.length;i++) {
-            list.push(
-                <Form.Check 
-                type='checkbox'
-                id={option[i]} 
-                label={option[i]}
-                />
-            )
-        }
-    }
-    return list;
-}
-function display_param(param_set = [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
-['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'] ], test_type) {
-    let list = [];
-    if(test_type == "single")
-    {
-        for(let i=0;i<param_set.length;i++) {
+// function display_option(option, test_type) {
+//     let list = [];
+//     if(test_type == "single")
+//     {
+//         for(let i=0;i<option.length;i++) {
+//             list.push(<option value="param">{option[i]}</option>)
+//         }
+//     }
+//     else
+//     {
+//         for(let i=0;i<option.length;i++) {
+//             list.push(
+//                 <Form.Check 
+//                 type='checkbox'
+//                 id={option[i]} 
+//                 label={option[i]}
+//                 />
+//             )
+//         }
+//     }
+//     return list;
+// }
+// function display_param(param_set = [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
+// ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'] ], test_type) {
+//     let list = [];
+//     if(test_type == "single")
+//     {
+//         for(let i=0;i<param_set.length;i++) {
 
-            if(param_set[i][1]=='catogory') {
-                list.push(
-                <tr>
-                    <td>{param_set[i][0]}</td>
-                    <td>
-                        <select>
-                            {display_option(param_set[i][2],test_type)}
-                        </select>
-                    </td>
-                </tr>)
-            }
-            else {
-                list.push(
-                <tr>
-                    <td>{param_set[i][0]}({param_set[i][2]})</td>
-                    <td>
-                        <input type="text"/>
-                    </td>
-                </tr>)
-            }
-        }
-    }   
-    else
-    {
-        for(let i=0;i<param_set.length;i++) {
+//             if(param_set[i][1]=='catogory') {
+//                 list.push(
+//                 <tr>
+//                     <td>{param_set[i][0]}</td>
+//                     <td>
+//                         <select>
+//                             {display_option(param_set[i][2],test_type)}
+//                         </select>
+//                     </td>
+//                 </tr>)
+//             }
+//             else {
+//                 list.push(
+//                 <tr>
+//                     <td>{param_set[i][0]}({param_set[i][2]})</td>
+//                     <td>
+//                         <input type="text" id="single-num" onChange={this.handleParamInput}/>
+//                     </td>
+//                 </tr>)
+//             }
+//         }
+//     }   
+//     else
+//     {
+//         for(let i=0;i<param_set.length;i++) {
 
-            if(param_set[i][1]=='catogory') {
-                list.push(
-                <tr>
-                    <td>{param_set[i][0]}</td>
-                    <td>
-                        <Form>
-                            {display_option(param_set[i][2],test_type)}
-                        </Form>
-                    </td>
-                </tr>)
-            }
-            else {
-                list.push(
-                <tr>
-                    <td>{param_set[i][0]}({param_set[i][2]})</td>
-                    <td>
-                        <input type="text" placeholder="from"/>{' '}<input type="text" placeholder="to"/>
-                    </td>
-                </tr>)
-            }
-        }
-    }
-    return list;
-} 
+//             if(param_set[i][1]=='catogory') {
+//                 list.push(
+//                 <tr>
+//                     <td>{param_set[i][0]}</td>
+//                     <td>
+//                         <Form>
+//                             {display_option(param_set[i][2],test_type)}
+//                         </Form>
+//                     </td>
+//                 </tr>)
+//             }
+//             else {
+//                 list.push(
+//                 <tr>
+//                     <td>{param_set[i][0]}({param_set[i][2]})</td>
+//                     <td>
+//                         <input type="text" placeholder="from"/>{' '}<input type="text" placeholder="to"/>
+//                     </td>
+//                 </tr>)
+//             }
+//         }
+//     }
+//     return list;
+// } 

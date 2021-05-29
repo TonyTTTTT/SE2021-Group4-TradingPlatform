@@ -38,20 +38,23 @@ if __name__ == "__main__":
     asset_data_all = a.load()
 
 # A list that each elemnt is an dictonary
-        # for i in range(1, len(data_all)):
-        #     data_all[i][0] = str(parse(data_all[i][0]).date())
-        #     tmp = dict(time = data_all[i][0],
-        #               contract = data_all[i][1],
-        #               open = float(data_all[i][2]),
-        #               high = float(data_all[i][3]),
-        #               low = float(data_all[i][4]),
-        #               close = float(data_all[i][5]),
-        #               volume = int(data_all[i][6]),
-        #               delta = float(data_all[i][7]))
-        #     if start == None and end == None:
-        #         data_new.append(tmp)
-        #     elif start <= tmp['time'] <= end:
-        #         data_new.append(tmp)
+        # with open(self.path, 'r') as f:
+        #     r = csv.DictReader(f)
+        #     # A dictionary that each elment is a list
+        #     data_new = []
+        #     for data in r:
+        #         # print(data['time'])
+        #         data['time'] = date.fromisoformat(data['time'])
+        #         data['open'] = float(data['open'])
+        #         data['high'] = float(data['high'])
+        #         data['low'] = float(data['low'])
+        #         data['close'] = float(data['close'])
+        #         data['volume'] = int(data['volume'])
+        #         data['delta'] = float(data['delta'])
+        #         if start == None and end == None:
+        #             data_new.append(data)
+        #         elif start <= data['time'] <= end:
+        #             data_new.append(data)
 
 # # A dictionary that each elment is a list
 # data_all = dict(time=[], contract=[], open=[], high=[], low=[],
