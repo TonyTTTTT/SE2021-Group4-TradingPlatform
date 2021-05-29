@@ -10,12 +10,12 @@ let algo_info = {
                     "name": "BH_algo",
                     "version": "0.1",
                     "algo_id": 0,
-                    "product": [
-                        {
-                            "name": ["TXF"],   
-                        }
-                    ],
                     "parameter": [
+                        {
+                            "name": "product",
+                            "type": "cat",
+                            "value": ["TXF"],
+                        },
                         {
                             "name": "color",
                             "type": "cat",
@@ -62,7 +62,8 @@ let algo_info = {
 
 const mapStateToProps = state =>{
     return { 
-        sideArea : state.sideArea
+        sideArea : state.sideArea,
+        menu : state.menu
     };
 }
 
@@ -145,54 +146,56 @@ class SideArea extends React.Component {
         if(test_type == "single")
         {
             for(let i=0;i<param_set.length;i++) {
-
-                if(param_set[i]['type']=='cat') {
-                    list.push(
-                    <tr>
-                        <td>{param_set[i]['name']}</td>
-                        <td>
-                            <select id="single-cat" name={param_set[i]['name']} onChange={this.handleParamInput}>
-                                {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
-                            </select>
-                        </td>
-                    </tr>)
-                }
-                else {
-                    list.push(
-                    <tr>
-                        <td>{param_set[i]['name']}({param_set[i]['value']})</td>
-                        <td>
-                            <input type="text" id="single-num" name={param_set[i]['name']} onChange={this.handleParamInput}/>
-                        </td>
-                    </tr>)
+                if(param_set[i]['name']!='product') {
+                    if(param_set[i]['type']=='cat') {
+                        list.push(
+                        <tr>
+                            <td>{param_set[i]['name']}</td>
+                            <td>
+                                <select id="single-cat" name={param_set[i]['name']} onChange={this.handleParamInput}>
+                                    {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
+                                </select>
+                            </td>
+                        </tr>)
+                    }
+                    else {
+                        list.push(
+                        <tr>
+                            <td>{param_set[i]['name']}({param_set[i]['value']})</td>
+                            <td>
+                                <input type="text" id="single-num" name={param_set[i]['name']} onChange={this.handleParamInput}/>
+                            </td>
+                        </tr>)
+                    }
                 }
             }
         }   
         else
         {
             for(let i=0;i<param_set.length;i++) {
-
-                if(param_set[i]['type']=='cat') {
-                    list.push(
-                    <tr>
-                        <td>{param_set[i]['name']}</td>
-                        <td>
-                            <Form id="batch-cat" name={param_set[i]['name']}>
-                                {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
-                            </Form>
-                        </td>
-                    </tr>)
-                }
-                else {
-                    list.push(
-                    <tr>
-                        <td>{param_set[i]['name']}({param_set[i]['value']})</td>
-                        <td>
-                            <input type="text" id="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
-                            <input type="text" id="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
-                            <input type="text" id="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
-                        </td>
-                    </tr>)
+                if(param_set[i]['name']!='product') {
+                    if(param_set[i]['type']=='cat') {
+                        list.push(
+                        <tr>
+                            <td>{param_set[i]['name']}</td>
+                            <td>
+                                <Form id="batch-cat" name={param_set[i]['name']}>
+                                    {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
+                                </Form>
+                            </td>
+                        </tr>)
+                    }
+                    else {
+                        list.push(
+                        <tr>
+                            <td>{param_set[i]['name']}({param_set[i]['value']})</td>
+                            <td>
+                                <input type="text" id="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
+                                <input type="text" id="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
+                                <input type="text" id="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
+                            </td>
+                        </tr>)
+                    }
                 }
             }
         }
