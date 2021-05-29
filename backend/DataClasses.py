@@ -67,6 +67,7 @@ class TradeAction:
 class TradeResult:
     product_id: int
     time: datetime  # ??????
+    net_position: int
     is_long: bool  # True: ???è²·å?Œèm, False: ???è³?å¾Œè²·
     is_enter: bool  # True: ??²å ´, False: ?‡º? ´
     price: float  # ??¹æ ¼
