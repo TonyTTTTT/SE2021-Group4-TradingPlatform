@@ -3,10 +3,25 @@ from itertools import product
 from DataClasses import Parameter
 import numpy as np
 
-# 把使用者設定的batch參數展開，輸出每次single test需要的參數
 class ParameterParser:
 
-    def batch_parameters_parse(self, input_parameters: List[Parameter]) -> List[List[Parameter]]:
+    # 將 input JSON dictionary 中的 parameters 項目轉換成 List[Parameter]
+    def single_parameters_parse(input_json: dict) -> List[Parameter]:
+
+        output_parameters = []
+
+        for parameter_dict in input_json['parameter']:
+            p = Parameter(
+                    name=parameter_dict['name'],
+                    type=parameter_dict['type'],
+                    value=parameter_dict['value']
+            )
+            output_parameters.append(p)
+
+        return output_parameters
+
+    # 把使用者設定的batch參數展開，輸出每次single test需要的參數
+    def batch_parameters_parse(input_parameters: List[Parameter]) -> List[List[Parameter]]:
 
         input_parameter_list_list = []
 
@@ -33,13 +48,36 @@ class ParameterParser:
 
         return output_parameters
 
-
-""" Test
-parser = ParameterParser()
-
+"""
 p1 = Parameter(name='color', type='cat', value=['red', 'black'])
 p2 = Parameter(name='xyz', type='cat', value=['x', 'y', 'z'])
 p3 = Parameter(name='height', type='num', value=[1, 5, 1])
 
-print(parser.batch_parameters_parse([p1, p3]))
+print(ParameterParser.batch_parameters_parse([p1, p3]))
+"""
+
+"""
+input_json = {
+    'algo_id': 0,
+    'product': {
+        'name': 'TXF',
+        'start_date': '2021-05-01',
+        'end_date': '2021-05-02',
+        'slip': 2.5,       
+    },
+    'parameter': [
+        {
+            'name': 'color',
+            'type': 'cat',
+            'value': 'red'
+        },
+        {
+            'name': 'height',
+            'type': 'num',
+            'value': 178.5,
+        },
+    ],
+}
+
+print(ParameterParser.single_parameters_parse(input_json))
 """
