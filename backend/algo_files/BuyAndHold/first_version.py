@@ -4,9 +4,14 @@ import sys
 import os
 from dataclasses import dataclass
 
+from DataClasses import Parameter
+
 from backend.Algorithm import Algorithm as algo
 
 class BH(algo):
+    args = [
+        Parameter(name='product', type='cat', value=['TXF'])
+    ]
 
     def __init__(self, **kwargs):
         self.init()
