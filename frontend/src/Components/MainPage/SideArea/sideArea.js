@@ -7,7 +7,28 @@ import axios from "axios";
 // import Example from './Components/datepicker'
 // import { Example } from './Components/datepicker.js';
 // import Button from '@material-ui/core/Button'
-
+let algo_info = {
+                    "name": "BH_algo",
+                    "version": "0.1",
+                    "algo_id": 0,
+                    "product": [
+                        {
+                            "name": ["TXF"],   
+                        }
+                    ],
+                    "parameter": [
+                        {
+                            "name": "color",
+                            "type": "cat",
+                            "value": ["red", "blue"]
+                        },
+                        {
+                            "name": "height",
+                            "type": "num",
+                            "value": "float",
+                        }
+                    ]
+                }; 
 
 class SideArea extends React.Component {
     constructor(props) {
@@ -34,7 +55,6 @@ class SideArea extends React.Component {
         }
         else
         {
-            // list.push(<option value=""></option>);
             for(let i=0;i<option.length;i++) {
                 list.push(
                     <Form.Check 
@@ -51,20 +71,19 @@ class SideArea extends React.Component {
         return list;
     }
 
-    display_param(param_set = [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
-    ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'] ], test_type) {
+    display_param(param_set=algo_info, test_type) {
         let list = [];
         if(test_type == "single")
         {
             for(let i=0;i<param_set.length;i++) {
 
-                if(param_set[i][1]=='catogory') {
+                if(param_set[i]['type']=='cat') {
                     list.push(
                     <tr>
-                        <td>{param_set[i][0]}</td>
+                        <td>{param_set[i]['name']}</td>
                         <td>
-                            <select id="single-cat" name={param_set[i][0]} onChange={this.handleParamInput}>
-                                {this.display_option(param_set[i][0], param_set[i][2],test_type)}
+                            <select id="single-cat" name={param_set[i]['name']} onChange={this.handleParamInput}>
+                                {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
                             </select>
                         </td>
                     </tr>)
@@ -72,9 +91,9 @@ class SideArea extends React.Component {
                 else {
                     list.push(
                     <tr>
-                        <td>{param_set[i][0]}({param_set[i][2]})</td>
+                        <td>{param_set[i]['name']}({param_set[i]['value']})</td>
                         <td>
-                            <input type="text" id="single-num" name={param_set[i][0]} onChange={this.handleParamInput}/>
+                            <input type="text" id="single-num" name={param_set[i]['name']} onChange={this.handleParamInput}/>
                         </td>
                     </tr>)
                 }
@@ -84,13 +103,13 @@ class SideArea extends React.Component {
         {
             for(let i=0;i<param_set.length;i++) {
 
-                if(param_set[i][1]=='catogory') {
+                if(param_set[i]['type']=='cat') {
                     list.push(
                     <tr>
-                        <td>{param_set[i][0]}</td>
+                        <td>{param_set[i]['name']}</td>
                         <td>
-                            <Form id="batch-cat" name={param_set[i][0]}>
-                                {this.display_option(param_set[i][0], param_set[i][2],test_type)}
+                            <Form id="batch-cat" name={param_set[i]['name']}>
+                                {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
                             </Form>
                         </td>
                     </tr>)
@@ -98,11 +117,11 @@ class SideArea extends React.Component {
                 else {
                     list.push(
                     <tr>
-                        <td>{param_set[i][0]}({param_set[i][2]})</td>
+                        <td>{param_set[i]['name']}({param_set[i]['value']})</td>
                         <td>
-                            <input type="text" id="batch-num-from" name={param_set[i][0]} placeholder="from" onChange={this.handleParamInput}/>{' '}
-                            <input type="text" id="batch-num-to" name={param_set[i][0]} placeholder="to" onChange={this.handleParamInput}/>{' '}
-                            <input type="text" id="batch-num-step" name={param_set[i][0]} placeholder="step" onChange={this.handleParamInput}/>
+                            <input type="text" id="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
+                            <input type="text" id="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
+                            <input type="text" id="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
                         </td>
                     </tr>)
                 }
@@ -262,7 +281,8 @@ class SideArea extends React.Component {
         let algo_name = "BH Algo";
         let param_set =  [ ['color','catogory', ['red','blue']] , ['size','catogory', ['big','small']] , 
         ['gender','catogory', ['male', 'femlae']], ['height', 'numeric', 'float'], ['weight', 'numeric', 'float'], 
-        ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small', 'mid']] ]
+        ['age', 'numeric', 'int'], ['shoe_size', 'numeric', 'float'], ['head','catogory', ['big','small', 'mid']] ]  
+
         const input_slip = (value) => {
             console.log("entering slip. ",value);
         }
@@ -272,7 +292,7 @@ class SideArea extends React.Component {
                     <Button variant="outline-dark" href="/">Home</Button>
                 </Row>
                 <Row>
-                    <h1>{algo_name}</h1>
+                    <h1>{algo_info['name']}</h1>
                 </Row>
                 <Tab.Container defaultActiveKey="switch test" id="switch test"
                 style={{height: "100%"}} >
@@ -297,7 +317,7 @@ class SideArea extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>version</td>
-                                    <td></td>
+                                    <td>{algo_info['version']}</td>
                                 </tr>
                                 <tr>
                                     <td>ApplyProduct</td>
@@ -341,7 +361,7 @@ class SideArea extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.display_param(param_set, 'single')}
+                                {this.display_param(algo_info['parameter'], 'single')}
                             </tbody>
                         </Table>
                         </Scrollbars>
@@ -359,7 +379,7 @@ class SideArea extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>version</td>
-                                    <td></td>
+                                    <td>{algo_info['version']}</td>
                                 </tr>
                                 <tr>
                                     <td>ApplyProduct</td>
@@ -403,7 +423,7 @@ class SideArea extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.display_param(param_set,'batch')}
+                                {this.display_param(algo_info['parameter'],'batch')}
                             </tbody>
                         </Table>
                         </Scrollbars>
@@ -446,13 +466,13 @@ export default SideArea;
 //     {
 //         for(let i=0;i<param_set.length;i++) {
 
-//             if(param_set[i][1]=='catogory') {
+//             if(param_set[i]['type']=='catogory') {
 //                 list.push(
 //                 <tr>
-//                     <td>{param_set[i][0]}</td>
+//                     <td>{param_set[i]['name']}</td>
 //                     <td>
 //                         <select>
-//                             {display_option(param_set[i][2],test_type)}
+//                             {display_option(param_set[i]['value'],test_type)}
 //                         </select>
 //                     </td>
 //                 </tr>)
@@ -460,7 +480,7 @@ export default SideArea;
 //             else {
 //                 list.push(
 //                 <tr>
-//                     <td>{param_set[i][0]}({param_set[i][2]})</td>
+//                     <td>{param_set[i]['name']}({param_set[i]['value']})</td>
 //                     <td>
 //                         <input type="text" id="single-num" onChange={this.handleParamInput}/>
 //                     </td>
@@ -472,13 +492,13 @@ export default SideArea;
 //     {
 //         for(let i=0;i<param_set.length;i++) {
 
-//             if(param_set[i][1]=='catogory') {
+//             if(param_set[i]['type']=='catogory') {
 //                 list.push(
 //                 <tr>
-//                     <td>{param_set[i][0]}</td>
+//                     <td>{param_set[i]['name']}</td>
 //                     <td>
 //                         <Form>
-//                             {display_option(param_set[i][2],test_type)}
+//                             {display_option(param_set[i]['value'],test_type)}
 //                         </Form>
 //                     </td>
 //                 </tr>)
@@ -486,7 +506,7 @@ export default SideArea;
 //             else {
 //                 list.push(
 //                 <tr>
-//                     <td>{param_set[i][0]}({param_set[i][2]})</td>
+//                     <td>{param_set[i]['name']}({param_set[i]['value']})</td>
 //                     <td>
 //                         <input type="text" placeholder="from"/>{' '}<input type="text" placeholder="to"/>
 //                     </td>
