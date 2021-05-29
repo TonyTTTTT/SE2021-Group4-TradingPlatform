@@ -38,8 +38,18 @@ class ParameterParser:
 
         return output_parameters
 
-    # 把使用者設定的batch參數展開，輸出每次single test需要的參數
-    def batch_parameters_parse(input_parameters: List[Parameter]) -> List[List[Parameter]]:
+    def batch_parameters_parse(input_json: dict) -> List[List[Parameter]]:
+
+        input_parameters = []
+
+        for parameter_dict in input_json['parameter']:
+            p = Parameter(name=parameter_dict['name'], type=parameter_dict['type'], value=None)
+            if p.type == 'cat':
+                p.value = parameter_dict['value']
+            elif p.type == 'num':
+                p.value = [parameter_dict['from'], parameter_dict['to'], parameter_dict['step']]
+
+            input_parameters.append(p)
 
         input_parameter_list_list = []
 
@@ -66,14 +76,37 @@ class ParameterParser:
 
         return output_parameters
 
-"""
-p1 = Parameter(name='color', type='cat', value=['red', 'black'])
-p2 = Parameter(name='xyz', type='cat', value=['x', 'y', 'z'])
-p3 = Parameter(name='height', type='num', value=[1, 5, 1])
 
-print(ParameterParser.batch_parameters_parse([p1, p3]))
+# Test #1
+"""
+input_json = {
+    "algo_id": 0,
+    "product": {
+        "name": "TXF",
+        "start_date": '2021-05-01',
+        "end_date": '2021-05-02',
+        "slip": 1,
+    },
+    "parameter": [
+        {
+            "name": "color",
+            "type": "cat",
+            "value": ["red","black"]
+        },
+        {
+            "name": "height",
+            "type": "num",
+            "from": 170,
+            "to": 175,
+            "step": 1
+        },
+    ]
+}
+
+print(ParameterParser.batch_parameters_parse(input_json))
 """
 
+# Test #2
 """
 input_json = {
     'algo_id': 0,
@@ -100,6 +133,7 @@ input_json = {
 print(ParameterParser.single_parameters_parse(input_json))
 """
 
+# Test #3
 """
 ret = ParameterParser.parameter_format_parse('algo_files/BuyAndHold/first_version.py')
 print(ret)
