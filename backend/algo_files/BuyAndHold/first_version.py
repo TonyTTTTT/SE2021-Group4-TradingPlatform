@@ -6,7 +6,8 @@ from dataclasses import dataclass
 
 from DataClasses import Parameter
 
-from backend.Algorithm import Algorithm as algo
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from Algorithm import Algorithm as algo
 
 class BH(algo):
     args = [
