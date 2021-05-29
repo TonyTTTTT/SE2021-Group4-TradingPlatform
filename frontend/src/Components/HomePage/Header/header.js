@@ -1,7 +1,6 @@
 import React, {useState, useRef, version}from 'react';
 import {Container, Row, Col, Modal , Button, InputGroup, FormControl} from 'react-bootstrap';
 import { connect } from "react-redux";
-import { consoleState } from '../../../state.template';
 import axios from "axios";
 
 const mapStateToProps = state =>{
@@ -57,38 +56,36 @@ const Header = (props) => {
     const readFile = (file)=> {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
-      
           reader.onload = res => {
             resolve(res.target.result);
           };
           reader.onerror = err => reject(err);
-      
           reader.readAsText(file);
         });
     }
-
     const onNewButtonClick = () => {
         setShow(true);
     };
-
     const onUpdateButtonClick = () => {
         updateInput.click();
     };
-
     const onDeleteButtonClick = () => {
-        props.signalDeleteAlgo();
+        //backend : delete report 
+        axios.delete('/api2/delete-algo/' + props.menu.AlgoID).then(
+            response => {
+                //action dispatch to menu
+                props.signalDeleteAlgo();
+            },error =>{
+                console.log(error.message)
+            } 
+        )
     };
-
     const onNewInputChange =  async (event) => {
-		//setSelectedFile(event.target.files[0]);
-		//setIsFilePicked(true);
-
         //read file 
         var UTCtime = event.target.files[0].lastModifiedDate;
         var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
         const content = await readFile(event.target.files[0]);
         
-
         // backend : create report , return algoID 
         let formData = new FormData();
         formData.append('title', modalInput.title);
@@ -96,13 +93,11 @@ const Header = (props) => {
         formData.append('description',modalInput.description);
         formData.append('lastModified',dateTime);
         formData.append('content',content);
-       
         axios.post('/api2/create-algo', formData,
         {headers: {"Content-Type": "multipart/form-data"}},).then(
         response => {
             console.log(response)
             if (response.data.code === 2) {
-                
                 // action dispatch to menu component
                 console.log("addAlgo  id:")
                 console.log(response.data.data)
@@ -110,13 +105,9 @@ const Header = (props) => {
             } else {
                 console.log(response.data.msg)
             }
-        },
-        error => {
+        },error => {
             console.log(error.message)
-        }
-    )
-       
-    
+        })
 	};
 
     const onUpdateInputChange = async (event) => {
@@ -125,14 +116,12 @@ const Header = (props) => {
         var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
         const content = await readFile(event.target.files[0]);
         
-
         // backend : update report 
         let formData = new FormData();
         console.log("header selected algoID")
         console.log(props.menu.selectedAlgoID)
         formData.append('algoID', props.menu.selectedAlgoID);
         formData.append('content',content);
-       
         axios.post('/api2/update-algo', formData,
         {headers: {"Content-Type": "multipart/form-data"}},).then(
         response => {

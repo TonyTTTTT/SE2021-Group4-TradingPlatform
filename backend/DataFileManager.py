@@ -83,6 +83,14 @@ class DataFileManager(metaclass=Singleton):
         """
         return int(time.time() * 100)
 
+    def get_all_algorithm(self):
+        """
+        input:
+            * void
+        output:
+            * A list that contain all algo info: list
+        """
+        return self.data["algo"]
 
     def create_algorithm(self,title: str, version: str, description:str, lastModified:str, content: str):
         p = Path(ALGO_DIR)/ title
@@ -255,14 +263,7 @@ class DataFileManager(metaclass=Singleton):
                                 exchange_rate=product_info['exchangeRate'] )
         return -1
     
-    def get_all_algo(self):
-        """
-        input:
-            * void
-        output:
-            * A list that contain all report info: list
-        """
-        return self.data["algo"]
+    
 
 
 

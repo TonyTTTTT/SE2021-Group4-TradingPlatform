@@ -2,6 +2,7 @@ import React ,{ useState, useEffect, useRef}from 'react';
 import { AgGridColumn, AgGridReact} from 'ag-grid-react';
 import { Row, Col, Nav, Tab } from 'react-bootstrap';
 import { connect } from "react-redux";
+import axios from "axios";
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
@@ -39,6 +40,14 @@ const mapDispatchToProps = dispatch => {
                     value: value
                 }
             });
+        },
+        setAlgoData:(algoData)=>{
+            dispatch({
+                type:"SET_ALGOS",
+                payload:{
+                    algoData:algoData
+                }
+            });
         }
     };
 };
@@ -68,19 +77,37 @@ const Menu = (props) => {
     }, [gridApi,selectedRow,props.menu.deleteSignal])
 
     const onRowSelected = ()=>{
-
         if(gridApi.getSelectedRows()[0]!=undefined){
             setSelectedRow(gridApi.getSelectedRows());
             props.setSelectedAlgoID(gridApi.getSelectedRows()[0].AlgoID)
             console.log("set selected algoID")
             console.log(gridApi.getSelectedRows()[0].AlgoID)
         }
-        
     };
 
     const onGridReady = (params) => {
-        setGridApi(params.api);
-        setGridColumnApi(params.columnApi);   
+        axios.get('/api2/get-all-algo').then(
+            response => {
+                
+                var data = response.data.data
+                // algo data field remapping
+                data.forEach(element => delete element.path);
+                data.forEach(element => delete element.apply_product);
+                data.forEach(element => delete element.parameter_set_id);
+                data.forEach((element) => {element.AlgoID = element.id; delete element.id;});
+                data.forEach((element) => {element.Title = element.title; delete element.title;});
+                data.forEach((element) => {element.Version = element.version; delete element.version;});
+                data.forEach((element) => {element.Description = element.description; delete element.description;});
+                data.forEach((element) => {element.Last_Modified = element.lastModified; delete element.lastModified;});
+
+                console.log(data)
+                props.setAlgoData(data)
+                setGridApi(params.api);
+                setGridColumnApi(params.columnApi);  
+            },error => {console.log(error.message)}
+
+        )
+         
     };
 
     const onTabSelect = (tab) => {
@@ -92,7 +119,7 @@ const Menu = (props) => {
             setTabKey("Report");
         }
     }
-   
+
     return (
         <Tab.Container  
             style={{height:"80%"}}
@@ -113,11 +140,11 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Algo" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 200,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
                                 onGridReady={onGridReady}
-                                autoGroupColumnDef={{ minWidth: 150, headerName:"Title"}}
+                                autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
                                 enableRangeSelection={true}
                                 //enableCellChangeFlash={true}
                                 onRowSelected={onRowSelected}
@@ -135,10 +162,10 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Report" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 150,editable: true,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 180,editable: true,filter: true,resizable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
-                                autoGroupColumnDef={{ minWidth: 150 , headerName:"Algorithm"}}
+                                autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm"}}
                                 enableRangeSelection={true}
                                 rowData={props.menu.reportData}
                                 >

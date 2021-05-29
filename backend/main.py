@@ -22,6 +22,15 @@ def index():
 
 #     return send_from_directory('reports', name)
 
+@app.route('/get-all-algo', methods=['GET'])
+def get_all_algo():
+    df_manager = DataFileManager()
+    try:
+        res = df_manager.get_all_algorithm()
+        return CommonResult(LogLevel.INFO, "Success get all Algo_info", res).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info",None).to_json()
+
 @app.route('/create-algo', methods=['POST'])
 def create_algorithm():
     df_manager = DataFileManager()
@@ -57,14 +66,13 @@ def update_algorithm():
         return CommonResult(LogLevel.ERROR, "Error Upadating algorithm", None).to_json()
 
 @app.route('/delete-algo/<algo_id>', methods=['DELETE'])
-def algo_report(algo_id):
+def delete_algo(algo_id):
     df_manager = DataFileManager()
     try:
-        df_manager.algo_report(int(algo_id))
+        df_manager.delete_algo(int(algo_id))
         return CommonResult(LogLevel.INFO, "Deleted algorithm No. {}".format(algo_id), None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting algorithm", None).to_json()
-
 
 @app.route('/get-report/<report_id>', methods=['get'])
 def get_report(report_id):
@@ -182,17 +190,6 @@ def single_test():
         return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
-
-
-@app.route('/get-all-algo', methods=['get'])
-def get_all_algo():
-    df_manager = DataFileManager()
-    try:
-        res = df_manager.get_all_algo()
-        return CommonResult(LogLevel.INFO, "Success get all report_info", res).to_json()
-    except:
-        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info",
-                            None).to_json()
 
     
 if __name__ == '__main__':

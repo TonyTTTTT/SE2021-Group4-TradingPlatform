@@ -43,8 +43,12 @@ export default function (state = { ...menuState }, action) {
        
         case "SET_SELECTED_ALGO_ID": {
             state = { ...state };
-    
             state.selectedAlgoID = action.payload.AlgoID;
+            return state;
+        }
+        case "SET_ALGOS": {
+            state = { ...state };
+            state.algoData = action.payload.algoData;
             return state;
         }
         default:
