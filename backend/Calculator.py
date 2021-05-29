@@ -1,9 +1,9 @@
 import numpy as np
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from typing import List
-from DataClasses import TradeAction, TradeResult, TradeStat
+from DataClasses import TradeAction, TradeResult, TradeStat, Product
 from DataFileManager import DataFileManager
+from dataclasses import dataclass
 
 @dataclass
 class Mdd:
@@ -43,6 +43,7 @@ class Account:
             # adding new long positions
             while trade_size:
                 self.long.append(trade.price)
+                trade_size -= 1
                 out.append(self._make_trade_result(trade, is_enter=True, profit=0, is_long=True))
 
         elif trade.position < 0:
@@ -54,13 +55,14 @@ class Account:
             # adding new short positions
             while trade_size:
                 self.short.append(trade.price)
+                trade_size -= 1
                 out.append(self._make_trade_result(trade, is_enter=True, profit=0, is_long=False))
 
         return out
 
     def _make_trade_result(self, trade, is_enter, profit, is_long) -> TradeResult:
         return TradeResult( product_id  = trade.product_id,
-                            time        = trade.datetime, 
+                            time        = trade.time, 
                             net_position     = len(self.long) - len(self.short),
                             is_long     = is_long,
                             is_enter    = is_enter,
@@ -90,26 +92,26 @@ class Calculator:
         traded_product = []
         account = {}
         for ta in trade_actions:
-            if ta.product_id not in products:
+            if ta.product_id not in account:
                 account[ta.product_id] = Account(ta.product_id)
                 traded_product.append(df_manager.get_product_info(ta.product_id))
                 
-            tr += account[ta.product_id].add_trade(ta, slip=self.slip)
+            tr += account[ta.product_id].add_trade(ta, slip=self._slip)
         self._adjust_point(tr, traded_product)
         return tr
 
     def _adjust_point(self, trade_results: List[TradeResult], traded_product: List[Product]):
         """
-        if more than one products are treded, adjust profit of each trade result
-        to the product with the largest unit.
+        if more than one products are traded, adjust profit of each trade result
+        to the product with the largest value.
 
         ex:
 
         if
-        * product1 has unit 200
-        * product2 has unit 300
+        * product1 has unit 200, with exchange rate 1.2
+        * product2 has unit 300, with exchange rate 1.0
         
-        then adjust profits of product1 by multiplying 2/3.
+        then adjust profits of product1 by multiplying 4/5.
 
         """
         if len(traded_product) < 2:
@@ -119,37 +121,37 @@ class Calculator:
             tr.profit = tr.real_profit / max_unit
 
     def get_all_statistics(self, trade_results: List[TradeResult]) -> List[TradeStat]:
-        profit             = list(map(lambda x: x.profit, trade_results))
+        profit             = list(map(lambda x: x.profit, filter(lambda x: not x.is_enter, trade_results)))
         net_position       = list(map(lambda x: x.net_position, trade_results))
-        real_profit        = list(map(lambda x: x.real_profit, trade_results))
-        is_exit            = list(map(lambda x: not x.is_enter, trade_results))
-        is_win             = list(map(lambda x: x.profit>0, trade_results))
+        real_profit        = list(map(lambda x: x.real_profit, filter(lambda x: not x.is_enter, trade_results)))
+        is_win             = list(map(lambda x: x.profit>0, filter(lambda x: not x.is_enter, trade_results)))
         time               = list(map(lambda x: x.time, trade_results))
-        mdd_point          = self.get_mdd_point(trade_results)
+        mdd_point          = self.get_mdd(trade_results)
+        mdd_real           = self.get_mdd(trade_results, is_real=True)
         start_time         = min(time)
         end_time           = max(time)
         total_real_profit  = sum(real_profit)
         total_profit       = sum(profit)
-        years              = relativedelta(end_time, start_time).years
+        years              = (end_time - start_time).days / 365
         annual_real_profit = total_real_profit / max(1, years)
         annual_profit      = total_profit / max(1, years)
-        trade_cnt          = sum(is_exit)
+        trade_cnt          = len(profit)
         win_cnt            = sum(is_win)
-        loss_cnt           = trade_cnt - loss_cnt
+        loss_cnt           = trade_cnt - win_cnt
         win_profit         = 0 if len(profit) == 0 else np.dot(profit, is_win)
         loss_profit        = win_profit - total_profit
         avg_win            = win_profit / max(win_cnt, 1)
         avg_loss           = loss_profit / max(loss_cnt, 1)
         exp                = total_profit / max(trade_cnt, 1)
-        win_rate           = win_cnt / max(trade_cnt, 1)
+        win_rate           = win_cnt / max(trade_cnt, 1) * 100
         win_loss_ratio     = 0 if avg_loss == 0 else (avg_win / avg_loss)
         annual_pm          = annual_profit / max(mdd_point, 1)
         pm                 = total_profit / max(mdd_point, 1)
-        q0                 = 0 if len(profit) == 0 else max(profit)
+        q0                 = 0 if len(profit) == 0 else min(profit)
         q1                 = 0 if len(profit) == 0 else np.quantile(profit, 0.25, interpolation = 'midpoint')
-        q2                 = 0 if len(profit) == 0 else np.quantile(profit, 0.25, interpolation = 'midpoint')
-        q3                 = 0 if len(profit) == 0 else np.quantile(profit, 0.25, interpolation = 'midpoint')
-        q4                 = 0 if len(profit) == 0 else min(profit)
+        q2                 = 0 if len(profit) == 0 else np.quantile(profit, 0.50, interpolation = 'midpoint')
+        q3                 = 0 if len(profit) == 0 else np.quantile(profit, 0.75, interpolation = 'midpoint')
+        q4                 = 0 if len(profit) == 0 else max(profit)
         rng                = q4 - q0
         std                = 0 if len(profit) == 0 else np.std(profit)
         return [
@@ -159,27 +161,27 @@ class Calculator:
             TradeStat("總獲利點", total_profit),
             TradeStat("年均獲利", round(annual_real_profit, 2)),
             TradeStat("年均獲利點", round(annual_profit, 2)),
-            TradeStat("最大回檔", round(mdd[0].mdd, 2)),
+            TradeStat("最大回檔", mdd_real),
             TradeStat("最大回檔點", mdd_point),
             TradeStat("交易次數", trade_cnt),
             TradeStat("期望值", round(exp, 2)),
             TradeStat("獲利次數", win_cnt),
-            TradeStat("平均獲利", avg_win),
+            TradeStat("平均獲利", round(avg_win, 2)),
             TradeStat("虧損次數", loss_cnt),
             TradeStat("平均虧損", round(avg_loss, 2)),
             TradeStat("勝率", round(win_rate, 2)),
             TradeStat("賺賠比", round(win_loss_ratio, 2)),
             TradeStat("年均獲利/最大回檔", round(annual_pm, 2)),
             TradeStat("總獲利/最大回檔", round(pm, 2)),
-            TradeStat("最大淨多單", max(pos, 0)),
-            TradeStat("最大淨空單", min(pos, 0)),
-            TradeStat("Profit - Min", q0)
+            TradeStat("最大淨多單", max(max(net_position), 0)),
+            TradeStat("最大淨空單", min(max(net_position), 0)),
+            TradeStat("Profit - Min", q0),
             TradeStat("Profit - Q1", q1),
             TradeStat("Profit - Medium", q2),
             TradeStat("Profit - Q3", q3),
             TradeStat("Profit - Max", q4),
             TradeStat("Profit - Range", rng),
-            TradeStat("Profit - Std", std),
+            TradeStat("Profit - Std", round(std, 2)),
         ] + self.get_mdd_stat(trade_results)
 
     def get_mdd_stat(self, trade_results: List[TradeResult]) -> List[TradeStat]:
@@ -192,13 +194,13 @@ class Calculator:
             out.append(TradeStat("MDD{} 起始金額".format(i+1), mdd[i].start_profit))
         return out
 
-    def get_mdd_point(self, trade_results: List[TradeStat]) -> float:
-        net = self._get_profit_by_time(trade_results, is_real=False)
+    def get_mdd(self, trade_results: List[TradeStat], is_real=False) -> float:
+        net = self._get_profit_by_time(trade_results, is_real=is_real)
         mdd = 0
         max_profit = 0
         for i in net:
             max_profit = max(max_profit, i.profit)
-            mdd = max_profit - i.profit
+            mdd = max(mdd, max_profit - i.profit)
         return mdd
 
     def get_mdd_list(self, trade_results: List[TradeResult]) -> List[Mdd]:
@@ -213,10 +215,10 @@ class Calculator:
             max_profit = max(max_profit, cur.profit)
             cur_dd = max(cur_dd, max_profit - cur.profit)
             if max_profit == cur.profit:
-                out.append(Mdd(start_time   : start_time,
-                               end_time     : cur.time,
-                               mdd          : cur_dd,
-                               start_profit : start_profit))
+                mdd.append(Mdd(start_time   = start_time,
+                               end_time     = cur.time,
+                               mdd          = cur_dd,
+                               start_profit = start_profit))
                 cur_dd = 0
                 start_time = cur.time
                 start_profit = cur.profit
@@ -224,8 +226,10 @@ class Calculator:
         mdd.sort(key=lambda x: x.mdd, reverse=True)
         # append mdd to _mdd_count
         if len(mdd) < self._mdd_count:
-            null_mdd = #pass
+            null_mdd = Mdd(datetime.now(), datetime.now(), 0, 0)
             mdd += [null_mdd] * (self._mdd_count-len(mdd))
+        else:
+            mdd = mdd[:self._mdd_count]
         # finally
         return mdd
 
@@ -241,4 +245,24 @@ class Calculator:
         return out
 
 
+if __name__ == '__main__':
+    ta = []
+    with open("BH.txt", 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            time, hmm, bs, price = line.replace("\n", "").split(" ")
+            a = TradeAction(0, datetime(int(time[:4]), int(time[4:6]), int(time[6:8])), (-1)**(bs=="S"), float(price), "")
+            ta.append(a)
+
+    cal = Calculator()
+    cal.set_slip(1)
+    tr = cal.calculate(ta)
+    # test trade result
+    #for i in tr:
+    #    print(i)
+
+    # test stats
+    ts = cal.get_all_statistics(tr)
+    for i in ts:
+        print(i)
 
