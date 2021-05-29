@@ -2,13 +2,11 @@ import pandas as pd
 import numpy as np
 import sys
 import os
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from dataclasses import dataclass
 
+from backend.Algorithm import Algorithm as algo
 
-
-
-class BH(st.Strategy):
+class BH(algo):
 
     def __init__(self, **kwargs):
         self.init()
