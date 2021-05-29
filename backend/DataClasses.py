@@ -71,6 +71,7 @@ class TradeResult:
     is_enter: bool  # True: ??≤Â†¥, False: ?á∫?†¥
     price: float  # ??πÊ†º
     profit: float  # ?ç≤?à© (?á∫?†¥??çÊ??)
+    real_profit: float
     tag: str  # ‰∫§Ê?ìÊ?ôÁ±§
 
 
