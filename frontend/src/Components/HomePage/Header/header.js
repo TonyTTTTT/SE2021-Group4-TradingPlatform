@@ -2,6 +2,7 @@ import React, {useState, useRef, version}from 'react';
 import {Container, Row, Col, Modal , Button, InputGroup, FormControl} from 'react-bootstrap';
 import { connect } from "react-redux";
 import { consoleState } from '../../../state.template';
+import axios from "axios";
 
 const mapStateToProps = state =>{
     return { 
@@ -17,10 +18,11 @@ const mapDispatchToProps = dispatch => {
                 type: "DELETE_ALGO"
             });
         },
-        addAlgo : (title,version,description,content,lastModifiedTime) => {
+        addAlgo : (id,title,version,description,content,lastModifiedTime) => {
             dispatch({
                 type: "ADD_ALGO",
                 payload:{
+                    AlgoID : id,
                     Title: title,
                     Version: version,
                     Description : description,
@@ -79,10 +81,37 @@ const Header = (props) => {
     const onNewInputChange =  async (event) => {
 		//setSelectedFile(event.target.files[0]);
 		//setIsFilePicked(true);
+
+        //read file 
         var UTCtime = event.target.files[0].lastModifiedDate;
         var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
         const content = await readFile(event.target.files[0]);
-        props.addAlgo(modalInput.title,modalInput.version,modalInput.description,content,dateTime);
+        
+
+        // backend : create report , return algoID 
+        let formData = new FormData();
+        formData.append('title', modalInput.title);
+        formData.append('version',modalInput.version);
+        formData.append('description',modalInput.description);
+        formData.append('lastModified',dateTime);
+        formData.append('content',content);
+       
+        axios.post('/api2/create-algo', formData,
+        {headers: {"Content-Type": "multipart/form-data"}},).then(
+        response => {
+            if (response.data.code === 2) {
+                const {data: {id}} = response;
+                 // action dispatch to menu component
+                props.addAlgo(id,modalInput.title,modalInput.version,modalInput.description,content,dateTime);
+            } else {
+                console.log(response.data.msg)
+            }
+        },
+        error => {
+            console.log(error.message)
+        }
+    )
+       
     
 	};
 

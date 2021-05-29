@@ -25,12 +25,17 @@ def index():
 @app.route('/create-algo', methods=['POST'])
 def create_algorithm():
     df_manager = DataFileManager()
+
     title = request.form.get('title')
     version = request.form.get('version')
-    algo_content = request.form.get('algo_content')
+    description = request.form.get('description')
+    lastModified = request.form.get('lastModified')
+    content = request.form.get('content')
+    
+    algo_id = df_manager.create_algorithm(title, version, description ,lastModified , content)
 
-    algo_id , version = df_manager.create_algorithm(title, version, algo_content)
     if algo_id is not None:
+        print("id"+str( algo_id))
         return CommonResult(LogLevel.INFO, 'Create report', algo_id).to_json()
     else:
         return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
@@ -62,7 +67,7 @@ def algo_report(algo_id):
 
 
 @app.route('/get-report/<report_id>', methods=['get'])
-def get_report(report_id: int):
+def get_report(report_id):
     df_manager = DataFileManager()
     report_id = int(report_id)
     try:
@@ -134,17 +139,16 @@ def delete_report(report_id):
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()
 
-# NOTE:
-# ??ñÁ?∂Âè´??? get-algo-infoÔºå‰???òØÂØ¶È?õ‰?äÂ?≥È?????Ë≥???ô‰?çÊòØ AlgoInfo ??ôÂ?? classÔº?
-# ??åÊòØ????????èÈ?? parameter_set_id Â∞? parameters Â±ïÈ?ã‰??Ôº?Âª?Áæ©Á??algo infoÔº?
 @app.route('/get-algo-info/<algo_id>', methods=['get'])
 def get_algo_info(algo_id):
+
     df_manager = DataFileManager()
     algo_id = int(algo_id)
+
     try:
-        algo_info_and_parameters = df_manager.get_algo_info_and_parameters(algo_id)
+        algo_info = df_manager._find_algorithm(algo_id)
         message = 'Get algo info of algo id {} successfully'.format(algo_id)
-        return CommonResult(LogLevel.INFO, message, algo_info_and_parameters).to_json()
+        return CommonResult(LogLevel.INFO, message, algo_info).to_json()
     except:
         message = 'Fail to get algo info of algo id {} due to uncertain errors'.format(algo_id)
         return CommonResult(LogLevel.ERROR, message, None).to_json()
