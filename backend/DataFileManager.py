@@ -123,7 +123,7 @@ class DataFileManager(metaclass=Singleton):
 
     def _find_algorithm(self, algo_id: int):
 
-        return next(filter(lambda : algo['id'] == algo_id, self.data[ALGO]), None)
+        return next(filter(lambda algo : algo['id'] == algo_id, self.data[ALGO]), None)
     # }
 
     # def create_report(self, title: str, algo_id: int) -> int:
@@ -238,29 +238,6 @@ class DataFileManager(metaclass=Singleton):
         else:
             return None
 
-    def get_algo_info(self, algo_id: int):
-        return {'title': 'hi', 'version': '1.0', 'description': 'hi', 'lastModified': "123",algo_content:"content"}
-        # print(self.data['algo'])
-        # return next(filter(lambda algo: algo['id'] == algo_id, self.data['algo']), None)
-
-    def get_parameter_set(self, parameter_set_id: int):
-        return {'id': 123, 'algo_id': 0, 'parameters': []}
-
-    def get_algo_info_and_parameters(self, algo_id: int) -> dict:
-        algo_info = self.get_algo_info(algo_id)
-
-        parameter_set_id = algo_info['parameter_set_id']
-        parameter_set = self.get_parameter_set(parameter_set_id)
-
-        algo_info_and_parameters = {
-                'name': algo_info['title'],
-                'version': algo_info['version'],
-                'product': algo_info['apply_product'],
-                'parameter': parameter_set['parameters']
-        }
-
-        return algo_info_and_parameters
-    
     def get_product_info(self, product_id: int):
         with open(self.product_info_path, 'r') as f:
             self.product_infos = json.load(f)
