@@ -19,6 +19,12 @@ class AssetDataLoader:
             for data in r:
                 # print(data['time'])
                 data['time'] = date.fromisoformat(data['time'])
+                data['open'] = float(data['open'])
+                data['high'] = float(data['high'])
+                data['low'] = float(data['low'])
+                data['close'] = float(data['close'])
+                data['volume'] = int(data['volume'])
+                data['delta'] = float(data['delta'])
                 if start == None and end == None:
                     data_new.append(data)
                 elif start <= data['time'] <= end:
