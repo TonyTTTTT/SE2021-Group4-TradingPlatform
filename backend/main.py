@@ -35,26 +35,26 @@ def create_algorithm():
     algo_id = df_manager.create_algorithm(title, version, description ,lastModified , content)
 
     if algo_id is not None:
-        print("id"+str( algo_id))
         return CommonResult(LogLevel.INFO, 'Create report', algo_id).to_json()
     else:
         return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
 
 @app.route('/update-algo', methods=['POST'])
 def update_algorithm():
-     df_manager = DataFileManager()
-     args = request.args.to_dict()
-     algo_id = args.pop("algo_id", None)
-     algo_content = args.pop("algo_content", None)
-     if algo_id is None or algo_content is None:
+    df_manager = DataFileManager()
+    
+    algo_id = int(request.form.get('algoID'))
+    content = request.form.get('content')
+
+    if algo_id is None or content is None:
          return CommonResult(LogLevel.ERROR, "Invalid update ", None).to_json()
-     try:
-         algo_id = df_manager.update_algorithm(algo_id, algo_content)
-         if algo_id == -1:
-             return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
-         return CommonResult(LogLevel.DEBUG, "Update algorithm No. {}".format(algo_id), None).to_json()
-     except:
-         return CommonResult(LogLevel.ERROR, "Error Upadating algorithm", None).to_json()
+    try:
+        algo_id = df_manager.update_algorithm(algo_id, content)
+        if algo_id == -1:
+            return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
+        return CommonResult(LogLevel.DEBUG, "Update algorithm No. {}".format(str(algo_id)), None).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Error Upadating algorithm", None).to_json()
 
 @app.route('/delete-algo/<algo_id>', methods=['DELETE'])
 def algo_report(algo_id):
