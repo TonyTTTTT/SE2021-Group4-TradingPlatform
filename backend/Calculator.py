@@ -73,6 +73,9 @@ class Account:
 
 
 class Calculator:
+    """
+    class for calculating performance of trade actions
+    """
     def __init__(self):
         self._slip = 0
         self._mdd_count = 5
@@ -224,7 +227,7 @@ class Calculator:
                 start_profit = cur.profit
         # sort mdd large -> small
         mdd.sort(key=lambda x: x.mdd, reverse=True)
-        # append mdd to _mdd_count
+        # make mdd of length _mdd_count
         if len(mdd) < self._mdd_count:
             null_mdd = Mdd(datetime.now(), datetime.now(), 0, 0)
             mdd += [null_mdd] * (self._mdd_count-len(mdd))
