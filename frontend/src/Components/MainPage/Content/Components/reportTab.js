@@ -24,6 +24,7 @@ import Report from "./report";
 import ReportDialog from "./reportDialog";
 import axios from "axios";
 import {connect} from "react-redux";
+import {sendLogAction} from "../../../../actions";
 
 function createData(title, lastModified, id) {
     return {title, lastModified, id};
@@ -185,11 +186,12 @@ class ReportTab extends Component {
     componentDidMount() {
         axios.get('/api2/get-report-list', {params: {algo_id: 7}}).then(
             response => {
-                const {data: {data}} = response
+                const {data: {data, code, msg}} = response
                 this.setState({rows: data})
+                this.props.sendLog({time: Date.now(), level: code, text: msg})
                 // console.log(rows)
             },
-            error => console.log(error.message)
+            error => this.props.sendLog({time: Date.now(), level: 0, text: error.message})
         )
     }
 
@@ -242,10 +244,12 @@ class ReportTab extends Component {
                     const text = response.data.data
                     this.setState({editFilename: title, editReportId: reportId, editMode: true, text})
                 } else {
-                    console.log(response.data.msg)
+                    const {data: {code, msg}} = response
+                    this.props.sendLog({time: Date.now(), level: code, text: msg})
+                    // console.log(response.data.msg)
                 }
             },
-            error => console.log(error.message)
+            error => this.props.sendLog({time: Date.now(), level: 0, text: error.message})
         )
     }
 
@@ -256,11 +260,13 @@ class ReportTab extends Component {
                 if (response.data.code === 2) {
                     this.setState({editFilename: '', editReportId: null})
                 } else {
-                    console.log(response.data.msg)
+                    const {data: {code, msg}} = response
+                    this.props.sendLog({time: Date.now(), level: code, text: msg})
+                    // console.log(response.data.msg)
                 }
             },
             error => {
-                console.log(error.message)
+                this.props.sendLog({time: Date.now(), level: 0, text: error.message})
             }
         )
         this.setState({editMode: false})
@@ -277,17 +283,19 @@ class ReportTab extends Component {
                 {headers: {"Content-Type": "multipart/form-data"}},).then(
                 response => {
                     if (response.data.code === 2) {
-                        const {data: {data}} = response
+                        const {data: {data, code, msg}} = response
                         const {rows} = this.state
                         const newRows = [...rows, createData(title, new Date().toLocaleString(), data)]
                         console.log(data)
+                        this.props.sendLog({time: Date.now(), level: code, text: msg})
                         this.setState({rows: newRows})
                     } else {
-                        console.log(response.data.msg)
+                        const {data: {code, msg}} = response
+                        this.props.sendLog({time: Date.now(), level: code, text: msg})
                     }
                 },
                 error => {
-                    console.log(error.message)
+                    this.props.sendLog({time: Date.now(), level: 0, text: error.message})
                 }
             )
         }
@@ -307,10 +315,12 @@ class ReportTab extends Component {
                     axios.delete('/api2/delete-report/' + report_id).then(
                         response => {
                             console.log(response.data.msg)
+                            const {data: {code, msg}} = response
+                            this.props.sendLog({time: Date.now(), level: code, text: msg})
                             newRows = newRows.filter(value => value.id !== report_id)
                             this.setState({rows: newRows, selected: []})
                         },
-                        error => console.log(error.message)
+                        error => this.props.sendLog({time: Date.now(), level: 0, text: error.message})
                     )
                 }
             )
@@ -390,4 +400,4 @@ class ReportTab extends Component {
     }
 }
 
-export default connect(state => ({algoId: state.menu.selectedAlgoID}))(withStyles(styles)(ReportTab));
+export default connect(state => ({algoId: state.menu.selectedAlgoID}), {sendLog: sendLogAction})(withStyles(styles)(ReportTab));

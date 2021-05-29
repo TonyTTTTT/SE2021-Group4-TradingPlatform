@@ -154,7 +154,7 @@ const Header = (props) => {
             </Row>
 
             <Row className="d-flex justify-content-right ">
-                <Button href="/main" style={{lineHeight:"5",padding:"auto",margin:"0% 0% 40% 0%",width:100 ,height:100}} variant="success" >Select !</Button>    
+                <Button href={`/main/${props.menu.selectedAlgoID}`} style={{lineHeight:"5",padding:"auto",margin:"0% 0% 40% 0%",width:100 ,height:100}} variant="success" >Select !</Button>
             </Row>
 
             <Modal
