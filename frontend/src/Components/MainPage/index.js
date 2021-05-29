@@ -42,7 +42,6 @@ class MainPage extends React.Component {
                 <Row style={{height: "100%"}}>
                     <Col sm={4} style={{height: "100%", width: "100%"}}>
                         <SideArea/>
-                        <TagArea/>
                     </Col>
                     <Col sm={8} style={{height: "100%", width: "100%"}}>
                         <div style={{height: "calc(100% - 200px)"}}>

@@ -2,9 +2,11 @@ import { sideAreaState } from "../state.template";
 
 export default function (state = { ...sideAreaState }, action) {
     switch (action.type) {
-        case "SIDEAREA_TEST": {
+        case "GET_ALGO_INFO": {
             state = { ...state };
             return state;
         }
+        default:
+        	return state;
     }
 }

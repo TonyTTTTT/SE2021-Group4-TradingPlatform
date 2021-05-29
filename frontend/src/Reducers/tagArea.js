@@ -6,5 +6,7 @@ export default function (state = { ...tagAreaState }, action) {
             state = { ...state };
             return state;
         }
+        default:
+        	return state;
     }
 }

@@ -60,6 +60,30 @@ let algo_info = {
                 }; 
 
 
+const mapStateToProps = state =>{
+    return { 
+        sideArea : state.sideArea
+    };
+}
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        runTest : (algo_id, product, parameter) => {
+            dispatch({
+                type: "CONTENT_TEST",
+                payload:{
+                    algo_id: algo_id,
+                    product: product,
+                    parameter: parameter,
+                }
+                
+            });
+        },
+    };
+};
+
+
 class SideArea extends React.Component {
     constructor(props) {
         super(props);
@@ -73,6 +97,21 @@ class SideArea extends React.Component {
     componentDidMount() {
 
     }
+
+
+    runTest = (event) => {  
+        const content = {"algo_id": 0, "product": this.state.product, "parameter": this.state.parameter}
+
+        axios.post('http://localhost:5000/single-test', content).then(
+        response => {
+            // this.run(response.data)
+            const res = response.data;
+            console.log(res);
+        },
+        error => console.log(error.message)
+        )
+    }
+
 
     display_option(param_name, option, test_type) {
         let list = [];
@@ -310,7 +349,7 @@ class SideArea extends React.Component {
     render() {  
 
         return (
-            <Col style={{height:"90%"}}>
+            <Col style={{height:"100%"}}>
                 <Row>
                     <Button variant="outline-dark" href="/">Home</Button>
                 </Row>
@@ -329,7 +368,7 @@ class SideArea extends React.Component {
                     </Nav>
                     <Tab.Content style={{height:"100%"}}>
                     <Tab.Pane eventKey="Single Test" style={{height:"100%"}}>
-                        <Row style={{height:"70%"}}>
+                        <Row style={{height:"75%"}}>
                         <Scrollbars>
                         <Table striped bordered size="sm">
                             <thead>
@@ -389,9 +428,13 @@ class SideArea extends React.Component {
                         </Table>
                         </Scrollbars>
                         </Row>
+                        <Row>
+                            <Button variant="danger" onClick={this.runTest}>Run Test</Button>{' '}
+                            <Button variant="success">Save Parameters</Button>
+                        </Row>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Batch Test" style={{height:"100%"}}>
-                        <Row style={{height:"70%"}}>
+                        <Row style={{height:"75%"}}>
                         <Scrollbars>
                         <Table striped bordered size="sm">
                             <thead>
@@ -450,6 +493,10 @@ class SideArea extends React.Component {
                             </tbody>
                         </Table>
                         </Scrollbars>
+                        </Row>
+                         <Row>
+                            <Button variant="danger" onClick={this.runTest}>Run Test</Button>{' '}
+                            <Button variant="success">Save Parameters</Button>
                         </Row>
                 </Tab.Pane>
                 </Tab.Content>

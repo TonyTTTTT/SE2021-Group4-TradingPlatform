@@ -93,6 +93,7 @@ class DataFileManager(metaclass=Singleton):
         if not exists:
             algo_path.touch()
             algo_id = self._generate_algo_id()
+
             algo_info = AlgoInfo(algo_id, title, version, description,lastModified,str(algo_path),"test1","test2")
             self.data[ALGO].append(algo_info.__dict__) 
             with open(algo_path, 'w', encoding='utf-8') as f:
@@ -103,11 +104,11 @@ class DataFileManager(metaclass=Singleton):
 
     def update_algorithm(self,algo_id: int ,content: str):
         algorithm = self._find_algorithm(algo_id)
-        
-        # modify algofile
+
+        # modify algo file
         if algorithm is None:
             return -1
-        with open(algo['path'], 'w', encoding='utf-8') as f:
+        with open(algorithm['path'], 'w', encoding='utf-8') as f:
             f.write(content)
         return
 
@@ -115,15 +116,16 @@ class DataFileManager(metaclass=Singleton):
 
         algorithm = self._find_algorithm(algo_id)
         self.data[ALGO] = [algorithm for algorithm in self.data[ALGO] if algo['id'] != algo_id]
-        print(self.data[ALGO])
-        if algorithm is not None and os.path.exists(algo['path']):
+        if algorithm is not None and os.path.exists(algorithm['path']):
             os.remove(ALGO['path'])
-        print(self.data)
         return
 
     def _find_algorithm(self, algo_id: int):
 
-        return next(filter(lambda algo : algo['id'] == algo_id, self.data[ALGO]), None)
+        for algo in self.data[ALGO]:
+            if algo['id'] == algo_id:
+                return algo
+        return None
     # }
 
     # def create_report(self, title: str, algo_id: int) -> int:
