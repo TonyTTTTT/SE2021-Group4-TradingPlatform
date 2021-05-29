@@ -6,12 +6,15 @@ import datetime
 # AlgoInfo
 @dataclass
 class AlgoInfo:
-    id: int                 # é€™å€‹ Algorithm çš„ ID
+    id: int                
     title: str              
-    version: str            
+    version: str
+    description: str
+    lastModified : str
+    path: str         
     apply_product: str
     parameter_set_id: int
-    path: str               # é€™å€‹ Algorithm çš„æª”æ¡ˆè·¯å¾‘
+                
     # class_name: str
 
 
@@ -63,12 +66,12 @@ class TradeAction:
 @dataclass
 class TradeResult:
     product_id: int
-    time: str  # æ™‚é–“
-    is_long: bool  # True: å…ˆè²·å¾Œè³£, False: å…ˆè³£å¾Œè²·
-    is_enter: bool  # True: é€²å ´, False: å‡ºå ´
-    price: float  # åƒ¹æ ¼
-    profit: float  # ç²åˆ© (å‡ºå ´æ‰æœ‰)
-    tag: str  # äº¤æ˜“æ¨™ç±¤
+    time: str  # ??????
+    is_long: bool  # True: ???è²·å?Œèm, False: ???è³?å¾Œè²·
+    is_enter: bool  # True: ??²å ´, False: ?‡º? ´
+    price: float  # ??¹æ ¼
+    profit: float  # ?²?ˆ© (?‡º? ´??æ??)
+    tag: str  # äº¤æ?“æ?™ç±¤
 
 
 @dataclass

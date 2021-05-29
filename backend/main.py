@@ -25,12 +25,17 @@ def index():
 @app.route('/create-algo', methods=['POST'])
 def create_algorithm():
     df_manager = DataFileManager()
+
     title = request.form.get('title')
     version = request.form.get('version')
-    algo_content = request.form.get('algo_content')
+    description = request.form.get('description')
+    lastModified = request.form.get('lastModified')
+    content = request.form.get('content')
+    
+    algo_id = df_manager.create_algorithm(title, version, description ,lastModified , content)
 
-    algo_id , version = df_manager.create_algorithm(title, version, algo_content)
     if algo_id is not None:
+        print("id"+str( algo_id))
         return CommonResult(LogLevel.INFO, 'Create report', algo_id).to_json()
     else:
         return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
@@ -62,7 +67,7 @@ def algo_report(algo_id):
 
 
 @app.route('/get-report/<report_id>', methods=['get'])
-def get_report(report_id: int):
+def get_report(report_id):
     df_manager = DataFileManager()
     report_id = int(report_id)
     try:
@@ -135,8 +140,6 @@ def delete_report(report_id):
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()
 
 # NOTE:
-# ??–ç?¶å«??? get-algo-infoï¼Œä???˜¯å¯¦é?›ä?Šå?³é?????è³???™ä?æ˜¯ AlgoInfo ??™å?? classï¼?
-# ??Œæ˜¯????????é?? parameter_set_id å°? parameters å±•é?‹ä??ï¼?å»?ç¾©ç??algo infoï¼?
 @app.route('/get-algo-info/<algo_id>', methods=['get'])
 def get_algo_info(algo_id):
     df_manager = DataFileManager()

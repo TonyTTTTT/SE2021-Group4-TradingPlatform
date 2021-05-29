@@ -6,7 +6,9 @@
       "version": "1.0",
       "description": "",
       "lastModified": "",
-      "path": "algo_files/BuyAndHold/first_version.py"
+      "path": "algo_files/BuyAndHold/first_version.py",
+      "apply_product": "apply product",
+      "parameter_set_id": "parameter set id"
     }
   ],
   "report": [

@@ -84,34 +84,34 @@ class DataFileManager(metaclass=Singleton):
         return int(time.time() * 100)
 
 
-    def create_algorithm(self,title: str, version: str, algo_content: str):
+    def create_algorithm(self,title: str, version: str, description:str, lastModified:str, content: str):
+        p = Path(ALGO_DIR)/ title
+        p.mkdir(parents=True, exist_ok=True)
+        algo_path = Path(ALGO_DIR) / title / ( version + '.py') 
 
-        algo_path = Path(REPORT_DIR) / title / ( version + '.py') 
         exists = algo_path.exists()
         if not exists:
             algo_path.touch()
             algo_id = self._generate_algo_id()
-            algo_info = AlgoInfo(algo_id, title, version, "None","LastModified example",algo_path)
+            algo_info = AlgoInfo(algo_id, title, version, description,lastModified,str(algo_path),"test1","test2")
             self.data[ALGO].append(algo_info.__dict__) 
-
-            with open(algo['path'], 'w', encoding='utf-8') as f:
-                f.write(algo_content)
-
+            with open(algo_path, 'w', encoding='utf-8') as f:
+                f.write(content)
             return algo_id
         else:
             return None
 
-    def update_algorithm(self,algo_id: int , algo_content: str):
+    def update_algorithm(self,algo_id: int ,content: str):
         algorithm = self._find_algorithm(algo_id)
         
         # modify algofile
         if algorithm is None:
             return -1
         with open(algo['path'], 'w', encoding='utf-8') as f:
-            f.write(algo_content)
+            f.write(content)
         return
 
-    def delete_algorithm(self,algo_id: int , algo_content: str): 
+    def delete_algorithm(self,algo_id: int , content: str): 
 
         algorithm = self._find_algorithm(algo_id)
         self.data[ALGO] = [algorithm for algorithm in self.data[ALGO] if algo['id'] != algo_id]
@@ -239,7 +239,7 @@ class DataFileManager(metaclass=Singleton):
             return None
 
     def get_algo_info(self, algo_id: int):
-        return {'title': 'hi', 'version': '1.0', 'apply_product': 'hi', 'parameter_set_id': 123}
+        return {'title': 'hi', 'version': '1.0', 'description': 'hi', 'lastModified': "123",algo_content:"content"}
         # print(self.data['algo'])
         # return next(filter(lambda algo: algo['id'] == algo_id, self.data['algo']), None)
 
