@@ -169,7 +169,18 @@ def single_test():
         return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
-    
+
+
+@app.route('/get-all-algo', methods=['get'])
+def get_all_algo():
+    df_manager = DataFileManager()
+    try:
+        res = df_manager.get_all_algo()
+        return CommonResult(LogLevel.INFO, "Success get all report_info", res).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info",
+                            None).to_json()
+
     
 if __name__ == '__main__':
     app.run(debug=True, port=4000)

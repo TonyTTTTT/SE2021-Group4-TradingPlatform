@@ -251,6 +251,15 @@ class DataFileManager(metaclass=Singleton):
                                 unit=product_info['unit'],
                                 exchange_rate=product_info['exchangeRate'] )
         return -1
+    
+    def get_all_algo(self):
+        """
+        input:
+            * void
+        output:
+            * A list that contain all report info: list
+        """
+        return self.data["algo"]
 
 
 
