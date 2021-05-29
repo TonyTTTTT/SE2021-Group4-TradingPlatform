@@ -1,6 +1,12 @@
 from typing import List
+<<<<<<< HEAD
 from Calculator import TradeAction, ProductInfo
 from dataclasses import dataclass
+=======
+from dataclasses import dataclass
+from AssetData import AssetDataLoader 
+from DataClasses import TradeAction
+>>>>>>> 74a34c3182e9acf92d85eaee048dbb9a79f1fa80
 
 
 class Algorithm: 
