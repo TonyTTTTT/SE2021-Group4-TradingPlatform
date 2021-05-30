@@ -192,6 +192,23 @@ def single_test():
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
 
+
+@app.route('/batch-test', methods=['POST'])
+def batch_test():
+    df_manager = DataFileManager()
+    try:
+        print(request.json)
+        algo_id = int(request.json.get("algo_id", None))
+        print(algo_id)
+        # get the file path of the specific algo
+        # alto_tester = AlgorithmTester()
+        # algo_test._create_algo(algo_id)
+        # algo_tester.single_test()
+
+        return CommonResult(LogLevel.INFO, "Success batch testing", [{'color':'red', 'height':170, 'exp':7, 'netprofit':100 }] ).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
+
     
 if __name__ == '__main__':
     app.run(debug=True, port=4000)

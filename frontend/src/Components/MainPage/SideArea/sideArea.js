@@ -99,6 +99,7 @@ class SideArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            algo_id: '',
             param_format: {},
             product: {name: "", start_date: "", end_date: "", slip: ""},
             parameter: [],
@@ -110,8 +111,9 @@ class SideArea extends React.Component {
         axios.get('/api2/get-algo-info/' + this.props.menu.selectedAlgoID).then(
         response => {
             // this.run(response.data)
+            this.setState({algo_id: this.props.menu.selectedAlgoID});
             const res_param_format = response.data.data.parameter;
-            this.setState({param_format: res_param_format})
+            this.setState({param_format: res_param_format});
             console.log(res_param_format);
             console.log(this.state.param_format);
         },
@@ -127,10 +129,29 @@ class SideArea extends React.Component {
         console.log('redux console newlog: ', this.props.console.newlog);
     }
 
-    runTest = (event) => {  
-        const content = {"algo_id": 0, "product": this.state.product, "parameter": this.state.parameter}
+    runSingleTest = (event) => {  
+        const content = {"algo_id": this.state.algo_id, "product": this.state.product, "parameter": this.state.parameter}
 
         axios.post('/api2/single-test', content).then(
+        response => {
+            // this.run(response.data)
+            const res = response.data;
+            console.log(res);
+            this.props.addLog(res);
+            console.log("addLog success");
+            this.props.runSingleTest(res.data);
+            // console.log(res.code);
+            // console.log(res.msg);
+
+        },
+        error => console.log(error.message)
+        )
+    }
+
+    runBatchTest = (event) => {  
+        const content = {"algo_id": this.state.algo_id, "product": this.state.product, "parameter": this.state.parameter}
+
+        axios.post('/api2/batch-test', content).then(
         response => {
             // this.run(response.data)
             const res = response.data;
@@ -465,7 +486,7 @@ class SideArea extends React.Component {
                         </Scrollbars>
                         </Row>
                         <Row>
-                            <Button variant="danger" onClick={this.runTest}>Run Test</Button>{' '}
+                            <Button variant="danger" onClick={this.runSingleTest}>Run Test</Button>{' '}
                             <Button variant="success" onClick={this.saveParam}>Save Parameters</Button>
                         </Row>
                 </Tab.Pane>
@@ -531,8 +552,8 @@ class SideArea extends React.Component {
                         </Scrollbars>
                         </Row>
                          <Row>
-                            <Button variant="danger" onClick={this.runTest}>Run Test</Button>{' '}
-                            <Button variant="success">Save Parameters</Button>
+                            <Button variant="danger" onClick={this.runBatchTest}>Run Test</Button>{' '}
+                            <Button variant="success" onClick={this.saveParam}>Save Parameters</Button>
                         </Row>
                 </Tab.Pane>
                 </Tab.Content>
