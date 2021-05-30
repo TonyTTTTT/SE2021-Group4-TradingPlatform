@@ -1,9 +1,11 @@
 from abc import abstractmethod
+from sys import setdlopenflags
 from typing import List
-from dataclasses import dataclass
+import datetime
+import pandas as pd
 
-from backend.AssetData import AssetDataLoader 
-from backend.DataClasses import Parameter, TradeAction
+from AssetData import AssetDataLoader 
+from DataClasses import Parameter, TradeAction
 
 
 class Algorithm: 
@@ -14,35 +16,47 @@ class Algorithm:
 
     def init(self):
         self.tradelist = []
-        self.startDate = None 
-        self.endDate = None
-        a = AssetDataLoader(start=self.setStartDate, end=self.endDate) # startDate 跟 endDate 也在 parameter 裡面嗎？
-        self.data = a.load() # data: List[Dict]
+        self.cat_param = {}
+        self.num_param = {}
+        self.start_date = None 
+        self.end_date = None
+        a = AssetDataLoader() # start_date 跟 end_date 也在 parameter 裡面嗎？
+        self.data = a.load(start=self.start_date, end=self.end_date) # data: List[Dict]
 
-    def set_parameter(self, parameter: List[Parameter]):
-        self.parameter = parameter
+    def set_parameter(self, parameters: List[Parameter]):
+        self.parameters = parameters
+        self.parse_param()
+        print("cat para: ", self.cat_param)
 
-    def setStartDate(self, token):
-        self.startDate = datetime.datetime.strptime(token, "%Y-%m-%d").date()
+    def parse_param(self):
+        for param in self.parameters:
+            if param.type == 'cat':
+                self.cat_param[param.name] = param.value
+            elif param.type == 'num':
+                self.num_param[param.name] = param.value
 
-    def setEndDate(self, token):
-        self.endDate = datetime.datetime.strptime(token, "%Y-%m-%d").date()
+    def set_start_date(self, token):
+        self.start_date = datetime.datetime.strptime(token, "%Y-%m-%d").date()
+
+    def set_end_date(self, token):
+        self.end_date = datetime.datetime.strptime(token, "%Y-%m-%d").date()
 
     def run(self) -> List[TradeAction]:
-        df = self.data.copy()
-        if self.startDate is not None:
-            t = self.startDate.strftime("%Y-%m-%d")
+        self.runtime_data = self.data.copy()
+        """         
+        if self.start_date is not None:
+            t = self.start_date.strftime("%Y-%m-%d")
             df = df[t:]
-        if self.endDate is not None:
-            t = self.endDate.strftime("%Y-%m-%d")
-            df = df[:t]
-        self.runtime_data = df
-        self.applyTradeLogic(df) 
+        if self.end_date is not None:
+            t = self.end_date.strftime("%Y-%m-%d")
+            df = df[:t] 
+        """
+        self.applyTradeLogic() 
 
         return self.tradelist
     
     @abstractmethod
-    def applyTradeLogic(data):
+    def applyTradeLogic(self):
         """
         Defined in each algorithm inherited from this class
         """
@@ -51,9 +65,10 @@ class Algorithm:
     def addTrade(self, time_stamp, bs, contract, price, tag='', **kwargs):
         if contract == 0:
             return
-        if isinstance(time_stamp, pd.Timestamp) or isinstance(time_stamp, datetime.datetime):
-            time_stamp = time_stamp.strftime("%Y/%m/%d %H:%M:%S")
+        # if isinstance(time_stamp, datetime.datetime):
+        #     time_stamp = time_stamp.strftime("%Y/%m/%d %H:%M:%S")
         if not isinstance(bs, str):
-            bs = "B" if bs else "S"
+            pos = 1 if bs else -1
 
-        self.tradelist.append(TradeAction("TXF", time_stamp, bs, price, tag))
+        self.tradelist.append(TradeAction(0, time_stamp, pos, price, tag))
+
