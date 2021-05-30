@@ -205,7 +205,12 @@ class DataFileManager(metaclass=Singleton):
         output:
             * A list that contain all report info: list
         """
-        return self.data["report"]
+        res = self.data["report"]
+        for report in res:
+            algo = self._find_algorithm(report['algo_id'])
+            report['algo_tilte'] = algo['title']
+            
+        return res
 
     def get_report(self, report_id: int):
         """

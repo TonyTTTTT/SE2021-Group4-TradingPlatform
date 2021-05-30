@@ -44,14 +44,14 @@
   "report": [
     {
       "id": 0,
-      "algo_id": 7,
+      "algo_id": 0,
       "title": "Report of Buy and Hold 1.0",
       "lastModified": "2021-5-26 17:13:00",
       "path": "report_files/my_report.md"
     },
     {
       "id": 1,
-      "algo_id": 7,
+      "algo_id": 0,
       "title": "Report of Buy and Hold 2.0",
       "path": "report_files/my_report2.md"
     }
