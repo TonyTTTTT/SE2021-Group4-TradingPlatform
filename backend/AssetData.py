@@ -1,7 +1,7 @@
 import csv
 from dateutil.parser import parse
 import numpy as np
-from datetime import date
+from datetime import datetime
 
 
 class AssetDataLoader:
@@ -10,15 +10,15 @@ class AssetDataLoader:
     # start&end must me 'yyyy-mm-dd'
     def load(self, id=0 ,start=None, end=None):
         if start != None and end != None:
-            start = date.fromisoformat(start)
-            end = date.fromisoformat(end)
+            start = datetime.fromisoformat(start)
+            end = datetime.fromisoformat(end)
         with open(self.path, 'r') as f:
             r = csv.DictReader(f)
             # A dictionary that each elment is a list
             data_new = []
             for data in r:
                 # print(data['time'])
-                data['time'] = date.fromisoformat(data['time'])
+                data['time'] = datetime.fromisoformat(data['time'])
                 data['open'] = float(data['open'])
                 data['high'] = float(data['high'])
                 data['low'] = float(data['low'])
@@ -34,8 +34,10 @@ class AssetDataLoader:
 
 if __name__ == "__main__":
     a = AssetDataLoader()
-    asset_data_period = a.load(id=0, start='2021-03-01', end='2021-03-16')
+    asset_data_period = a.load(id=0, start='2021-03-01', end='2100-01-01')
     asset_data_all = a.load()
+    for row in asset_data_period:
+        print(row)
 
 # A list that each elemnt is an dictonary
         # with open(self.path, 'r') as f:

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-import datetime
+from datetime import datetime
 
 
 # AlgoInfo
