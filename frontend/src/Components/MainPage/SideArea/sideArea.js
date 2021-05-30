@@ -72,11 +72,12 @@ const mapStateToProps = state =>{
 
 const mapDispatchToProps = dispatch => {
     return {
-        runTest : (result) => {
+        runTest : (result, testType) => {
             dispatch({
                 type: "RUN_TEST",
                 payload:{
                     result: result,
+                    testType: testType,
                 }
                 
             });
@@ -126,6 +127,7 @@ class SideArea extends React.Component {
 
     saveParam = (event) => {
         console.log('redux sidaArea result: ', this.props.sideArea.result);
+        console.log('redux sideArea testType: ', this.props.sideArea.testType);
         console.log('redux console newlog: ', this.props.console.newlog);
     }
 
@@ -139,7 +141,7 @@ class SideArea extends React.Component {
             console.log(res);
             this.props.addLog(res);
             console.log("addLog success");
-            this.props.runTest(res.data);
+            this.props.runTest(res.data, 'single');
             // console.log(res.code);
             // console.log(res.msg);
 
@@ -158,7 +160,7 @@ class SideArea extends React.Component {
             console.log(res);
             this.props.addLog(res);
             console.log("addLog success");
-            this.props.runTest(res.data);
+            this.props.runTest(res.data, 'batch');
             // console.log(res.code);
             // console.log(res.msg);
 

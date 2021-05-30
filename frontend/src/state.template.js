@@ -39,6 +39,7 @@ export const navigationBarState={
 }
 export const sideAreaState={
     result: null,
+    testType: null,
 }
 export const tagAreaState={
 

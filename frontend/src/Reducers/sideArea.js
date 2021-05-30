@@ -5,6 +5,7 @@ export default function (state = { ...sideAreaState }, action) {
         case "RUN_TEST": {
             state = { ...state };
             state.result = action.payload.result;
+            state.testType = action.payload.testType;
             return state;
         }
         default:
