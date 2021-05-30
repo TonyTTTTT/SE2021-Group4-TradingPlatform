@@ -4,8 +4,9 @@ import os
 import time
 from pathlib import Path
 
-from DataClasses import ReportInfo ,AlgoInfo, Product
+from DataClasses import ReportInfo, AlgoInfo, Product
 from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR, PRODUCT_INFO_PATH, ALGO
+
 
 class Singleton(type):
     _instances = {}
@@ -35,9 +36,9 @@ class DataFileManager(metaclass=Singleton):
         self.algo_id2report_ids = {}
         self.report_id2report_info = {}
 
-        maxAlgoID = 0 
+        maxAlgoID = 0
         for i, algo_info in enumerate(self.data[ALGO]):
-            maxAlgoID = max(maxAlgoID,algo_info["id"])
+            maxAlgoID = max(maxAlgoID, algo_info["id"])
             if i == len(self.data[ALGO]) - 1:
                 self.next_algo_id = maxAlgoID + 1
 
@@ -92,25 +93,25 @@ class DataFileManager(metaclass=Singleton):
         """
         return self.data["algo"]
 
-    def create_algorithm(self,title: str, version: str, description:str, lastModified:str, content: str):
-        p = Path(ALGO_DIR)/ title
+    def create_algorithm(self, title: str, version: str, description: str, lastModified: str, content: str):
+        p = Path(ALGO_DIR) / title
         p.mkdir(parents=True, exist_ok=True)
-        algo_path = Path(ALGO_DIR) / title / ( version + '.py') 
+        algo_path = Path(ALGO_DIR) / title / (version + '.py')
 
         exists = algo_path.exists()
         if not exists:
             algo_path.touch()
             algo_id = self._generate_algo_id()
 
-            algo_info = AlgoInfo(algo_id, title, version, description,lastModified,str(algo_path),"test1","test2")
-            self.data[ALGO].append(algo_info.__dict__) 
+            algo_info = AlgoInfo(algo_id, title, version, description, lastModified, str(algo_path), "test1", "test2")
+            self.data[ALGO].append(algo_info.__dict__)
             with open(algo_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return algo_id
         else:
             return None
 
-    def update_algorithm(self,algo_id: int ,content: str):
+    def update_algorithm(self, algo_id: int, content: str):
         algorithm = self._find_algorithm(algo_id)
 
         # modify algo file
@@ -120,7 +121,7 @@ class DataFileManager(metaclass=Singleton):
             f.write(content)
         return
 
-    def delete_algorithm(self,algo_id: int): 
+    def delete_algorithm(self, algo_id: int):
         algorithm = self._find_algorithm(algo_id)
         self.data[ALGO] = [algo for algo in self.data[ALGO] if algo['id'] != algo_id]
         if algorithm is not None and os.path.exists(algorithm['path']):
@@ -136,6 +137,7 @@ class DataFileManager(metaclass=Singleton):
 
     def get_algo_info(self, algo_id: int):
         return self._find_algorithm(algo_id)
+
     # }
 
     # def create_report(self, title: str, algo_id: int) -> int:
@@ -209,7 +211,7 @@ class DataFileManager(metaclass=Singleton):
         for report in res:
             algo = self._find_algorithm(report['algo_id'])
             report['algo_tilte'] = algo['title']
-            
+
         return res
 
     def get_report(self, report_id: int):
@@ -262,15 +264,12 @@ class DataFileManager(metaclass=Singleton):
             self.product_infos = json.load(f)
         for product_info in self.product_infos["product"]:
             if int(product_info['id']) == int(product_id):
-                return Product( id=product_info['id'],
-                                name=product_info['name'],
-                                tick_size=product_info['tickSize'],
-                                unit=product_info['unit'],
-                                exchange_rate=product_info['exchangeRate'] )
+                return Product(id=product_info['id'],
+                               name=product_info['name'],
+                               tick_size=product_info['tickSize'],
+                               unit=product_info['unit'],
+                               exchange_rate=product_info['exchangeRate'])
         return -1
-    
-    
-
 
 
 if __name__ == "__main__":

@@ -8,8 +8,8 @@ class AssetDataLoader:
     path = '../input-data/TXF.csv'
 
     # start&end must me 'yyyy-mm-dd'
-    def load(self, id=0 ,start=None, end=None):
-        if start != None and end != None:
+    def load(self, id=0, start=None, end=None):
+        if start is not None and end is not None:
             start = datetime.fromisoformat(start)
             end = datetime.fromisoformat(end)
         with open(self.path, 'r') as f:
@@ -25,12 +25,13 @@ class AssetDataLoader:
                 data['close'] = float(data['close'])
                 data['volume'] = int(data['volume'])
                 data['delta'] = float(data['delta'])
-                if start == None and end == None:
+                if start is None and end is None:
                     data_new.append(data)
                 elif start <= data['time'] <= end:
                     data_new.append(data)
 
             return data_new
+
 
 if __name__ == "__main__":
     a = AssetDataLoader()
@@ -40,23 +41,23 @@ if __name__ == "__main__":
         print(row)
 
 # A list that each elemnt is an dictonary
-        # with open(self.path, 'r') as f:
-        #     r = csv.DictReader(f)
-        #     # A dictionary that each elment is a list
-        #     data_new = []
-        #     for data in r:
-        #         # print(data['time'])
-        #         data['time'] = date.fromisoformat(data['time'])
-        #         data['open'] = float(data['open'])
-        #         data['high'] = float(data['high'])
-        #         data['low'] = float(data['low'])
-        #         data['close'] = float(data['close'])
-        #         data['volume'] = int(data['volume'])
-        #         data['delta'] = float(data['delta'])
-        #         if start == None and end == None:
-        #             data_new.append(data)
-        #         elif start <= data['time'] <= end:
-        #             data_new.append(data)
+# with open(self.path, 'r') as f:
+#     r = csv.DictReader(f)
+#     # A dictionary that each elment is a list
+#     data_new = []
+#     for data in r:
+#         # print(data['time'])
+#         data['time'] = date.fromisoformat(data['time'])
+#         data['open'] = float(data['open'])
+#         data['high'] = float(data['high'])
+#         data['low'] = float(data['low'])
+#         data['close'] = float(data['close'])
+#         data['volume'] = int(data['volume'])
+#         data['delta'] = float(data['delta'])
+#         if start == None and end == None:
+#             data_new.append(data)
+#         elif start <= data['time'] <= end:
+#             data_new.append(data)
 
 # # A dictionary that each elment is a list
 # data_all = dict(time=[], contract=[], open=[], high=[], low=[],
