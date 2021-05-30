@@ -96,7 +96,8 @@ class SideArea extends React.Component {
     }
 
     componentDidMount() {
-        // console.log("selectedID: ", this.props.menu);
+        //  Cannot read property 'selectedAlgoID' of undefined
+        // console.log("selectedID: ", this.props.menu.selectedAlgoID);
         axios.get('http://localhost:5000/get-algo-info/0').then(
         response => {
             // this.run(response.data)
