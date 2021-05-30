@@ -1,10 +1,9 @@
-from flask import Flask, request, redirect, url_for, jsonify, send_from_directory
+from flask import Flask, request
 from flask_cors import CORS
-import json
 
 from DataFileManager import DataFileManager
 from ParameterParser import ParameterParser
-from utils import CommonResult, LogLevel, META_INFO_PATH
+from utils import CommonResult, LogLevel
 
 app = Flask(__name__)
 cors = CORS(app)
