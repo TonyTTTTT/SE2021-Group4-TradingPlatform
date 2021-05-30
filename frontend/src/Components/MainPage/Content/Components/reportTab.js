@@ -184,7 +184,8 @@ const styles = theme => ({
 class ReportTab extends Component {
 
     componentDidMount() {
-        axios.get('/api2/get-report-list', {params: {algo_id: 7}}).then(
+        const {algoId} = this.props
+        axios.get('/api2/get-report-list', {params: {algo_id: algoId}}).then(
             response => {
                 const {data: {data, code, msg}} = response
                 this.setState({rows: data})
