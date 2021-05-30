@@ -2,8 +2,9 @@ import { sideAreaState } from "../state.template";
 
 export default function (state = { ...sideAreaState }, action) {
     switch (action.type) {
-        case "GET_ALGO_INFO": {
+        case "SINGLE_TEST": {
             state = { ...state };
+            state.result = action.payload.result;
             return state;
         }
         default:

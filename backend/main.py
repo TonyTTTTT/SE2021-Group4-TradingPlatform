@@ -188,7 +188,7 @@ def single_test():
         # algo_test._create_algo(algo_id)
         # algo_tester.single_test()
 
-        return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
+        return CommonResult(LogLevel.INFO, "Success single testing", {'name': 'test', 'list':[1,2,3]}).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
 

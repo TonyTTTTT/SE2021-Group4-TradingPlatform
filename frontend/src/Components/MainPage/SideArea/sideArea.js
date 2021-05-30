@@ -4,6 +4,7 @@ import { Scrollbars } from "rc-scrollbars";
 import { Link } from 'react-router-dom';
 import HomePage from '../../HomePage';
 import axios from "axios";
+import { connect } from "react-redux";
 
 // This let is for testing
 let algo_info = {
@@ -62,21 +63,30 @@ let algo_info = {
 
 const mapStateToProps = state =>{
     return { 
-        // sideArea : state.sideArea,
-        menu : state.menu
+        sideArea : state.sideArea,
+        menu : state.menu,
+        console: state.console,
     };
 }
 
 
 const mapDispatchToProps = dispatch => {
     return {
-        runTest : (algo_id, product, parameter) => {
+        runSingleTest : (result) => {
             dispatch({
-                type: "CONTENT_TEST",
+                type: "SINGLE_TEST",
                 payload:{
-                    algo_id: algo_id,
-                    product: product,
-                    parameter: parameter,
+                    result: result,
+                }
+                
+            });
+        },
+        addLog : (data) => {
+            dispatch({
+                type: "ADD_LOG",
+                payload:{
+                    level: data.code,
+                    text: data.msg,
                 }
                 
             });
@@ -96,29 +106,41 @@ class SideArea extends React.Component {
     }
 
     componentDidMount() {
-        //  Cannot read property 'selectedAlgoID' of undefined
-        // console.log("selectedID: ", this.props.menu.selectedAlgoID);
-        axios.get('http://localhost:5000/get-algo-info/0').then(
+        console.log("selectedID: ", this.props.menu.selectedAlgoID);
+        axios.get('/api2/get-algo-info/' + this.props.menu.selectedAlgoID).then(
         response => {
             // this.run(response.data)
-            const res = response.data.data.parameter;
-            this.setState({param_format: res})
-            console.log(res);
+            const res_param_format = response.data.data.parameter;
+            this.setState({param_format: res_param_format})
+            console.log(res_param_format);
             console.log(this.state.param_format);
         },
         error => console.log(error.message)
         )
     }
+    componentDidUpdate() {
 
+    }
+
+    saveParam = (event) => {
+        console.log('redux sidaArea result: ', this.props.sideArea.result);
+        console.log('redux console newlog: ', this.props.console.newlog);
+    }
 
     runTest = (event) => {  
         const content = {"algo_id": 0, "product": this.state.product, "parameter": this.state.parameter}
 
-        axios.post('http://localhost:5000/single-test', content).then(
+        axios.post('/api2/single-test', content).then(
         response => {
             // this.run(response.data)
             const res = response.data;
             console.log(res);
+            this.props.addLog(res);
+            console.log("addLog success");
+            this.props.runSingleTest(res.data);
+            // console.log(res.code);
+            // console.log(res.msg);
+
         },
         error => console.log(error.message)
         )
@@ -444,7 +466,7 @@ class SideArea extends React.Component {
                         </Row>
                         <Row>
                             <Button variant="danger" onClick={this.runTest}>Run Test</Button>{' '}
-                            <Button variant="success">Save Parameters</Button>
+                            <Button variant="success" onClick={this.saveParam}>Save Parameters</Button>
                         </Row>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Batch Test" style={{height:"100%"}}>
@@ -519,4 +541,4 @@ class SideArea extends React.Component {
         );
     }
 }
-export default SideArea;
+export default connect(mapStateToProps, mapDispatchToProps)(SideArea);
