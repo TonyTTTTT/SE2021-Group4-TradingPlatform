@@ -228,7 +228,7 @@ class DataFileManager(metaclass=Singleton):
             return -1
 
     def get_report_list(self, algo_id: int):
-        report_ids = self.algo_id2report_ids[algo_id]
+        report_ids = self.algo_id2report_ids.get(algo_id, [])
         report_infos = []
         for report_id in report_ids:
             report_infos.append(self.report_id2report_info[report_id])
@@ -249,6 +249,8 @@ class DataFileManager(metaclass=Singleton):
             report_id = self._generate_report_id()
             report_info = ReportInfo(report_id, algo_id, title, str(report_path), time.asctime(time.localtime()))
             self.data[REPORT].append(report_info.__dict__)
+            if algo_id not in self.algo_id2report_ids:
+                self.algo_id2report_ids[algo_id] = []
             self.algo_id2report_ids[algo_id].append(report_id)
             self.report_id2report_info[report_id] = report_info.__dict__
             return report_id
