@@ -1,9 +1,12 @@
 from flask import Flask, request
 from flask_cors import CORS
+from datetime import datetime
 
 from DataFileManager import DataFileManager
 from ParameterParser import ParameterParser
 from utils import CommonResult, LogLevel
+from DataClasses import TradeAction
+from Calculator import Calculator
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -204,15 +207,32 @@ def batch_test():
     df_manager = DataFileManager()
     try:
         print(request.json)
-        algo_id = int(request.json.get("algo_id", None))
-        print(algo_id)
+        # algo_id = int(request.json.get("algo_id", None))
+        # print(algo_id)
+        
+        
+        ta = []
+        with open("BH.txt", 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                time, hmm, bs, price = line.replace("\n", "").split(" ")
+                a = TradeAction(0, datetime(int(time[:4]), int(time[4:6]), int(time[6:8])), (-1) ** (bs == "S"),
+                                float(price), "")
+                ta.append(a)
+    
+        cal = Calculator()
+        cal.set_slip(1)
+        tr = cal.calculate(ta)
+        ts = cal.get_all_statistics(tr)
+        res = {"tradeResult": tr, "tradeStat": ts}
+        # print('res: ', res)
         # get the file path of the specific algo
         # alto_tester = AlgorithmTester()
         # algo_test._create_algo(algo_id)
         # algo_tester.single_test()
 
         return CommonResult(LogLevel.INFO, "Success batch testing",
-                            [{'color': 'red', 'height': 170, 'exp': 7, 'netprofit': 100}]).to_json()
+                            res).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
 

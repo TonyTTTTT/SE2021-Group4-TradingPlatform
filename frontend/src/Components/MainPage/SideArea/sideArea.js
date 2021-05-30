@@ -72,9 +72,9 @@ const mapStateToProps = state =>{
 
 const mapDispatchToProps = dispatch => {
     return {
-        runSingleTest : (result) => {
+        runTest : (result) => {
             dispatch({
-                type: "SINGLE_TEST",
+                type: "RUN_TEST",
                 payload:{
                     result: result,
                 }
@@ -139,7 +139,7 @@ class SideArea extends React.Component {
             console.log(res);
             this.props.addLog(res);
             console.log("addLog success");
-            this.props.runSingleTest(res.data);
+            this.props.runTest(res.data);
             // console.log(res.code);
             // console.log(res.msg);
 
@@ -158,7 +158,7 @@ class SideArea extends React.Component {
             console.log(res);
             this.props.addLog(res);
             console.log("addLog success");
-            this.props.runSingleTest(res.data);
+            this.props.runTest(res.data);
             // console.log(res.code);
             // console.log(res.msg);
 
