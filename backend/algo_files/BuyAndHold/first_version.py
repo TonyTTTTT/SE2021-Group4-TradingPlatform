@@ -1,8 +1,10 @@
-from backend.Algorithm import Algorithm as Algo
-from backend.DataClasses import Parameter
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+
+from Algorithm import Algorithm as Algo
+from DataClasses import Parameter
 
 
-# sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 
 class BH(Algo):
     args = [
