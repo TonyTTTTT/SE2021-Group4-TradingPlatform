@@ -9,9 +9,11 @@ from utils import CommonResult, LogLevel, META_INFO_PATH
 app = Flask(__name__)
 cors = CORS(app)
 
+
 @app.route('/')
 def index():
     return '<h1>Hello, Flask!</h1>'
+
 
 # @app.route('/report', methods=['GET'])
 # def reports():
@@ -29,7 +31,9 @@ def get_all_algo():
         res = df_manager.get_all_algorithm()
         return CommonResult(LogLevel.INFO, "Success get all Algo_info", res).to_json()
     except:
-        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info",None).to_json()
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur when requesting all the report_info",
+                            None).to_json()
+
 
 @app.route('/create-algo', methods=['POST'])
 def create_algorithm():
@@ -40,23 +44,24 @@ def create_algorithm():
     description = request.form.get('description')
     lastModified = request.form.get('lastModified')
     content = request.form.get('content')
-    
-    algo_id = df_manager.create_algorithm(title, version, description ,lastModified , content)
+
+    algo_id = df_manager.create_algorithm(title, version, description, lastModified, content)
 
     if algo_id is not None:
         return CommonResult(LogLevel.INFO, 'Create report', algo_id).to_json()
     else:
         return CommonResult(LogLevel.ERROR, 'Duplicated title').to_json()
 
+
 @app.route('/update-algo', methods=['POST'])
 def update_algorithm():
     df_manager = DataFileManager()
-    
+
     algo_id = int(request.form.get('algoID'))
     content = request.form.get('content')
 
     if algo_id is None or content is None:
-         return CommonResult(LogLevel.ERROR, "Invalid update ", None).to_json()
+        return CommonResult(LogLevel.ERROR, "Invalid update ", None).to_json()
     try:
         algo_id = df_manager.update_algorithm(algo_id, content)
         if algo_id == -1:
@@ -64,6 +69,7 @@ def update_algorithm():
         return CommonResult(LogLevel.DEBUG, "Update algorithm No. {}".format(str(algo_id)), None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error Upadating algorithm", None).to_json()
+
 
 @app.route('/delete-algo/<algo_id>', methods=['DELETE'])
 def delete_algo(algo_id):
@@ -74,6 +80,7 @@ def delete_algo(algo_id):
         return CommonResult(LogLevel.INFO, "Deleted algorithm No. {}".format(algo_id), None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting algorithm", None).to_json()
+
 
 @app.route('/get-report/<report_id>', methods=['get'])
 def get_report(report_id):
@@ -148,9 +155,9 @@ def delete_report(report_id):
     except:
         return CommonResult(LogLevel.ERROR, "Error Deleting report", None).to_json()
 
+
 @app.route('/get-algo-info/<algo_id>', methods=['get'])
 def get_algo_info(algo_id):
-
     df_manager = DataFileManager()
     algo_id = int(algo_id)
 
@@ -164,7 +171,7 @@ def get_algo_info(algo_id):
             'algo_id': algo_info['id'],
             'parameter': parameters
         }
-        
+
         if algo_info is None:
             message = 'Algo info #{} not exists'.format(algo_id)
         else:
@@ -188,10 +195,28 @@ def single_test():
         # algo_test._create_algo(algo_id)
         # algo_tester.single_test()
 
-        return CommonResult(LogLevel.INFO, "Success single testing", None).to_json()
+        return CommonResult(LogLevel.INFO, "Success single testing", {'name': 'test', 'list': [1, 2, 3]}).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
 
-    
+
+@app.route('/batch-test', methods=['POST'])
+def batch_test():
+    df_manager = DataFileManager()
+    try:
+        print(request.json)
+        algo_id = int(request.json.get("algo_id", None))
+        print(algo_id)
+        # get the file path of the specific algo
+        # alto_tester = AlgorithmTester()
+        # algo_test._create_algo(algo_id)
+        # algo_tester.single_test()
+
+        return CommonResult(LogLevel.INFO, "Success batch testing",
+                            [{'color': 'red', 'height': 170, 'exp': 7, 'netprofit': 100}]).to_json()
+    except:
+        return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=4000)

@@ -2,6 +2,7 @@ from importlib import import_module
 from DataFileManager import DataFileManager
 from DataClasses import *
 
+
 class AlgorithmTester:
     def __init__(self):
         self.loaded_algo = {}  # 儲存已經載入過的 algo
@@ -10,7 +11,7 @@ class AlgorithmTester:
         algo = self._create_algo(algo_id)  # 從 algo_type 建立一個 algo instance
         algo.set_version(algo_version)  # 設定 algo version
         algo.set_parameter(algo_parameter_set)  # 設定 algo 參數
-        trade_actions = self.algo.run()  # NOTE: run() 是否要帶入 AssetData?
+        trade_actions = algo.run()  # NOTE: run() 是否要帶入 AssetData?
         return trade_actions
 
     def batch_test(self, algo_id, algo_version, batch_parameter):

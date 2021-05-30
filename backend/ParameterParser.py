@@ -4,6 +4,7 @@ from importlib import import_module
 from DataClasses import Parameter
 import numpy as np
 
+
 class ParameterParser:
 
     def parameter_format_parse(filepath: str) -> List[dict]:
@@ -30,9 +31,9 @@ class ParameterParser:
 
         for parameter_dict in input_json['parameter']:
             p = Parameter(
-                    name=parameter_dict['name'],
-                    type=parameter_dict['type'],
-                    value=parameter_dict['value']
+                name=parameter_dict['name'],
+                type=parameter_dict['type'],
+                value=parameter_dict['value']
             )
             output_parameters.append(p)
 

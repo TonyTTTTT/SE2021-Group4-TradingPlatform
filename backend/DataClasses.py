@@ -6,15 +6,15 @@ from datetime import datetime
 # AlgoInfo
 @dataclass
 class AlgoInfo:
-    id: int                
-    title: str              
+    id: int
+    title: str
     version: str
     description: str
-    lastModified : str
-    path: str         
+    lastModified: str
+    path: str
     apply_product: str
     parameter_set_id: int
-                
+
     # class_name: str
 
 
@@ -22,8 +22,9 @@ class AlgoInfo:
 @dataclass
 class Parameter:
     name: str
-    type: str       # "cat" or "num"
+    type: str  # "cat" or "num"
     value: object
+
 
 @dataclass
 class ParameterSet:
@@ -52,7 +53,6 @@ class Product:
     exchange_rate: float
 
 
-
 # TradeAction, TradeResult, TestResult, TradeStat
 @dataclass
 class TradeAction:
@@ -68,12 +68,12 @@ class TradeResult:
     product_id: int
     time: datetime  # ??????
     net_position: int
-    is_long: bool  # True: ???è²·å?Œèm, False: ???è³?å¾Œè²·
-    is_enter: bool  # True: ??²å ´, False: ?‡º? ´
-    price: float  # ??¹æ ¼
-    profit: float  # ?²?ˆ© (?‡º? ´??æ??)
+    is_long: bool  # True: ???è²·ï¿½?ï¿½ï¿½m, False: ???ï¿½?å¾Œè²·
+    is_enter: bool  # True: ??ï¿½å ´, False: ?ï¿½ï¿½?ï¿½ï¿½
+    price: float  # ??ï¿½æ ¼
+    profit: float  # ?ï¿½ï¿½?ï¿½ï¿½ (?ï¿½ï¿½?ï¿½ï¿½??ï¿½ï¿½??)
     real_profit: float
-    tag: str  # äº¤æ?“æ?™ç±¤
+    tag: str  # äº¤ï¿½?ï¿½ï¿½?ï¿½ç±¤
 
 
 @dataclass
