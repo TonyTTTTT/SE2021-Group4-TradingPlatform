@@ -62,7 +62,7 @@ let algo_info = {
 
 const mapStateToProps = state =>{
     return { 
-        sideArea : state.sideArea,
+        // sideArea : state.sideArea,
         menu : state.menu
     };
 }
@@ -89,14 +89,24 @@ class SideArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            paramset_format: {},
+            param_format: {},
             product: {name: "", start_date: "", end_date: "", slip: ""},
             parameter: [],
         };
     }
 
     componentDidMount() {
-
+        // console.log("selectedID: ", this.props.menu);
+        axios.get('http://localhost:5000/get-algo-info/0').then(
+        response => {
+            // this.run(response.data)
+            const res = response.data.data.parameter;
+            this.setState({param_format: res})
+            console.log(res);
+            console.log(this.state.param_format);
+        },
+        error => console.log(error.message)
+        )
     }
 
 
@@ -426,7 +436,7 @@ class SideArea extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.display_param(algo_info['parameter'], 'single')}
+                                {this.display_param(this.state.param_format, 'single')}
                             </tbody>
                         </Table>
                         </Scrollbars>
@@ -492,7 +502,7 @@ class SideArea extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.display_param(algo_info['parameter'],'batch')}
+                                {this.display_param(this.state.param_format,'batch')}
                             </tbody>
                         </Table>
                         </Scrollbars>
