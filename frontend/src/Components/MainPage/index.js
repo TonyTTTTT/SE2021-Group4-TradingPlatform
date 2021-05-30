@@ -37,7 +37,7 @@ class MainPage extends React.Component {
 
     render() {
         const {match: {params: {algoId}}} = this.props
-        this.props.setAlgoId({AlgoID: algoId})
+        this.props.setAlgoId({AlgoID: parseInt(algoId)})
         return (
             <Container fluid style={{height: window.innerHeight, width: window.innerWidth}}>
                 <Row style={{height: "100%"}}>

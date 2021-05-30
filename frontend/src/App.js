@@ -2,7 +2,6 @@ import React from 'react';
 import {Switch, Route, Link, BrowserRouter} from 'react-router-dom';
 import MainPage from './Components/MainPage';
 import HomePage from './Components/HomePage';
-import {connect} from "react-redux";
 
 class App extends React.Component {
     constructor(props) {
