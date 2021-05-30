@@ -1,6 +1,4 @@
 import csv
-from dateutil.parser import parse
-import numpy as np
 from datetime import datetime
 
 

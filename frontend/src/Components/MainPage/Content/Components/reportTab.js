@@ -286,7 +286,7 @@ class ReportTab extends Component {
                         const {data: {data, code, msg}} = response
                         const {rows} = this.state
                         const newRows = [...rows, createData(title, new Date().toLocaleString(), data)]
-                        console.log(data)
+                        // console.log(data)
                         this.props.sendLog({time: Date.now(), level: code, text: msg})
                         this.setState({rows: newRows})
                     } else {
