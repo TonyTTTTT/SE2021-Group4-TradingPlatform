@@ -193,14 +193,26 @@ class Calculator:
                ] + self.get_mdd_stat(trade_results)
 
     def get_batch_result(self, trade_actions: List[TradeAction]) -> List[TradeStat]:
+
         trade_results = self.calculate(trade_actions)
-        profit = list(map(lambda x: x.profit, filter(lambda x: not x.is_enter, trade_results)))
+
         is_win = list(map(lambda x: x.profit > 0, filter(lambda x: not x.is_enter, trade_results)))
         mdd_point = self.get_mdd(trade_results)
-        total_profit = sum(profit)
+
+        time = list(map(lambda x: x.time, trade_results))
+        start_time = min(time)
+        end_time = max(time)
         years = (end_time - start_time).days / 365
-        annual_real_profit = total_real_profit / max(1, years)
+
+        profit = list(map(lambda x: x.profit, filter(lambda x: not x.is_enter, trade_results)))
+        real_profit = list(map(lambda x: x.real_profit, filter(lambda x: not x.is_enter, trade_results)))
+
+        total_profit = sum(profit)
+        total_real_profit = sum(real_profit)
+
         annual_profit = total_profit / max(1, years)
+        annual_real_profit = total_real_profit / max(1, years)
+
         trade_cnt = len(profit)
         win_cnt = sum(is_win)
         loss_cnt = trade_cnt - win_cnt
@@ -212,6 +224,7 @@ class Calculator:
         win_rate = win_cnt / max(trade_cnt, 1) * 100
         win_loss_ratio = 0 if avg_loss == 0 else (avg_win / avg_loss)
         annual_pm = annual_profit / max(mdd_point, 1)
+
         return [ TradeStat("總獲利", total_profit),
                  TradeStat("期望值", round(exp, 2)),
                  TradeStat("交易次數", trade_cnt),
@@ -280,7 +293,7 @@ class Calculator:
             out.append(n)
         return out
 
-
+"""
 if __name__ == '__main__':
     ta = []
     with open("BH.txt", 'r') as f:
@@ -302,3 +315,4 @@ if __name__ == '__main__':
     ts = cal.get_all_statistics(tr)
     for i in ts:
         print(i)
+"""

@@ -228,22 +228,21 @@ def batch_test():
 
     try:
         tester = AlgorithmTester()
-        trade_actions = tester.batch_test(algo_id, start_date, end_date, parameters)
+        tass = tester.batch_test(algo_id, start_date, end_date, parameters)
 
-#        cal = Calculator()
-#        cal.set_slip(1)
-#        tr = cal.calculate(trade_actions)
-#        ts = cal.get_all_statistics(tr)
-#        res = {"tradeResult": tr, "tradeStat": ts}
+        tsss = []
+        for tas in tass:
+            calculator = Calculator()
+            calculator.set_slip(slip)
+            tss = calculator.get_batch_result(tas)
+            tsss.append(tss)
 
-        message = 'Succeed to send trade actions'
-        output_dict = {
-            'TradeActions': trade_actions
-        }
+        message = 'Succeed to send trade stats'
 
-        return CommonResult(LogLevel.INFO, message, output_dict).to_json()
+        return CommonResult(LogLevel.INFO, message, tsss).to_json()
     except:
-        return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
+        message = 'Uncertain errors occurred'
+        return CommonResult(LogLevel.ERROR, message, None).to_json()
 
 
 if __name__ == '__main__':
