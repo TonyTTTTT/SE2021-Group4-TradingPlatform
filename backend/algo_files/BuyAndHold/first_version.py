@@ -5,6 +5,7 @@ from Algorithm import Algorithm as Algo
 from DataClasses import Parameter
 
 
+class_name = 'BH'
 
 class BH(Algo):
     args = [
@@ -18,7 +19,6 @@ class BH(Algo):
         print("init bh")
         # a = AssetDataLoader(id=0, start=self.start_date, end=self.end_date)
         self.preprocess()
-        self.strategy_name = "BH"
 
     def preprocess(self):
         for idx in range(len(self.data)):

@@ -11,7 +11,8 @@ class ParameterParser:
 
         module_name = filepath.rsplit('.', 1)[0].replace('/', '.')
         mod = import_module(module_name)
-        classBH = getattr(mod, 'BH')
+        class_name = getattr(mod, 'class_name')
+        classBH = getattr(mod, class_name)
 
         output_parameters = []
 
@@ -135,7 +136,5 @@ print(ParameterParser.single_parameters_parse(input_json))
 """
 
 # Test #3
-"""
 ret = ParameterParser.parameter_format_parse('algo_files/BuyAndHold/first_version.py')
 print(ret)
-"""

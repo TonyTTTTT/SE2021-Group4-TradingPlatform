@@ -34,7 +34,8 @@ class AlgorithmTester:
 
             module_name = algo_info['path'].rsplit('.', 1)[0].replace('/', '.')
             mod = import_module(module_name)
-            algo_class = getattr(mod, 'BH')
+            class_name = getattr(mod, 'class_name')
+            algo_class = getattr(mod, class_name)
             self.loaded_algo[algo_id] = algo_class
 
         algo = self.loaded_algo[algo_id]()
@@ -42,7 +43,5 @@ class AlgorithmTester:
         return algo
 
 # Test
-"""
 tas = AlgorithmTester().single_test(0, '2000-05-01', '2001-05-01', [Parameter('long/short', 'cat', 'long')])
 print(tas)
-"""
