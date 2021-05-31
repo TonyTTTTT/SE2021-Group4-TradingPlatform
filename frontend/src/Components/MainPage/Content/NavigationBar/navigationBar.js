@@ -75,8 +75,8 @@ class NavigationBar extends Component {
 
     render() {
         if (this.props.result !== null) {
-            const {tradeResult} = this.props.result
-            const tradeActions = processTrade(tradeResult)
+            const {tradeResults} = this.props.result
+            const tradeActions = processTrade(tradeResults)
             this.props.setResult(tradeActions)
             console.log(tradeActions)
         }
