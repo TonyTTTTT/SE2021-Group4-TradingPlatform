@@ -50,5 +50,7 @@ class AlgorithmTester:
         return algo
 
 # Test
-tas = AlgorithmTester().single_test(0, '2000-05-01', '2001-05-01', [Parameter('long/short', 'cat', 'long')])
-print(tas)
+if __name__ == "__main__":
+
+    tas = AlgorithmTester().single_test(0, '2000-05-01', '2001-05-01', [Parameter('long/short', 'cat', 'long')])
+    print(tas)
