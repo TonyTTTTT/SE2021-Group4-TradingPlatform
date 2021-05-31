@@ -189,19 +189,24 @@ def get_algo_info(algo_id):
 @app.route('/single-test', methods=['POST'])
 def single_test():
 
-    tester = AlgorithmTester()
-
     # request.json是送過來的input json
-    algo_id = int(request.json['algo_id'])
-    start_date = request.json['product']['start_date']
-    end_date = request.json['product']['end_date']
-    parameters = ParameterParser.single_parameters_parse(request.json)
+    algo_id     = int(request.json['algo_id'])
+    start_date  = request.json['product']['start_date']
+    end_date    = request.json['product']['end_date']
+    slip        = float(request.json['product']['slip'])
+    parameters  = ParameterParser.single_parameters_parse(request.json)
 
     try:
+        tester = AlgorithmTester()
         trade_actions = tester.single_test(algo_id, start_date, end_date, parameters)
-        message = 'Sending trade actions only'
 
-        return CommonResult(LogLevel.INFO, message, trade_actions).to_json()
+        calculator = Calculator()
+        calculator.set_slip(slip)
+        trade_results = calculator.calculate(trade_actions)
+
+        message = 'Succeed to send trade results for Algo #{}'.format(algo_id)
+
+        return CommonResult(LogLevel.INFO, message, {'tradeResults': trade_results}).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
 
