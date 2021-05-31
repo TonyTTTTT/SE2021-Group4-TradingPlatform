@@ -22,7 +22,6 @@ class Algorithm:
     def set_parameter(self, parameters: List[Parameter]):
         self.parameters = parameters
         self.parse_param()
-        print("cat para: ", self.cat_param)
 
     def parse_param(self):
         for param in self.parameters:
