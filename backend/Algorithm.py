@@ -18,14 +18,6 @@ class Algorithm:
         self.num_param = {}
         self.start_date = None
         self.end_date = None
-<<<<<<< HEAD
-        #a = AssetDataLoader() 
-        #self.data = a.load(start=self.start_date, end=self.end_date) # data: List[Dict]
-=======
-        a = AssetDataLoader()  # start_date 跟 end_date 也在 parameter 裡面嗎？
-        self.data = a.load(start=self.start_date, end=self.end_date)  # data: List[Dict]
->>>>>>> cf749b68001d42b89264cf3e6b2950ab5f833f93
-
     def set_parameter(self, parameters: List[Parameter]):
         self.parameters = parameters
         self.parse_param()
@@ -38,12 +30,6 @@ class Algorithm:
             elif param.type == 'num':
                 self.num_param[param.name] = param.value
 
-    # def set_start_date(self, token):
-    #     self.start_date = datetime.datetime.strptime(token, "%Y-%m-%d").date()
-
-    # def set_end_date(self, token):
-    #     self.end_date = datetime.datetime.strptime(token, "%Y-%m-%d").date()
-
     def set_product_date(self, start_date=None, end_date=None):
         data_loader = AssetDataLoader()
         data_loader.load(start=start_date, end=end_date)
@@ -52,14 +38,6 @@ class Algorithm:
         a = AssetDataLoader()
         self.data = a.load(start=self.start_date, end=self.end_date) 
         self.runtime_data = self.data.copy()
-        """         
-        if self.start_date is not None:
-            t = self.start_date.strftime("%Y-%m-%d")
-            df = df[t:]
-        if self.end_date is not None:
-            t = self.end_date.strftime("%Y-%m-%d")
-            df = df[:t] 
-        """
         self.applyTradeLogic()
 
         return self.tradelist
@@ -74,8 +52,6 @@ class Algorithm:
     def addTrade(self, time_stamp, bs, contract, price, tag='', **kwargs):
         if contract == 0:
             return
-        # if isinstance(time_stamp, datetime.datetime):
-        #     time_stamp = time_stamp.strftime("%Y/%m/%d %H:%M:%S")
         if not isinstance(bs, str):
             pos = 1 if bs else -1
 
