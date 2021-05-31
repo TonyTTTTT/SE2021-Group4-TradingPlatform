@@ -21,7 +21,7 @@ class Algorithm:
 
     def set_parameter(self, parameters: List[Parameter]):
         self.parameters = parameters
-        self.parse_param()
+        self._parse_param()
 
     def _parse_param(self):
         for param in self.parameters:
@@ -36,7 +36,7 @@ class Algorithm:
 
     def run(self) -> List[TradeAction]:
         self.runtime_data = self.data.copy()
-        self.applyTradeLogic()
+        self.apply_trade_logic()
 
         return self.tradelist
 

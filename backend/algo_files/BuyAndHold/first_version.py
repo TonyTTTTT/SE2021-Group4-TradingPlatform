@@ -39,10 +39,9 @@ class BH(Algo):
     def print_trade_list(self):
         print(self.tradelist)
 
-"""
-bh = BH()
-bh.set_parameter([Parameter('long/short', 'cat', 'long')])
-bh.set_product_date(start_date='2021-03-01', end_date='2100-01-01')
-bh.run()
-bh.print_trade_list() 
-"""
+if __name__ == '__main__':
+    bh = BH()
+    bh.set_parameter([Parameter('long/short', 'cat', 'long')])
+    bh.set_product_date(start_date='2007-02-15', end_date='2007-04-04')
+    bh.run()
+    bh.print_trade_list() 
