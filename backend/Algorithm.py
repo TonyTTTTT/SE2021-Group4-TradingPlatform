@@ -18,12 +18,12 @@ class Algorithm:
         self.num_param = {}
         self.start_date = None
         self.end_date = None
-        
+
     def set_parameter(self, parameters: List[Parameter]):
         self.parameters = parameters
         self.parse_param()
 
-    def parse_param(self):
+    def _parse_param(self):
         for param in self.parameters:
             if param.type == 'cat':
                 self.cat_param[param.name] = param.value
