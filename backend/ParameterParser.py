@@ -1,6 +1,7 @@
 from typing import List
 from itertools import product
 from importlib import import_module
+import inspect
 from DataClasses import Parameter
 import numpy as np
 
@@ -11,7 +12,10 @@ class ParameterParser:
 
         module_name = filepath.rsplit('.', 1)[0].replace('/', '.')
         mod = import_module(module_name)
-        class_name = getattr(mod, 'class_name')
+        cls = inspect.getmembers(mod, inspect.isclass)
+        class_name = next(filter(lambda x: x[1].__module__ == module_name, cls), None)[0]
+        if class_name is None:
+            raise Exception("No class defined in " + filepath)
         classBH = getattr(mod, class_name)
 
         output_parameters = []

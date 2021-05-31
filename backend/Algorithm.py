@@ -6,20 +6,25 @@ from AssetData import AssetDataLoader
 from DataClasses import Parameter, TradeAction
 
 
-class Algorithm: 
+class Algorithm:
 
     def __init__(self, **kwargs):
         self.init()
-        #self.initarg(kwargs)
+        # self.initarg(kwargs)
 
     def init(self):
         self.tradelist = []
         self.cat_param = {}
         self.num_param = {}
-        self.start_date = None 
+        self.start_date = None
         self.end_date = None
+<<<<<<< HEAD
         #a = AssetDataLoader() 
         #self.data = a.load(start=self.start_date, end=self.end_date) # data: List[Dict]
+=======
+        a = AssetDataLoader()  # start_date 跟 end_date 也在 parameter 裡面嗎？
+        self.data = a.load(start=self.start_date, end=self.end_date)  # data: List[Dict]
+>>>>>>> cf749b68001d42b89264cf3e6b2950ab5f833f93
 
     def set_parameter(self, parameters: List[Parameter]):
         self.parameters = parameters
@@ -55,10 +60,10 @@ class Algorithm:
             t = self.end_date.strftime("%Y-%m-%d")
             df = df[:t] 
         """
-        self.applyTradeLogic() 
+        self.applyTradeLogic()
 
         return self.tradelist
-    
+
     @abstractmethod
     def applyTradeLogic(self):
         """
@@ -75,4 +80,3 @@ class Algorithm:
             pos = 1 if bs else -1
 
         self.tradelist.append(TradeAction(0, time_stamp, pos, price, tag))
-
