@@ -18,6 +18,7 @@ class Algorithm:
         self.num_param = {}
         self.start_date = None
         self.end_date = None
+        
     def set_parameter(self, parameters: List[Parameter]):
         self.parameters = parameters
         self.parse_param()
@@ -32,11 +33,9 @@ class Algorithm:
 
     def set_product_date(self, start_date=None, end_date=None):
         data_loader = AssetDataLoader()
-        data_loader.load(start=start_date, end=end_date)
+        self.data = data_loader.load(start=start_date, end=end_date)
 
     def run(self) -> List[TradeAction]:
-        a = AssetDataLoader()
-        self.data = a.load(start=self.start_date, end=self.end_date) 
         self.runtime_data = self.data.copy()
         self.applyTradeLogic()
 

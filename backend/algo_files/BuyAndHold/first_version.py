@@ -1,3 +1,6 @@
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+
 from Algorithm import Algorithm as Algo
 from DataClasses import Parameter
 from AssetData import AssetDataLoader
@@ -36,10 +39,9 @@ class BH(Algo):
     def print_trade_list(self):
         print(self.tradelist)
 
-"""
+
 bh = BH()
 bh.set_parameter([Parameter('long/short', 'cat', 'long')])
 bh.set_product_date(start_date='2021-03-01', end_date='2100-01-01')
 bh.run()
 bh.print_trade_list() 
-"""
