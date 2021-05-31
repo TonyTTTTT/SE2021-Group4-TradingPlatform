@@ -1,8 +1,11 @@
-from backend.Algorithm import Algorithm as Algo
-from backend.DataClasses import Parameter
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+
+from Algorithm import Algorithm as Algo
+from DataClasses import Parameter
 
 
-# sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+class_name = 'BH'
 
 class BH(Algo):
     args = [
@@ -12,11 +15,9 @@ class BH(Algo):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.init()
         print("init bh")
         # a = AssetDataLoader(id=0, start=self.start_date, end=self.end_date)
         self.preprocess()
-        self.strategy_name = "BH"
 
     def preprocess(self):
         for idx in range(len(self.data)):

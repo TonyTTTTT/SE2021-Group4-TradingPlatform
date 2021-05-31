@@ -210,7 +210,7 @@ class DataFileManager(metaclass=Singleton):
         res = self.data["report"]
         for report in res:
             algo = self._find_algorithm(report['algo_id'])
-            report['algo_tilte'] = algo['title']
+            report['algo_title'] = algo['title']
 
         return res
 

@@ -28,10 +28,10 @@ export const menuState={
                
                
     ],
-    reportData:[{Algo:"Algo1",AlgoID: 1,Title: "Report Test1",Content:  ".......",Last_Modified: "30 days"},
-                {Algo:"Algo1",AlgoID: 2,Title: "Report Test2",Content: ".......",Last_Modified: "30 days"},
-                {Algo:"Algo1",AlgoID: 3,Title: "Report Test3",Content: ".......",Last_Modified: "30 days"},
-                {Algo:"Algo2",AlgoID: 4,Title: "Report Test4",Content: ".......",Last_Modified: "30 days"}
+    reportData:[{Algo:"Algo1",AlgoID: 1,ID:1,Title: "Report Test1",Content:  ".......",Last_Modified: "30 days"},
+                {Algo:"Algo1",AlgoID: 2,ID:2,Title: "Report Test2",Content: ".......",Last_Modified: "30 days"},
+                {Algo:"Algo1",AlgoID: 3,ID:3,Title: "Report Test3",Content: ".......",Last_Modified: "30 days"},
+                {Algo:"Algo2",AlgoID: 4,ID:4,Title: "Report Test4",Content: ".......",Last_Modified: "30 days"}
     ]
 }
 export const navigationBarState={

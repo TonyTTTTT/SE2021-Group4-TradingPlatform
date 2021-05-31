@@ -48,19 +48,32 @@ const mapDispatchToProps = dispatch => {
                     algoData:algoData
                 }
             });
+        },
+        setReportData:(reportData)=>{
+            dispatch({
+                type:"SET_REPORTS",
+                payload:{
+                    reportData:reportData
+                }
+            });
         }
     };
 };
 
-const Menu = (props) => { 
+const Menu = (props) => {
+   
+    // algoGrid
+    const [algoGridApi, setAlgoGridApi] = useState(null);
+    const [algoGridColumnApi, setAlgoGridColumnApi] = useState(null);
+    const [selectedALGORow,setSelectedALGORow] = useState(null)
+    // reportGrid
+    const [reportGridApi, setReportGridApi] = useState(null);
+    const [reportGridColumnApi, setReportGridColumnApi] = useState(null);
+    const [selectedRow,setSelectedRow] = useState(null);
 
-    const [gridApi, setGridApi] = useState(null);
-    const [selectedRow,setSelectedRow] = useState(null)
-    const [gridColumnApi, setGridColumnApi] = useState(null);
-    const [tabKey, setTabKey] = useState('Algo');
     
+    const [tabKey, setTabKey] = useState('Algo');
     const mounted = useRef(false);
-    var countClick = 0;
 
     useEffect(() => {
         if (!mounted.current) {
@@ -70,20 +83,20 @@ const Menu = (props) => {
            
           }
         if(props.menu.deleteSignal===true){
-            gridApi.applyTransaction({ remove: selectedRow });
+            algoGridApi.applyTransaction({ remove: selectedALGORow });
             props.signalDeleteAlgo();
         }
     
-    }, [gridApi,selectedRow,props.menu.deleteSignal])
+    }, [algoGridApi,selectedRow,props.menu.deleteSignal])
 
     const onRowSelected = ()=>{
-        if(gridApi.getSelectedRows()[0]!=undefined){
-            setSelectedRow(gridApi.getSelectedRows());
-            props.setSelectedAlgoID(gridApi.getSelectedRows()[0].AlgoID)
+        if(algoGridApi.getSelectedRows()[0]!=undefined){
+            setSelectedRow(algoGridApi.getSelectedRows());
+            props.setSelectedAlgoID(algoGridApi.getSelectedRows()[0].AlgoID)
         }
     };
 
-    const onGridReady = (params) => {
+    const onAlgoGridReady = (params) => {
         axios.get('/api2/get-all-algo').then(
             response => {
                 
@@ -98,15 +111,35 @@ const Menu = (props) => {
                 data.forEach((element) => {element.Description = element.description; delete element.description;});
                 data.forEach((element) => {element.Last_Modified = element.lastModified; delete element.lastModified;});
 
-                console.log(data)
+                //console.log(data)
                 props.setAlgoData(data)
-                setGridApi(params.api);
-                setGridColumnApi(params.columnApi);  
+                setAlgoGridApi(params.api);
+                setAlgoGridColumnApi(params.columnApi);  
             },error => {console.log(error.message)}
-
-        )
-         
+        )       
     };
+    const onReportGridReady = (params) => {
+        axios.get('/api2/get-all-report').then(
+            response => {
+                
+                var data = response.data.data
+                // report data field remapping
+                data.forEach(element => delete element.path);
+                
+                data.forEach((element) => {element.AlgoID = element.algo_id; delete element.algo_id;});
+                data.forEach((element) => {element.Algo = element.algo_title; delete element.algo_title;});
+                data.forEach((element) => {element.ID = element.id; delete element.id;});
+                data.forEach((element) => {element.Title = element.title; delete element.title;});
+                // data.forEach((element) => {element.Description = element.description; delete element.description;});
+                // data.forEach((element) => {element.Last_Modified = element.lastModified; delete element.lastModified;});
+
+                console.log(data)
+                props.setReportData(data)
+                setReportGridApi(params.api);
+                setReportGridColumnApi(params.columnApi);  
+            },error => {console.log(error.message)}
+        )
+    }
 
     const onTabSelect = (tab) => {
         if(tab === "Algo"){
@@ -141,7 +174,7 @@ const Menu = (props) => {
                                 defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
-                                onGridReady={onGridReady}
+                                onGridReady={onAlgoGridReady}
                                 autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
                                 enableRangeSelection={true}
                                 //enableCellChangeFlash={true}
@@ -165,6 +198,7 @@ const Menu = (props) => {
                                 animateRows={true}
                                 autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm"}}
                                 enableRangeSelection={true}
+                                onGridReady={onReportGridReady}
                                 rowData={props.menu.reportData}
                                 >
                                 <AgGridColumn field ="Algo" hide={true} filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
