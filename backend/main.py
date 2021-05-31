@@ -192,7 +192,7 @@ def single_test():
     tester = AlgorithmTester()
 
     # request.json是送過來的input json
-    algo_id = request.json['algo_id']
+    algo_id = int(request.json['algo_id'])
     start_date = request.json['product']['start_date']
     end_date = request.json['product']['end_date']
     parameters = ParameterParser.single_parameters_parse(request.json)
