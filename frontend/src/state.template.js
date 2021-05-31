@@ -5,7 +5,6 @@ export const consoleState={
     newlog: {time: Date.now(), level: "INFO", text: "first log"}
 }
 export const contentState={
-    tradeActions: []
 }
 export const headerState={
     selectedFile: null,

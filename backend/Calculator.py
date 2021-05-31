@@ -4,6 +4,7 @@ from typing import List
 from DataClasses import TradeAction, TradeResult, TradeStat, Product
 from DataFileManager import DataFileManager
 from dataclasses import dataclass
+import pandas as pd
 
 
 @dataclass
@@ -293,6 +294,23 @@ class Calculator:
             n.profit += out[-1].profit
             out.append(n)
         return out
+
+    def process_trade_results(self, trade_results):
+        df = pd.DataFrame(trade_results)
+        df['totalProfit'] = df['real_profit'].cumsum()
+        m_df = df[['time', 'real_profit']].resample('M', on='time', kind='period').sum()
+        q_df = df[['time', 'real_profit']].resample('Q', on='time', kind='period').sum()
+        y_df = df[['time', 'real_profit']].resample('A', on='time', kind='period').sum()
+        y_df['time'] = y_df.index.to_series().astype(str)
+        q_df['time'] = q_df.index.to_series().astype(str)
+        m_df['time'] = m_df.index.to_series().astype(str)
+        trade_results = df.to_dict('records')
+        m_dict = m_df.to_dict('list')
+        q_dict = q_df.to_dict('list')
+        y_dict = y_df.to_dict('list')
+
+        return {'trade_results': trade_results, 'm_results': m_dict, 'q_results': q_dict, 'y_results': y_dict}
+
 
 """
 if __name__ == '__main__':

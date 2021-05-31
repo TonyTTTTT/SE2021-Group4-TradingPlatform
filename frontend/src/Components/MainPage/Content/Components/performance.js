@@ -15,6 +15,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import {connect} from "react-redux";
 
 const styles1 = (theme) => ({
     root: {
@@ -89,26 +90,6 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(name, calories, fat) {
-    return {name, calories, fat};
-}
-
-const rows = [
-    createData('Cupcake', 305, 3.7),
-    createData('Donut', 452, 25.0),
-    createData('Eclair', 262, 16.0),
-    createData('Frozen yoghurt', 159, 6.0),
-    createData('Gingerbread', 356, 16.0),
-    createData('Honeycomb', 408, 3.2),
-    createData('Ice cream sandwich', 237, 9.0),
-    createData('Jelly Bean', 375, 0.0),
-    createData('KitKat', 518, 26.0),
-    createData('Lollipop', 392, 0.2),
-    createData('Marshmallow', 318, 0),
-    createData('Nougat', 360, 19.0),
-    createData('Oreo', 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
 const styles2 = (theme) => ({
     table: {
         minWidth: 500,
@@ -151,12 +132,18 @@ class Performance extends Component {
     state = {page: 0, rowsPerPage: 5}
 
     render() {
+        const {result} = this.props
+        let rows = [];
+        if (result !== null) {
+            const {tradeStats} = result
+            rows = tradeStats
+        }
         const {classes} = this.props;
         const {page, rowsPerPage} = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
         return (
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={{display: result === null ? 'none' : 'inline'}}>
                 <StyledToolbar>
                     <WhiteTypography variant="h6" id="tableTitle" component="div">
                         Performance
@@ -168,15 +155,12 @@ class Performance extends Component {
                                 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 : rows
                         ).map((row) => (
-                            <StyledTableRow key={row.name} hover>
+                            <StyledTableRow key={row.stat} hover>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {row.stat}
                                 </TableCell>
                                 <TableCell style={{width: 160}} align="right">
-                                    {row.calories}
-                                </TableCell>
-                                <TableCell style={{width: 160}} align="right">
-                                    {row.fat}
+                                    {row.value}
                                 </TableCell>
                             </StyledTableRow>
                         ))}
@@ -211,4 +195,4 @@ class Performance extends Component {
     }
 }
 
-export default withStyles(styles2)(Performance)
+export default connect(state => ({result: state.sideArea.result}))(withStyles(styles2)(Performance))

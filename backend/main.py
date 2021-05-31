@@ -205,10 +205,12 @@ def single_test():
         calculator.set_slip(slip)
         trade_results = calculator.calculate(trade_actions)
         trade_stats = calculator.get_all_statistics(trade_results)
+        cumulate_results = calculator.process_trade_results(trade_results)
 
         message = 'Succeed to send tradeResults and tradeStats for Algo #{}'.format(algo_id)
         output_dict = {
-            'tradeResults': trade_results,
+            'cumulateResults': cumulate_results,
+            # 'tradeResults': trade_results,
             'tradeStats': trade_stats
         }
 

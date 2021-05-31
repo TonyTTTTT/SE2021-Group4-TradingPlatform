@@ -36,7 +36,7 @@ class MainPage extends React.Component {
     }
 
     render() {
-        const {match: {params: {algoId}}} = this.props
+        const {match: {params: {algoId}}, testType} = this.props
         this.props.setAlgoId({AlgoID: parseInt(algoId)})
         return (
             <Container fluid style={{height: window.innerHeight, width: window.innerWidth}}>
@@ -46,7 +46,7 @@ class MainPage extends React.Component {
                     </Col>
                     <Col sm={8} style={{height: "100%", width: "100%"}}>
                         <div style={{height: "calc(100% - 200px)"}}>
-                            <NavigationBar tabs={tabs}/>
+                            <NavigationBar tabs={testType === 'batch' ? batchTabs : tabs}/>
                         </div>
                         <Console/>
                     </Col>
@@ -56,4 +56,4 @@ class MainPage extends React.Component {
     }
 }
 
-export default connect(null, {setAlgoId: setAlgoAction})(MainPage);
+export default connect(state => ({testType: state.sideArea.testType}), {setAlgoId: setAlgoAction})(MainPage);

@@ -22,11 +22,11 @@ class EquityTab extends Component {
                     focus: 'series'
                 },
                 encode: {
-                    x: 'time',
+                    x: 'time_stamp',
                     y: 'totalProfit',
                     label: ['Equity', 'TotalProfit'],
                     itemName: 'time',
-                    tooltip: ['totalProfit', 'price', 'net_position'],
+                    tooltip: ['totalProfit', 'real_profit', 'price', 'net_position'],
                 }
             });
         });
@@ -69,38 +69,34 @@ class EquityTab extends Component {
         this.equityCurve.setOption(option);
     }
 
-    componentDidMount() {
-        this.equityCurve = echarts.init(this.equity)
-        let {tradeActions} = this.props
-        if (tradeActions.length > 0) {
-            tradeActions = tradeActions.map(trade => {
-                const {is_enter, is_long, net_position, price, product_id, profit, time, totalProfit} = trade
-                return [is_enter, is_long, net_position, price, product_id, profit, time, totalProfit]
+    processData() {
+        let {result} = this.props
+        if (result !== null) {
+            const {cumulateResults: {trade_results}} = result
+            const tradeActions = trade_results.map(trade => {
+                const {is_enter, is_long, net_position, price, product_id, real_profit, time_stamp, totalProfit} = trade
+                return [is_enter, is_long, net_position, price, product_id, real_profit, time_stamp, totalProfit]
             })
-            tradeActions.unshift(['is_enter', 'is_long', 'net_position', 'price', 'product_id', 'profit', 'time', 'totalProfit'])
+            tradeActions.unshift(['is_enter', 'is_long', 'net_position', 'price', 'product_id', 'real_profit', 'time_stamp', 'totalProfit'])
             console.log(tradeActions)
             this.run(tradeActions)
         }
     }
 
+    componentDidMount() {
+        this.equityCurve = echarts.init(this.equity)
+        this.processData();
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
-        let {tradeActions} = this.props
-        if (tradeActions.length > 0) {
-            tradeActions = tradeActions.map(trade => {
-                const {is_enter, is_long, net_position, price, product_id, profit, time, totalProfit} = trade
-                return [is_enter, is_long, net_position, price, product_id, profit, time, totalProfit]
-            })
-            tradeActions.unshift(['is_enter', 'is_long', 'net_position', 'price', 'product_id', 'profit', 'time', 'totalProfit'])
-            console.log(tradeActions)
-            this.run(tradeActions)
-        }
+        this.processData()
     }
 
     render() {
         return (
-            <div id='equity' ref={c => this.equity = c} style={{width: '100%', height: '500px'}}/>
+            <div id='equity' ref={c => this.equity = c} style={{width: '100%', height: '500px', flexGrow: 1}}/>
         );
     }
 }
 
-export default connect(state => ({tradeActions: state.content.tradeActions}))(EquityTab)
+export default connect(state => ({result: state.sideArea.result}))(EquityTab)

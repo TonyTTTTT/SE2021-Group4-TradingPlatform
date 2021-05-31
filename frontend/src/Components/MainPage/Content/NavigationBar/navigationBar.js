@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {AppBar, Box, Container, Tab, Tabs, Typography, withStyles} from "@material-ui/core";
 import * as PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {setResultAction} from "../../../../actions";
 
 class TabPanel extends Component {
     render() {
@@ -59,27 +57,11 @@ const styles = (theme) => ({
     }
 });
 
-
-function processTrade(tradeResult) {
-    let totalProfit = 0
-    return tradeResult.map((trade, index) => {
-        const {profit} = trade
-        totalProfit += profit
-        return {...trade, totalProfit}
-    })
-}
-
 class NavigationBar extends Component {
 
     state = {value: 0}
 
     render() {
-        if (this.props.result !== null) {
-            const {tradeResults} = this.props.result
-            const tradeActions = processTrade(tradeResults)
-            this.props.setResult(tradeActions)
-            console.log(tradeActions)
-        }
         const {value} = this.state
         const {classes, tabs} = this.props
         return (
@@ -109,4 +91,4 @@ class NavigationBar extends Component {
     };
 }
 
-export default connect(state => ({result: state.sideArea.result}), {setResult: setResultAction})(withStyles(styles)(NavigationBar))
+export default withStyles(styles)(NavigationBar)

@@ -14,6 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import clsx from "clsx";
 import Switch from "react-bootstrap/Switch";
+import {connect} from "react-redux";
 
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -41,35 +42,17 @@ function descendingComparator(a, b, orderBy) {
     return 0;
 }
 
-function createData(name, calories, fat, carbs, protein) {
-    return {name, calories, fat, carbs, protein};
-}
-
-const rows = [
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Donut', 452, 25.0, 51, 4.9),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0),
-];
-
 class EnhancedTableHead extends Component {
     render() {
         const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} = this.props;
         const headCells = [
-            {id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)'},
-            {id: 'calories', numeric: true, disablePadding: false, label: 'Calories'},
-            {id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)'},
-            {id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)'},
-            {id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)'},
+            {id: 'time_stamp', numeric: false, disablePadding: true, label: 'Time'},
+            {id: 'is_enter', numeric: false, disablePadding: false, label: 'Enter'},
+            {id: 'is_long', numeric: false, disablePadding: false, label: 'Long'},
+            {id: 'net_position', numeric: true, disablePadding: false, label: 'Net Position'},
+            {id: 'price', numeric: true, disablePadding: false, label: 'Price'},
+            {id: 'real_profit', numeric: true, disablePadding: false, label: 'Real Profit'},
+            {id: 'totalProfit', numeric: true, disablePadding: false, label: 'Total Profit'}
         ];
         const createSortHandler = (property) => (event) => {
             onRequestSort(event, property);
@@ -88,7 +71,7 @@ class EnhancedTableHead extends Component {
                     {headCells.map((headCell) => (
                         <TableCell
                             key={headCell.id}
-                            align={headCell.numeric ? 'right' : 'left'}
+                            align={'right'}
                             padding={headCell.disablePadding ? 'none' : 'default'}
                             sortDirection={orderBy === headCell.id ? order : false}
                         >
@@ -217,6 +200,8 @@ const styles = theme => ({
     },
 });
 
+let rows = [];
+
 class TradeTab extends Component {
 
     state = {
@@ -236,20 +221,20 @@ class TradeTab extends Component {
 
     handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = rows.map((n) => n.time_stamp);
             this.setState({selected: newSelecteds})
             return;
         }
         this.setState({selected: []})
     };
 
-    handleClick = (event, name) => {
+    handleClick = (event, time_stamp) => {
         const {selected} = this.state
-        const selectedIndex = selected.indexOf(name);
+        const selectedIndex = selected.indexOf(time_stamp);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, time_stamp);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -281,10 +266,15 @@ class TradeTab extends Component {
 
     render() {
         const {classes} = this.props
+        const {result} = this.props
+        if (result !== null) {
+            const {cumulateResults: {trade_results}} = result
+            rows = trade_results
+        }
         const {rowsPerPage, dense, order, orderBy, page, selected} = this.state
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         return (
-            <div className={classes.root}>
+            <div className={classes.root} style={{display: result === null ? 'none' : 'inline'}}>
                 <Paper className={classes.paper}>
                     <EnhancedTableToolbar numSelected={selected.length}/>
                     <TableContainer>
@@ -307,17 +297,17 @@ class TradeTab extends Component {
                                 {stableSort(rows, getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
-                                        const isItemSelected = this.isSelected(row.name);
+                                        const isItemSelected = this.isSelected(row.time_stamp);
                                         const labelId = `enhanced-table-checkbox-${index}`;
 
                                         return (
                                             <TableRow
                                                 hover
-                                                onClick={(event) => this.handleClick(event, row.name)}
+                                                onClick={(event) => this.handleClick(event, row.time_stamp)}
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
-                                                key={row.name}
+                                                key={row.time_stamp}
                                                 selected={isItemSelected}
                                             >
                                                 <TableCell padding="checkbox">
@@ -327,12 +317,14 @@ class TradeTab extends Component {
                                                     />
                                                 </TableCell>
                                                 <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                    {row.name}
+                                                    {row.time_stamp}
                                                 </TableCell>
-                                                <TableCell align="right">{row.calories}</TableCell>
-                                                <TableCell align="right">{row.fat}</TableCell>
-                                                <TableCell align="right">{row.carbs}</TableCell>
-                                                <TableCell align="right">{row.protein}</TableCell>
+                                                <TableCell align="right">{row.is_enter.toString()}</TableCell>
+                                                <TableCell align="right">{row.is_long.toString()}</TableCell>
+                                                <TableCell align="right">{row.net_position}</TableCell>
+                                                <TableCell align="right">{row.price}</TableCell>
+                                                <TableCell align="right">{row.real_profit}</TableCell>
+                                                <TableCell align="right">{row.totalProfit}</TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -363,4 +355,4 @@ class TradeTab extends Component {
     }
 }
 
-export default withStyles(styles)(TradeTab);
+export default connect(state => ({result: state.sideArea.result}))(withStyles(styles)(TradeTab));
