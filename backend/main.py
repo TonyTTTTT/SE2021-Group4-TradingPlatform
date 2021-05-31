@@ -195,7 +195,7 @@ def single_test():
     algo_id = request.json['algo_id']
     start_date = request.json['product']['start_date']
     end_date = request.json['product']['end_date']
-    parameters = ParameterParser.single_parameters.parse(request.json)
+    parameters = ParameterParser.single_parameters_parse(request.json)
 
     try:
         trade_actions = tester.single_test(algo_id, start_date, end_date, parameters)
@@ -209,26 +209,35 @@ def single_test():
 @app.route('/batch-test', methods=['POST'])
 def batch_test():
     df_manager = DataFileManager()
+    tester = AlgorithmTester()
+
+    algo_id = int(request.json.get("algo_id", None))
+    start_date = request.json['product']['start_date']
+    end_date = request.json['product']['end_date']
+    parameters = ParameterParser.batch_parameters_parse(request.json)
+
     try:
         print(request.json)
-        # algo_id = int(request.json.get("algo_id", None))
+        trade_actions = tester.batch_test(algo_id, start_date, end_date, parameters)
+
         # print(algo_id)
         
         
-        ta = []
-        with open("BH.txt", 'r') as f:
-            lines = f.readlines()
-            for line in lines:
-                time, hmm, bs, price = line.replace("\n", "").split(" ")
-                a = TradeAction(0, datetime(int(time[:4]), int(time[4:6]), int(time[6:8])), (-1) ** (bs == "S"),
-                                float(price), "")
-                ta.append(a)
+        # ta = []
+        # with open("BH.txt", 'r') as f:
+        #     lines = f.readlines()
+        #     for line in lines:
+        #         time, hmm, bs, price = line.replace("\n", "").split(" ")
+        #         a = TradeAction(0, datetime(int(time[:4]), int(time[4:6]), int(time[6:8])), (-1) ** (bs == "S"),
+        #                         float(price), "")
+        #         ta.append(a)
     
         cal = Calculator()
         cal.set_slip(1)
-        tr = cal.calculate(ta)
+        tr = cal.calculate(trade_actions)
         ts = cal.get_all_statistics(tr)
         res = {"tradeResult": tr, "tradeStat": ts}
+
         # print('res: ', res)
         # get the file path of the specific algo
         # alto_tester = AlgorithmTester()

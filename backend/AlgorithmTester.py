@@ -1,6 +1,8 @@
 from typing import List
 from importlib import import_module
 import inspect
+import numpy as np
+
 from DataFileManager import DataFileManager
 from DataClasses import *
 
@@ -19,10 +21,15 @@ class AlgorithmTester:
 
         return tas
 
-    def batch_test(self, algo_id, algo_version, batch_parameter):
-        for ps in parameter_parser.parse_batch(batch_parameter):  # 用 `parameter_parser.parse_batch()` 抽取單一參數
-            ta = self.single_test(algo_id, algo_version, ps)  # 執行 sigle test
-            yield calculator.get_batch_result(ta)  # 用 `calculator` 產生 sigle test 的 trade_result
+    def batch_test(self, algo_id: int, start_date: str, end_date: str, batch_parameter: List[List[Parameter]]) -> List[TradeAction]:
+        ta = []
+        for ps in batch_parameter:  # 用 `parameter_parser.parse_batch()` 抽取單一參數
+            ta.append(self.single_test(algo_id, start_date, end_date, ps)) # 執行 sigle test
+
+        ta = np.array(ta)
+        ta = ta.flatten().tolist()
+        return ta
+            # yield self.calculator.get_batch_result(ta)  # 用 `calculator` 產生 sigle test 的 trade_result
 
     def _create_algo(self, algo_id: int):
 
