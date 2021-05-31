@@ -1,3 +1,4 @@
+from os import name
 from flask import Flask, request
 from flask_cors import CORS
 from datetime import datetime
@@ -210,6 +211,16 @@ def single_test():
             'tradeResults': trade_results,
             'tradeStats': trade_stats
         }
+
+        df_manager = DataFileManager()
+        product = df_manager.get_product_info(0)
+
+        output_dict['product'] = {}
+        output_dict['product']['name'] = 'TXF'
+        output_dict['product']['tick_size'] = product.tick_size
+        output_dict['product']['unit'] = product.unit
+        output_dict['product']['slip'] = slip
+        output_dict['product']['exchangeRate'] = product.exchange_rate
 
         return CommonResult(LogLevel.INFO, message, output_dict).to_json()
     except:
