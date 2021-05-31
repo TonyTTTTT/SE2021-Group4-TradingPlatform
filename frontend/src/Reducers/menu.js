@@ -51,6 +51,11 @@ export default function (state = { ...menuState }, action) {
             state.algoData = action.payload.algoData;
             return state;
         }
+        case "SET_REPORTS": {
+            state = { ...state };
+            state.reportData = action.payload.reportData;
+            return state;
+        }
         default:
             return state
     }

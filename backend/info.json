@@ -48,14 +48,14 @@
       "title": "Report of Buy and Hold 1.0",
       "lastModified": "2021-5-26 17:13:00",
       "path": "report_files/my_report.md",
-      "algo_tilte": "Buy and Hold"
+      "algo_title": "Buy and Hold"
     },
     {
       "id": 1,
       "algo_id": 0,
       "title": "Report of Buy and Hold 2.0",
       "path": "report_files/my_report2.md",
-      "algo_tilte": "Buy and Hold"
+      "algo_title": "Buy and Hold"
     }
   ],
   "parameter_set": []
