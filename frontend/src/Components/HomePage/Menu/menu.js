@@ -64,11 +64,8 @@ const mapDispatchToProps = dispatch => {
 const Menu = (props) => {
     // algoGrid
     const [algoGridApi, setAlgoGridApi] = useState(null);
-    const [algoGridColumnApi, setAlgoGridColumnApi] = useState(null);
-    const [selectedAlgoRow,setSelectedAlgoRow] = useState(null);
     // reportGrid
     const [reportGridApi, setReportGridApi] = useState(null);
-    const [reportGridColumnApi, setReportGridColumnApi] = useState(null);
     const [selectedRow,setSelectedRow] = useState(null);
     const stackedit = new Stackedit();
     
@@ -80,47 +77,13 @@ const Menu = (props) => {
             // do componentDidMount logic
             mounted.current = true;
           } else {
-
+            // do componentDidUpdate logic
             if(props.menu.deleteSignal===true){
                 algoGridApi.applyTransaction({ remove: algoGridApi.getSelectedRows() });
                 props.signalDeleteAlgo();
-            }
-            
-               
+            } 
           }
     }, [algoGridApi,selectedRow,props.menu.deleteSignal])
-
-    const onAlgoRowSelected = ()=>{
-        if(algoGridApi.getSelectedRows()[0]!=undefined){
-            setSelectedRow(algoGridApi.getSelectedRows());
-            props.setSelectedAlgoID(algoGridApi.getSelectedRows()[0].AlgoID)
-        }
-    };
-
-    const onAlgoDoubleClicked = ()=>{
-       
-        if(algoGridApi.getSelectedRows()[0]!=undefined){
-            window.location.href = window.location.href+"main/"+props.menu.selectedAlgoID;
-        }
-    }
-
-    const onReportDoubleClicked = ()=>{
-        //console.log("test")
-        if(reportGridApi.getSelectedRows()[0]!=undefined){
-            //console.log("SelectedRow ID:");
-            //console.log(reportGridApi.getSelectedRows()[0].ID)
-            axios.get('/api2/get-report/' + reportGridApi.getSelectedRows()[0].ID).then(
-                response => {
-                    stackedit.openFile({
-                        name: "report-name",
-                        content: {
-                            text:response.data.data
-                        }
-                    })
-                },error => {console.log(error.message)}
-            )
-        }
-    }
 
     const onAlgoGridReady = (params) => {
         axios.get('/api2/get-all-algo').then(
@@ -139,18 +102,26 @@ const Menu = (props) => {
 
                 props.setAlgoData(data)
                 setAlgoGridApi(params.api);
-                setAlgoGridColumnApi(params.columnApi);  
             },error => {console.log(error.message)}
         )       
     };
+    const onAlgoRowSelected = ()=>{
+        if(algoGridApi.getSelectedRows()[0]!=undefined){
+            setSelectedRow(algoGridApi.getSelectedRows());
+            props.setSelectedAlgoID(algoGridApi.getSelectedRows()[0].AlgoID)
+        }
+    };
+    const onAlgoDoubleClicked = ()=>{
+        if(algoGridApi.getSelectedRows()[0]!=undefined){
+            window.location.href = window.location.href+"main/"+props.menu.selectedAlgoID;
+        }
+    }
     const onReportGridReady = (params) => {
         axios.get('/api2/get-all-report').then(
             response => {
-                
                 var data = response.data.data
                 // report data field remapping
                 data.forEach(element => delete element.path);
-                
                 data.forEach((element) => {element.AlgoID = element.algo_id; delete element.algo_id;});
                 data.forEach((element) => {element.Algo = element.algo_title; delete element.algo_title;});
                 data.forEach((element) => {element.ID = element.id; delete element.id;});
@@ -158,11 +129,23 @@ const Menu = (props) => {
               
                 props.setReportData(data)
                 setReportGridApi(params.api);
-                setReportGridColumnApi(params.columnApi);  
             },error => {console.log(error.message)}
         )
     }
-
+    const onReportDoubleClicked = ()=>{
+        if(reportGridApi.getSelectedRows()[0]!=undefined){
+            axios.get('/api2/get-report/' + reportGridApi.getSelectedRows()[0].ID).then(
+                response => {
+                    stackedit.openFile({
+                        name: "report-name",
+                        content: {
+                            text:response.data.data
+                        }
+                    })
+                },error => {console.log(error.message)}
+            )
+        }
+    }
     const onTabSelect = (tab) => {
         if(tab === "Algo"){
             props.setHeaderButton(false);

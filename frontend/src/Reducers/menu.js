@@ -19,7 +19,6 @@ export default function (state = { ...menuState }, action) {
             //find selected Row by Selected AlgoID
             //state.updateSignal = !state.updateSignal;
              for (var i in state.algoData) {
-               
                 if (state.algoData[i].AlgoID === state.selectedAlgoID) {
                     state = { ...state };
                     var newData = {
@@ -30,17 +29,13 @@ export default function (state = { ...menuState }, action) {
                         Content: action.payload.Content,
                         Last_Modified: action.payload.Last_Modified
                     }
-                    //state.deleteSignal = !state.deleteSignal;
-                    //console.log(i);
                     state.algoData.splice(i, 1);
                     state.algoData = state.algoData.concat(newData)
-                    
                     return state;
                 }
             }
             return state;
         }
-       
         case "SET_SELECTED_ALGO_ID": {
             state = { ...state };
             state.selectedAlgoID = action.payload.AlgoID;
