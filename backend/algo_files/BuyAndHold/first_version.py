@@ -15,7 +15,6 @@ class BH(Algo):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.init()
         print("init bh")
         # a = AssetDataLoader(id=0, start=self.start_date, end=self.end_date)
         self.preprocess()
