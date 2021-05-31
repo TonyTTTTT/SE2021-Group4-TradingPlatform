@@ -1,3 +1,6 @@
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+
 from Algorithm import Algorithm as Algo
 from DataClasses import Parameter
 from AssetData import AssetDataLoader
