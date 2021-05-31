@@ -192,6 +192,34 @@ class Calculator:
                    TradeStat("Profit - Std", round(std, 2)),
                ] + self.get_mdd_stat(trade_results)
 
+    def get_batch_result(self, trade_actions: List[TradeAction]) -> List[TradeStat]:
+        trade_results = self.calculate(trade_actions)
+        profit = list(map(lambda x: x.profit, filter(lambda x: not x.is_enter, trade_results)))
+        is_win = list(map(lambda x: x.profit > 0, filter(lambda x: not x.is_enter, trade_results)))
+        mdd_point = self.get_mdd(trade_results)
+        total_profit = sum(profit)
+        years = (end_time - start_time).days / 365
+        annual_real_profit = total_real_profit / max(1, years)
+        annual_profit = total_profit / max(1, years)
+        trade_cnt = len(profit)
+        win_cnt = sum(is_win)
+        loss_cnt = trade_cnt - win_cnt
+        win_profit = 0 if len(profit) == 0 else np.dot(profit, is_win)
+        loss_profit = win_profit - total_profit
+        avg_win = win_profit / max(win_cnt, 1)
+        avg_loss = loss_profit / max(loss_cnt, 1)
+        exp = total_profit / max(trade_cnt, 1)
+        win_rate = win_cnt / max(trade_cnt, 1) * 100
+        win_loss_ratio = 0 if avg_loss == 0 else (avg_win / avg_loss)
+        annual_pm = annual_profit / max(mdd_point, 1)
+        return [ TradeStat("總獲利", total_profit),
+                 TradeStat("期望值", round(exp, 2)),
+                 TradeStat("交易次數", trade_cnt),
+                 TradeStat("勝率", round(win_rate, 2)),
+                 TradeStat("賺賠比", round(win_loss_ratio, 2)),
+                 TradeStat("年均獲利/MDD", round(annual_pm, 2)),
+                 TradeStat("MDD", mdd_point) ]
+
     def get_mdd_stat(self, trade_results: List[TradeResult]) -> List[TradeStat]:
         mdd = self.get_mdd_list(trade_results)
         out = []

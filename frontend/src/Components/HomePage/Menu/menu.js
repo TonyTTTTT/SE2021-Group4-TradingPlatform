@@ -3,6 +3,7 @@ import { AgGridColumn, AgGridReact} from 'ag-grid-react';
 import { Row, Col, Nav, Tab } from 'react-bootstrap';
 import { connect } from "react-redux";
 import axios from "axios";
+import Stackedit from "stackedit-js";
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
@@ -61,16 +62,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 const Menu = (props) => {
-   
     // algoGrid
     const [algoGridApi, setAlgoGridApi] = useState(null);
-    const [algoGridColumnApi, setAlgoGridColumnApi] = useState(null);
-    const [selectedALGORow,setSelectedALGORow] = useState(null)
     // reportGrid
     const [reportGridApi, setReportGridApi] = useState(null);
-    const [reportGridColumnApi, setReportGridColumnApi] = useState(null);
     const [selectedRow,setSelectedRow] = useState(null);
-
+    const stackedit = new Stackedit();
     
     const [tabKey, setTabKey] = useState('Algo');
     const mounted = useRef(false);
@@ -80,21 +77,13 @@ const Menu = (props) => {
             // do componentDidMount logic
             mounted.current = true;
           } else {
-           
+            // do componentDidUpdate logic
+            if(props.menu.deleteSignal===true){
+                algoGridApi.applyTransaction({ remove: algoGridApi.getSelectedRows() });
+                props.signalDeleteAlgo();
+            } 
           }
-        if(props.menu.deleteSignal===true){
-            algoGridApi.applyTransaction({ remove: selectedALGORow });
-            props.signalDeleteAlgo();
-        }
-    
     }, [algoGridApi,selectedRow,props.menu.deleteSignal])
-
-    const onRowSelected = ()=>{
-        if(algoGridApi.getSelectedRows()[0]!=undefined){
-            setSelectedRow(algoGridApi.getSelectedRows());
-            props.setSelectedAlgoID(algoGridApi.getSelectedRows()[0].AlgoID)
-        }
-    };
 
     const onAlgoGridReady = (params) => {
         axios.get('/api2/get-all-algo').then(
@@ -111,36 +100,52 @@ const Menu = (props) => {
                 data.forEach((element) => {element.Description = element.description; delete element.description;});
                 data.forEach((element) => {element.Last_Modified = element.lastModified; delete element.lastModified;});
 
-                //console.log(data)
                 props.setAlgoData(data)
                 setAlgoGridApi(params.api);
-                setAlgoGridColumnApi(params.columnApi);  
             },error => {console.log(error.message)}
         )       
     };
+    const onAlgoRowSelected = ()=>{
+        if(algoGridApi.getSelectedRows()[0]!=undefined){
+            setSelectedRow(algoGridApi.getSelectedRows());
+            props.setSelectedAlgoID(algoGridApi.getSelectedRows()[0].AlgoID)
+        }
+    };
+    const onAlgoDoubleClicked = ()=>{
+        if(algoGridApi.getSelectedRows()[0]!=undefined){
+            window.location.href = window.location.href+"main/"+props.menu.selectedAlgoID;
+        }
+    }
     const onReportGridReady = (params) => {
         axios.get('/api2/get-all-report').then(
             response => {
-                
                 var data = response.data.data
                 // report data field remapping
                 data.forEach(element => delete element.path);
-                
                 data.forEach((element) => {element.AlgoID = element.algo_id; delete element.algo_id;});
                 data.forEach((element) => {element.Algo = element.algo_title; delete element.algo_title;});
                 data.forEach((element) => {element.ID = element.id; delete element.id;});
                 data.forEach((element) => {element.Title = element.title; delete element.title;});
-                // data.forEach((element) => {element.Description = element.description; delete element.description;});
-                // data.forEach((element) => {element.Last_Modified = element.lastModified; delete element.lastModified;});
-
-                console.log(data)
+              
                 props.setReportData(data)
                 setReportGridApi(params.api);
-                setReportGridColumnApi(params.columnApi);  
             },error => {console.log(error.message)}
         )
     }
-
+    const onReportDoubleClicked = ()=>{
+        if(reportGridApi.getSelectedRows()[0]!=undefined){
+            axios.get('/api2/get-report/' + reportGridApi.getSelectedRows()[0].ID).then(
+                response => {
+                    stackedit.openFile({
+                        name: "report-name",
+                        content: {
+                            text:response.data.data
+                        }
+                    })
+                },error => {console.log(error.message)}
+            )
+        }
+    }
     const onTabSelect = (tab) => {
         if(tab === "Algo"){
             props.setHeaderButton(false);
@@ -177,8 +182,8 @@ const Menu = (props) => {
                                 onGridReady={onAlgoGridReady}
                                 autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
                                 enableRangeSelection={true}
-                                //enableCellChangeFlash={true}
-                                onRowSelected={onRowSelected}
+                                onRowSelected={onAlgoRowSelected}
+                                onRowDoubleClicked = {onAlgoDoubleClicked}
                                 rowData={props.menu.algoData}
                         
                                 >
@@ -199,7 +204,8 @@ const Menu = (props) => {
                                 autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm"}}
                                 enableRangeSelection={true}
                                 onGridReady={onReportGridReady}
-                                rowData={props.menu.reportData}
+                                rowData = {props.menu.reportData}
+                                onRowDoubleClicked = {onReportDoubleClicked}
                                 >
                                 <AgGridColumn field ="Algo" hide={true} filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
                                 <AgGridColumn field ="Title" filter={true} sortable={true}  ></AgGridColumn>

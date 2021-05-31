@@ -9,8 +9,6 @@ const mapStateToProps = state =>{
         menu : state.menu
     };
 }
-
-
 const mapDispatchToProps = dispatch => {
     return {
         signalDeleteAlgo : () => {
@@ -44,14 +42,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 const Header = (props) => {
-    //const [selectedFile, setSelectedFile] = useState();
-	//const [isFilePicked, setIsFilePicked] = useState(false);
+
     const [show,setShow] = useState(false);
     const [modalInput,setModalInput] = useState({title:null,version:null,description:null});
-    
     var newInput;
     var updateInput;
-    var promiseInfo = {};
 
     const readFile = (file)=> {
         return new Promise((resolve, reject) => {
@@ -131,18 +126,15 @@ const Header = (props) => {
             } else {
                 console.log(response.data.msg)
             }
-        },
-        error => {
+        },error => {
             console.log(error.message)
         })
 
 	};
-    
     const onConfirmButtonClick = () =>{
         newInput.click();
         setShow(false);
     }
-
     return (
         <Container className="d-flex justify-content-between flex-column" style={{height:"100%",width:"100%"}}>
             <Row className="d-flex justify-content-left ">  
@@ -154,7 +146,7 @@ const Header = (props) => {
             </Row>
 
             <Row className="d-flex justify-content-right ">
-                <Button href={`/main/${props.menu.selectedAlgoID}`} style={{lineHeight:"5",padding:"auto",margin:"0% 0% 40% 0%",width:100 ,height:100}} variant="success" >Select !</Button>
+               
             </Row>
 
             <Modal
