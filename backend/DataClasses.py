@@ -67,6 +67,7 @@ class TradeAction:
 class TradeResult:
     product_id: int
     time: datetime  # ??????
+    time_stamp: str
     net_position: int
     is_long: bool  # True: ???買�?��m, False: ???�?後買
     is_enter: bool  # True: ??�場, False: ?��?��

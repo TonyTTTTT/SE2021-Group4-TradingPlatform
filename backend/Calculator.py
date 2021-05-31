@@ -67,6 +67,7 @@ class Account:
     def _make_trade_result(self, trade, is_enter, profit, is_long) -> TradeResult:
         return TradeResult(product_id=trade.product_id,
                            time=trade.time,
+                           time_stamp="{:%Y-%m-%d}".format(trade.time),
                            net_position=len(self.long) - len(self.short),
                            is_long=is_long,
                            is_enter=is_enter,
