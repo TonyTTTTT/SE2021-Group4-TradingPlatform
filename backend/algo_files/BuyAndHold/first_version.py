@@ -3,6 +3,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 
 from Algorithm import Algorithm as Algo
 from DataClasses import Parameter
+from AssetData import AssetDataLoader
 
 
 class_name = 'BH'
@@ -15,9 +16,6 @@ class BH(Algo):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        print("init bh")
-        # a = AssetDataLoader(id=0, start=self.start_date, end=self.end_date)
-        self.preprocess()
 
     def preprocess(self):
         for idx in range(len(self.data)):
@@ -27,6 +25,7 @@ class BH(Algo):
                 self.data[idx]['is_ltd'] = False
 
     def applyTradeLogic(self):
+        self.preprocess()
         ls = self.cat_param['long/short']
         state = 'Empty'
         for row in self.runtime_data:
@@ -40,10 +39,10 @@ class BH(Algo):
     def print_trade_list(self):
         print(self.tradelist)
 
-
-""" 
+"""
 bh = BH()
 bh.set_parameter([Parameter('long/short', 'cat', 'long')])
+bh.set_product_date(start_date='2021-03-01', end_date='2100-01-01')
 bh.run()
 bh.print_trade_list() 
 """

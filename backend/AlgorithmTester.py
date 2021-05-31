@@ -11,9 +11,7 @@ class AlgorithmTester:
     def single_test(self, algo_id: int, start_date: str, end_date: str, parameters: List[Parameter]) -> List[TradeAction]:
 
         algo = self._create_algo(algo_id)
-
-        algo.set_start_date(start_date)
-        algo.set_end_date(end_date)
+        algo.set_product_date(start_date=start_date, end_date=end_date)
         algo.set_parameter(parameters)
 
         tas = algo.run()
