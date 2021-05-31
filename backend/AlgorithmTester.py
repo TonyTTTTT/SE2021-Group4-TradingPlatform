@@ -1,5 +1,6 @@
 from typing import List
 from importlib import import_module
+import inspect
 from DataFileManager import DataFileManager
 from DataClasses import *
 
@@ -11,9 +12,7 @@ class AlgorithmTester:
     def single_test(self, algo_id: int, start_date: str, end_date: str, parameters: List[Parameter]) -> List[TradeAction]:
 
         algo = self._create_algo(algo_id)
-
-        algo.set_start_date(start_date)
-        algo.set_end_date(end_date)
+        algo.set_product_date(start_date=start_date, end_date=end_date)
         algo.set_parameter(parameters)
 
         tas = algo.run()
@@ -34,7 +33,8 @@ class AlgorithmTester:
 
             module_name = algo_info['path'].rsplit('.', 1)[0].replace('/', '.')
             mod = import_module(module_name)
-            class_name = getattr(mod, 'class_name')
+            cls = inspect.getmembers(mod, inspect.isclass)
+            class_name = next(filter(lambda x: x[1].__module__ == module_name, cls), None)[0]
             algo_class = getattr(mod, class_name)
             self.loaded_algo[algo_id] = algo_class
 

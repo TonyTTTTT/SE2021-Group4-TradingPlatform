@@ -1,39 +1,20 @@
 import React, {Component} from 'react';
 import * as echarts from "echarts";
-import axios from "axios";
+import {connect} from "react-redux";
 
-export default class EquityTab extends Component {
+class EquityTab extends Component {
 
     run = (_rawData) => {
-        const countries = ['Finland', 'France', 'Germany', 'Iceland', 'Norway', 'Poland', 'Russia', 'United Kingdom'];
-        const datasetWithFilters = [];
+
+        const countries = ['Equity'];
         const seriesList = [];
         echarts.util.each(countries, function (country) {
             const datasetId = 'dataset_' + country;
-            datasetWithFilters.push({
-                id: datasetId,
-                fromDatasetId: 'dataset_raw',
-                transform: {
-                    type: 'filter',
-                    config: {
-                        and: [
-                            {dimension: 'Year', gte: 1950},
-                            {dimension: 'Country', '=': country}
-                        ]
-                    }
-                }
-            });
             seriesList.push({
                 type: 'line',
                 datasetId: datasetId,
                 showSymbol: false,
                 name: country,
-                endLabel: {
-                    show: true,
-                    formatter: function (params) {
-                        return params.value[3] + ': ' + params.value[0];
-                    }
-                },
                 labelLayout: {
                     moveOverlap: 'shiftY'
                 },
@@ -41,22 +22,22 @@ export default class EquityTab extends Component {
                     focus: 'series'
                 },
                 encode: {
-                    x: 'Year',
-                    y: 'Income',
-                    label: ['Country', 'Income'],
-                    itemName: 'Year',
-                    tooltip: ['Income'],
+                    x: 'time',
+                    y: 'totalProfit',
+                    label: ['Equity', 'TotalProfit'],
+                    itemName: 'time',
+                    tooltip: ['totalProfit', 'price', 'net_position'],
                 }
             });
         });
 
 
         const option = {
-            animationDuration: 0,
+            animationDuration: 1000,
             dataset: [{
-                id: 'dataset_raw',
+                id: 'dataset_Equity',
                 source: _rawData
-            }].concat(datasetWithFilters),
+            }],
             title: {
                 text: 'Equity Curve'
             },
@@ -69,7 +50,7 @@ export default class EquityTab extends Component {
                 nameLocation: 'middle'
             },
             yAxis: {
-                name: 'Income'
+                name: 'Total Profit'
             },
             dataZoom: [{
                 type: 'inside',
@@ -90,16 +71,29 @@ export default class EquityTab extends Component {
 
     componentDidMount() {
         this.equityCurve = echarts.init(this.equity)
+        let {tradeActions} = this.props
+        if (tradeActions.length > 0) {
+            tradeActions = tradeActions.map(trade => {
+                const {is_enter, is_long, net_position, price, product_id, profit, time, totalProfit} = trade
+                return [is_enter, is_long, net_position, price, product_id, profit, time, totalProfit]
+            })
+            tradeActions.unshift(['is_enter', 'is_long', 'net_position', 'price', 'product_id', 'profit', 'time', 'totalProfit'])
+            console.log(tradeActions)
+            this.run(tradeActions)
+        }
+    }
 
-        const ROOT_PATH = '/api1/examples';
-        axios.get(ROOT_PATH + '/data/asset/data/life-expectancy-table.json').then(
-            response => {
-                this.run(response.data)
-                // console.log(response.data)
-            },
-            error => console.log(error.message)
-        )
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let {tradeActions} = this.props
+        if (tradeActions.length > 0) {
+            tradeActions = tradeActions.map(trade => {
+                const {is_enter, is_long, net_position, price, product_id, profit, time, totalProfit} = trade
+                return [is_enter, is_long, net_position, price, product_id, profit, time, totalProfit]
+            })
+            tradeActions.unshift(['is_enter', 'is_long', 'net_position', 'price', 'product_id', 'profit', 'time', 'totalProfit'])
+            console.log(tradeActions)
+            this.run(tradeActions)
+        }
     }
 
     render() {
@@ -108,3 +102,5 @@ export default class EquityTab extends Component {
         );
     }
 }
+
+export default connect(state => ({tradeActions: state.content.tradeActions}))(EquityTab)
