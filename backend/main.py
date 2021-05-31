@@ -203,12 +203,18 @@ def single_test():
         calculator = Calculator()
         calculator.set_slip(slip)
         trade_results = calculator.calculate(trade_actions)
+        trade_stats = calculator.get_all_statistics(trade_results)
 
-        message = 'Succeed to send trade results for Algo #{}'.format(algo_id)
+        message = 'Succeed to send tradeResults and tradeStats for Algo #{}'.format(algo_id)
+        output_dict = {
+            'tradeResults': trade_results,
+            'tradeStats': trade_stats
+        }
 
-        return CommonResult(LogLevel.INFO, message, {'tradeResults': trade_results}).to_json()
+        return CommonResult(LogLevel.INFO, message, output_dict).to_json()
     except:
-        return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
+        message = 'Uncertain errors occurred'
+        return CommonResult(LogLevel.ERROR, message, None).to_json()
 
 
 @app.route('/batch-test', methods=['POST'])
