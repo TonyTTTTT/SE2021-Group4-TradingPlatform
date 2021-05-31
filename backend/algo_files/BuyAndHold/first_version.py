@@ -24,16 +24,16 @@ class BH(Algo):
             else:
                 self.data[idx]['is_ltd'] = False
 
-    def applyTradeLogic(self):
+    def apply_trade_logic(self):
         self.preprocess()
         ls = self.cat_param['long/short']
         state = 'Empty'
         for row in self.runtime_data:
             if state == "Empty":
-                self.addTrade(row['time'], ls == 'long', 1, row['open'])
+                self.add_trade(row['time'], ls == 'long', 1, row['open'])
                 state = "Entered"
             elif state == "Entered" and row['is_ltd']:
-                self.addTrade(row['time'], ls == 'short', 1, row['close'], 'expire')
+                self.add_trade(row['time'], ls == 'short', 1, row['close'], 'expire')
                 state = "Empty"
 
     def print_trade_list(self):

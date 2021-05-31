@@ -41,13 +41,13 @@ class Algorithm:
         return self.tradelist
 
     @abstractmethod
-    def applyTradeLogic(self):
+    def apply_trade_logic(self):
         """
         Defined in each algorithm inherited from this class
         """
         pass
 
-    def addTrade(self, time_stamp, bs, contract, price, tag='', **kwargs):
+    def add_trade(self, time_stamp, bs, contract, price, tag='', **kwargs):
         if contract == 0:
             return
         if not isinstance(bs, str):
