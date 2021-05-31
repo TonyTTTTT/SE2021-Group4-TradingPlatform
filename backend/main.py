@@ -219,44 +219,29 @@ def single_test():
 
 @app.route('/batch-test', methods=['POST'])
 def batch_test():
-    df_manager = DataFileManager()
-    tester = AlgorithmTester()
 
-    algo_id = int(request.json.get("algo_id", None))
-    start_date = request.json['product']['start_date']
-    end_date = request.json['product']['end_date']
-    parameters = ParameterParser.batch_parameters_parse(request.json)
+    algo_id     = int(request.json.get("algo_id", None))
+    start_date  = request.json['product']['start_date']
+    end_date    = request.json['product']['end_date']
+    slip        = request.json['product']['slip']
+    parameters  = ParameterParser.batch_parameters_parse(request.json)
 
     try:
-        print(request.json)
+        tester = AlgorithmTester()
         trade_actions = tester.batch_test(algo_id, start_date, end_date, parameters)
 
-        # print(algo_id)
-        
-        
-        # ta = []
-        # with open("BH.txt", 'r') as f:
-        #     lines = f.readlines()
-        #     for line in lines:
-        #         time, hmm, bs, price = line.replace("\n", "").split(" ")
-        #         a = TradeAction(0, datetime(int(time[:4]), int(time[4:6]), int(time[6:8])), (-1) ** (bs == "S"),
-        #                         float(price), "")
-        #         ta.append(a)
-    
-        cal = Calculator()
-        cal.set_slip(1)
-        tr = cal.calculate(trade_actions)
-        ts = cal.get_all_statistics(tr)
-        res = {"tradeResult": tr, "tradeStat": ts}
+#        cal = Calculator()
+#        cal.set_slip(1)
+#        tr = cal.calculate(trade_actions)
+#        ts = cal.get_all_statistics(tr)
+#        res = {"tradeResult": tr, "tradeStat": ts}
 
-        # print('res: ', res)
-        # get the file path of the specific algo
-        # alto_tester = AlgorithmTester()
-        # algo_test._create_algo(algo_id)
-        # algo_tester.single_test()
+        message = 'Succeed to send trade actions'
+        output_dict = {
+            'TradeActions': trade_actions
+        }
 
-        return CommonResult(LogLevel.INFO, "Success batch testing",
-                            res).to_json()
+        return CommonResult(LogLevel.INFO, message, output_dict).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Some uncertain err occur", None).to_json()
 

@@ -21,19 +21,15 @@ class AlgorithmTester:
 
         return tas
 
-    def batch_test(self, algo_id: int, start_date: str, end_date: str, batch_parameter: List[List[Parameter]]) -> List[TradeAction]:
-        algo = self._create_algo(algo_id)
-        algo.set_product_date(start_date=start_date, end_date=end_date)
-        trade_actions = []
-        for ps in batch_parameter:  # 用 `parameter_parser.parse_batch()` 抽取單一參數
-            algo.set_parameter(ps)
-            trade_actions.append(algo.run())
-            #ta.append(self.single_test(algo_id, start_date, end_date, ps)) # 執行 sigle test
+    def batch_test(self, algo_id: int, start_date: str, end_date: str, batch_parameter: List[List[Parameter]]) -> List[List[TradeAction]]:
 
-        trade_actions = np.array(trade_actions)
-        trade_actions = trade_actions.flatten().tolist()
-        return trade_actions
-            # yield self.calculator.get_batch_result(ta)  # 用 `calculator` 產生 sigle test 的 trade_result
+        tass = []
+
+        for parameters in batch_parameter:
+            tas = self.single_test(algo_id, start_date, end_date, parameters)
+            tass.append(tas)
+
+        return tass
 
     def _create_algo(self, algo_id: int):
 
@@ -56,5 +52,5 @@ class AlgorithmTester:
 # Test
 if __name__ == "__main__":
 
-    tas = AlgorithmTester().single_test(0, '2000-05-01', '2001-05-01', [Parameter('long/short', 'cat', 'long')])
+    tas = AlgorithmTester().single_test(0, '2007-02-15', '2007-04-04', [Parameter('long/short', 'cat', 'long')])
     print(tas)
