@@ -174,11 +174,11 @@ class SideArea extends React.Component {
     }
 
 
-    display_option(param_name, option, test_type) {
+    display_option(param_name, option, test_type, param_id_pre) {
         let list = [];
         if(test_type == "single")
         {
-            list.push(<option disabled selected value> -- select an option -- </option>);
+            list.push(<option disabled selected value=""> -- select an option -- </option>);
             for(let i=0;i<option.length;i++) {
                 list.push(<option value={option[i]}>{option[i]}</option>);
             }
@@ -186,10 +186,12 @@ class SideArea extends React.Component {
         else
         {
             for(let i=0;i<option.length;i++) {
+                let param_id = param_id_pre+i;
                 list.push(
                     <Form.Check 
                     type='checkbox'
-                    id="batch-cat"
+                    id={param_id}
+                    p_type='batch-cat'
                     label={option[i]}
                     value={option[i]}
                     onChange={this.handleParamInput}
@@ -207,13 +209,14 @@ class SideArea extends React.Component {
         {
             for(let i=0;i<param_set.length;i++) {
                 if(param_set[i]['name']!='product') {
+                    let param_id = 'single_param'+i;
                     if(param_set[i]['type']=='cat') {
                         list.push(
                         <tr>
                             <td>{param_set[i]['name']}</td>
                             <td>
-                                <select id="single-cat" name={param_set[i]['name']} onChange={this.handleParamInput}>
-                                    {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
+                                <select id={param_id} name={param_set[i]['name']} p_type="single-cat" onChange={this.handleParamInput}>
+                                    {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type, param_id)}
                                 </select>
                             </td>
                         </tr>)
@@ -223,7 +226,7 @@ class SideArea extends React.Component {
                         <tr>
                             <td>{param_set[i]['name']}({param_set[i]['value']})</td>
                             <td>
-                                <input type="text" id="single-num" name={param_set[i]['name']} onChange={this.handleParamInput}/>
+                                <input id={param_id} type="text" p_type="single-num" name={param_set[i]['name']} onChange={this.handleParamInput}/>
                             </td>
                         </tr>)
                     }
@@ -234,13 +237,14 @@ class SideArea extends React.Component {
         {
             for(let i=0;i<param_set.length;i++) {
                 if(param_set[i]['name']!='product') {
+                    let param_id = 'batch_param'+i;
                     if(param_set[i]['type']=='cat') {
                         list.push(
                         <tr>
                             <td>{param_set[i]['name']}</td>
                             <td>
-                                <Form id="batch-cat" name={param_set[i]['name']}>
-                                    {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type)}
+                                <Form id={param_id} name={param_set[i]['name']}>
+                                    {this.display_option(param_set[i]['name'], param_set[i]['value'],test_type, param_id)}
                                 </Form>
                             </td>
                         </tr>)
@@ -250,9 +254,11 @@ class SideArea extends React.Component {
                         <tr>
                             <td>{param_set[i]['name']}({param_set[i]['value']})</td>
                             <td>
-                                <input type="text" id="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
-                                <input type="text" id="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
-                                <input type="text" id="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
+                                <Form id={param_id}>
+                                    <input type="text" p_type="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
+                                    <input type="text" p_type="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
+                                    <input type="text" p_type="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
+                                </Form>
                             </td>
                         </tr>)
                     }
@@ -295,7 +301,7 @@ class SideArea extends React.Component {
     }
 
     handleParamInput = (event) => {
-        if(event.target.id == "single-num") {
+        if(event.target.getAttribute('p_type')== "single-num") {
             const copy_parameter = this.state.parameter;
             for(let i =0; i<copy_parameter.length; i++) {
                 if(copy_parameter[i].name == event.target.name) {
@@ -308,7 +314,7 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.id == "single-cat") {
+        else if(event.target.getAttribute('p_type')  == "single-cat") {
             const copy_parameter = this.state.parameter;
             for(let i =0; i<copy_parameter.length; i++) {
                 if(copy_parameter[i].name == event.target.name) {
@@ -321,7 +327,7 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             }); 
         }
-        else if(event.target.id == "batch-num-from") {
+        else if(event.target.getAttribute('p_type') == "batch-num-from") {
             const copy_parameter = this.state.parameter;
             var flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
@@ -338,7 +344,7 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.id == "batch-num-to") {
+        else if(event.target.getAttribute('p_type') == "batch-num-to") {
             const copy_parameter = this.state.parameter;
             var flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
@@ -355,7 +361,7 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.id == "batch-num-step") {
+        else if(event.target.getAttribute('p_type') == "batch-num-step") {
             const copy_parameter = this.state.parameter;
             var flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
@@ -372,7 +378,7 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.id == "batch-cat") {
+        else if(event.target.getAttribute('p_type') == "batch-cat") {
             const copy_parameter = this.state.parameter;
             var flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
@@ -414,6 +420,19 @@ class SideArea extends React.Component {
             document.getElementById("startDate-batch").value = "";
             document.getElementById("endDate-batch").value = "";
             document.getElementById("slip-batch").value = "";
+            // document.getElementById("single-cat").value = "";
+            for(let i=1; i<this.state.param_format.length; i++) {
+                // console.log("single_param"+i, ": ", document.getElementById("single_param"+i));
+                document.getElementById("single_param"+i).value = "";
+                if(this.state.param_format[i].type == 'cat') {
+                    for(let j=0; j<this.state.param_format[i].value.length; j++)
+                        document.getElementById("batch_param"+i+j).checked = false;
+                }
+                else {
+                    document.getElementById("batch_param"+i).value = "";
+                }
+                
+            }
         }) 
     }
 
