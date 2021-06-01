@@ -6,5 +6,12 @@ pipeline {
                 echo 'first stage, edit by Tony, v5' 
             }
         }
+        stage('Build') {
+            steps {
+                sh '''#!/bin/bash
+                pwd
+                '''
+            }
+        }
     }
 }
