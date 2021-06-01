@@ -13,7 +13,7 @@ class App extends React.Component {
         const {algoId} = this.props
         return (
             <BrowserRouter>
-                <div>
+                <div style={{background:"#E9EBED"}}>
                     <ul style={{margin: 0}}>
                         <li style={{display: 'none'}}><Link to="/">Home</Link></li>
                         <li style={{display: 'none'}}><Link to="/main">Main</Link></li>
