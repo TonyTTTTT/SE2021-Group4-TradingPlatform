@@ -8,7 +8,9 @@ pipeline {
         }
         state('Build') {
             steps {
-                sh 'pwd'
+                sh '''#!/bin/bash
+                pwd
+                '''
             }
         }
     }
