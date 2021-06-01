@@ -201,7 +201,7 @@ const Menu = (props) => {
                         <Tab.Pane eventKey="Algo" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true,sortable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
                                 onGridReady={onAlgoGridReady}
@@ -210,20 +210,19 @@ const Menu = (props) => {
                                 onRowSelected={onAlgoRowSelected}
                                 onRowDoubleClicked = {onAlgoDoubleClicked}
                                 rowData={props.menu.algoData}
-                        
                                 >
                                 <AgGridColumn field ="AlgoID" hide={true}></AgGridColumn>
                                 <AgGridColumn field ="Title" hide={true} sortable={true} filter={true} rowGroup={true}></AgGridColumn>
-                                <AgGridColumn field ="Version" filter={true}></AgGridColumn>
-                                <AgGridColumn field ="Description" filter={true}></AgGridColumn>
-                                <AgGridColumn field ="Last_Modified" filter={true}></AgGridColumn>
+                                <AgGridColumn field ="Version" filter={true} sortable={false}></AgGridColumn>
+                                <AgGridColumn field ="Description" filter={true} sortable={false}></AgGridColumn>
+                                <AgGridColumn field ="Last_Modified" filter={true} sortable={false}></AgGridColumn>
                             </AgGridReact>
                         </div>
                         </Tab.Pane>
                         <Tab.Pane eventKey="Report" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
                             <AgGridReact   
-                                defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true}}
+                                defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true,sortable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
                                 autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm"}}
@@ -234,7 +233,7 @@ const Menu = (props) => {
                                 >
                                 <AgGridColumn field ="Algo" hide={true} filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
                                 <AgGridColumn field ="Title" filter={true} sortable={true}  ></AgGridColumn>
-                                <AgGridColumn field ="Last_Modified" filter={true}></AgGridColumn>
+                                <AgGridColumn field ="Last_Modified" filter={true} sortable={false}></AgGridColumn>
                             </AgGridReact>
                         </div>
                         </Tab.Pane>
