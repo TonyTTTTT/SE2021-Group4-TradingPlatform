@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import * as echarts from "echarts";
 import {connect} from "react-redux";
 import {withTheme} from "@material-ui/core/styles";
-import {MobileStepper, Paper, Typography, withStyles} from "@material-ui/core";
+import {MobileStepper, withStyles} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
@@ -101,7 +101,7 @@ class ProfitBar extends Component {
 const styles = (theme) => ({
     root: {
         maxHeight: '500px',
-        flexGrow: 1,
+        // flexGrow: 1,
     },
     header: {
         display: 'flex',
@@ -136,11 +136,8 @@ class ProfitTab extends Component {
         const {theme, result} = this.props
         const labels = ['Monthly', 'Quarterly', 'Yearly']
         return (
-            <div className={classes.root} style={{display: result === null ? 'none' : 'inline'}}>
-                {/*<Paper square elevation={0} className={classes.header}>*/}
-                {/*    <Typography>{labels[activeStep]}</Typography>*/}
-                {/*</Paper>*/}
-                <ProfitBar period={labels[activeStep]} result={result}/>
+            <div className={classes.root}>
+                <ProfitBar period={labels[activeStep]} result={result} style={{display: result === null ? 'none' : 'show'}}/>
                 <MobileStepper
                     steps={maxSteps}
                     position="static"
@@ -158,6 +155,7 @@ class ProfitTab extends Component {
                             Back
                         </Button>
                     }
+                    style={{display: result === null ? 'none' : 'show'}}
                 />
             </div>
         );

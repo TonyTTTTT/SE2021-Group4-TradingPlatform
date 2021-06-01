@@ -11,6 +11,7 @@ import ReportTab from "./Content/Components/reportTab";
 import PivotTableTab from "./Content/Components/pivotTableTab";
 import {setAlgoAction} from "../../actions";
 import {connect} from "react-redux";
+import ResultListTab from "./Content/Components/resultListTab";
 
 const tabs = [
     createData('Equity', <EquityTab/>),
@@ -21,7 +22,7 @@ const tabs = [
 ]
 
 const batchTabs = [
-    createData('ResultList', <TradeTab/>),
+    createData('ResultList', <ResultListTab/>),
     createData('PivotTable', <PivotTableTab/>)
 ]
 

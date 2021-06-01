@@ -401,10 +401,11 @@ class SideArea extends React.Component {
         }
     }
 
-    handleSwitchTab = (event) => {
+    handleSwitchTab = (testType) => {
         this.setState({parameter: []});
         this.setState({product: {name: "", start_date: "", end_date: "", slip: ""}}, () =>
         {
+            this.props.runTest(null, testType);
             console.log(this.state);
         }) 
     }
@@ -423,10 +424,10 @@ class SideArea extends React.Component {
                 style={{height: "100%"}} >
                     <Nav variant="tabs" className="flex-row">
                         <Nav.Item>
-                        <Nav.Link eventKey="Single Test" onClick={this.handleSwitchTab}>Single Test</Nav.Link>
+                        <Nav.Link eventKey="Single Test" onClick={() => this.handleSwitchTab("single")}>Single Test</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                        <Nav.Link eventKey="Batch Test" onClick={this.handleSwitchTab}>Batch Test</Nav.Link>
+                        <Nav.Link eventKey="Batch Test" onClick={() => this.handleSwitchTab("batch")}>Batch Test</Nav.Link>
                         </Nav.Item>
                     </Nav>
                     <Tab.Content style={{height:"100%"}}>
