@@ -407,6 +407,13 @@ class SideArea extends React.Component {
         {
             this.props.runTest(null, testType);
             console.log(this.state);
+            this.myInput.focus();
+            document.getElementById("startDate").value = "";
+            document.getElementById("endDate").value = "";
+            document.getElementById("slip").value = "";
+            document.getElementById("startDate-batch").value = "";
+            document.getElementById("endDate-batch").value = "";
+            document.getElementById("slip-batch").value = "";
         }) 
     }
 
@@ -470,15 +477,15 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleProductInput} /></td>
+                                    <td><input class="args-input" type="date" name="startDate" id="startDate" onChange={this.handleProductInput} ref={myInput=>this.myInput=myInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><input class="args-input" type="date" name="endDate" onChange={this.handleProductInput} /></td>
+                                    <td><input class="args-input" type="date" name="endDate" id="endDate" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>
-                                    <td><input name="slip" onChange={this.handleProductInput} /></td>
+                                    <td><input name="slip" id="slip" onChange={this.handleProductInput} /></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -536,15 +543,15 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><input class="args-input" type="date" name="startDate" onChange={this.handleProductInput} /></td>
+                                    <td><input class="args-input" type="date" name="startDate" id="startDate-batch" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><input class="args-input" type="date" name="endDate" onChange={this.handleProductInput} /></td>
+                                    <td><input class="args-input" type="date" name="endDate" id="endDate-batch" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>
-                                    <td><input name="slip" onChange={this.handleProductInput} /></td>
+                                    <td><input name="slip" id="slip-batch" onChange={this.handleProductInput} /></td>
                                 </tr>
                             </tbody>
                             <thead>
