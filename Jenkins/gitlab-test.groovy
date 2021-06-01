@@ -6,5 +6,10 @@ pipeline {
                 echo 'first stage, edit by Tony, v5' 
             }
         }
+        state('Build') {
+            steps {
+                sh 'pwd'
+            }
+        }
     }
 }
