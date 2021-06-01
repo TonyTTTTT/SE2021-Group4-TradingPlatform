@@ -8,6 +8,7 @@ import numpy as np
 
 class ParameterParser:
 
+    @staticmethod
     def parameter_format_parse(filepath: str) -> List[dict]:
 
         module_name = filepath.rsplit('.', 1)[0].replace('/', '.')
@@ -30,6 +31,7 @@ class ParameterParser:
         return output_parameters
 
     # 將 input JSON dictionary 中的 parameters 項目轉換成 List[Parameter]
+    @staticmethod
     def single_parameters_parse(input_json: dict) -> List[Parameter]:
 
         output_parameters = []
@@ -44,6 +46,7 @@ class ParameterParser:
 
         return output_parameters
 
+    @staticmethod
     def batch_parameters_parse(input_json: dict) -> List[List[Parameter]]:
 
         input_parameters = []

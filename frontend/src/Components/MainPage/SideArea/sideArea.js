@@ -1,8 +1,6 @@
 import React from 'react';
-import { Container, Row,Col,Dropdown, Table, Button, Tab, Tabs, Nav, Form } from 'react-bootstrap';
+import { Row,Col,Table, Button, Tab, Nav, Form } from 'react-bootstrap';
 import { Scrollbars } from "rc-scrollbars";
-import { Link } from 'react-router-dom';
-import HomePage from '../../HomePage';
 import axios from "axios";
 import { connect } from "react-redux";
 
@@ -176,7 +174,7 @@ class SideArea extends React.Component {
 
     display_option(param_name, option, test_type, param_id_pre) {
         let list = [];
-        if(test_type == "single")
+        if(test_type === "single")
         {
             list.push(<option disabled selected value=""> -- select an option -- </option>);
             for(let i=0;i<option.length;i++) {
@@ -205,12 +203,12 @@ class SideArea extends React.Component {
 
     display_param(param_set=algo_info, test_type) {
         let list = [];
-        if(test_type == "single")
+        if(test_type === "single")
         {
             for(let i=0;i<param_set.length;i++) {
-                if(param_set[i]['name']!='product') {
+                if(param_set[i]['name']!=='product') {
                     let param_id = 'single_param'+i;
-                    if(param_set[i]['type']=='cat') {
+                    if(param_set[i]['type']==='cat') {
                         list.push(
                         <tr>
                             <td>{param_set[i]['name']}</td>
@@ -236,9 +234,9 @@ class SideArea extends React.Component {
         else
         {
             for(let i=0;i<param_set.length;i++) {
-                if(param_set[i]['name']!='product') {
+                if(param_set[i]['name']!=='product') {
                     let param_id = 'batch_param'+i;
-                    if(param_set[i]['type']=='cat') {
+                    if(param_set[i]['type']==='cat') {
                         list.push(
                         <tr>
                             <td>{param_set[i]['name']}</td>
@@ -269,7 +267,7 @@ class SideArea extends React.Component {
     } 
 
     handleProductInput = (event) => {
-        if(event.target.name == "product") {
+        if(event.target.name === "product") {
             const copy_product = { ...this.state.product, 'name': event.target.value };
             this.setState({product: copy_product}, () => 
                 {
@@ -277,21 +275,21 @@ class SideArea extends React.Component {
                     console.log(this.state);
                 });
         }
-        else if(event.target.name == "startDate") {
+        else if(event.target.name === "startDate") {
             const copy_product = { ...this.state.product, 'start_date': event.target.value };
             this.setState({product: copy_product}, () => 
                 {
                     console.log(this.state.product);
                 });
         }
-        else if(event.target.name == "endDate") {
+        else if(event.target.name === "endDate") {
             const copy_product = { ...this.state.product, 'end_date': event.target.value };
             this.setState({product: copy_product}, () => 
                 {
                     console.log(this.state.product);
                 });
         }
-        else if(event.target.name == "slip") {
+        else if(event.target.name === "slip") {
             const copy_product = { ...this.state.product, 'slip': parseFloat(event.target.value) };
             this.setState({product: copy_product}, () => 
                 {
@@ -301,10 +299,11 @@ class SideArea extends React.Component {
     }
 
     handleParamInput = (event) => {
-        if(event.target.getAttribute('p_type')== "single-num") {
+        let flag;
+        if(event.target.getAttribute('p_type')=== "single-num") {
             const copy_parameter = this.state.parameter;
             for(let i =0; i<copy_parameter.length; i++) {
-                if(copy_parameter[i].name == event.target.name) {
+                if(copy_parameter[i].name === event.target.name) {
                     copy_parameter.splice(i,1);
                 }
             }
@@ -314,10 +313,10 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.getAttribute('p_type')  == "single-cat") {
+        else if(event.target.getAttribute('p_type')  === "single-cat") {
             const copy_parameter = this.state.parameter;
             for(let i =0; i<copy_parameter.length; i++) {
-                if(copy_parameter[i].name == event.target.name) {
+                if(copy_parameter[i].name === event.target.name) {
                     copy_parameter.splice(i,1);
                 }
             }
@@ -327,16 +326,16 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             }); 
         }
-        else if(event.target.getAttribute('p_type') == "batch-num-from") {
+        else if(event.target.getAttribute('p_type') === "batch-num-from") {
             const copy_parameter = this.state.parameter;
-            var flag = 0;
+            flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
-                if(copy_parameter[i].name == event.target.name) {
+                if(copy_parameter[i].name === event.target.name) {
                     flag = 1;
                     copy_parameter[i].from = parseFloat(event.target.value);
                 }
             }
-            if(flag == 0) {
+            if(flag === 0) {
                 copy_parameter.push({"name": event.target.name, "type": "num", "from": parseFloat(event.target.value), "to": "", "step": ""});
             }
             this.setState({parameter: copy_parameter}, () =>
@@ -344,16 +343,16 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.getAttribute('p_type') == "batch-num-to") {
+        else if(event.target.getAttribute('p_type') === "batch-num-to") {
             const copy_parameter = this.state.parameter;
-            var flag = 0;
+            flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
-                if(copy_parameter[i].name == event.target.name) {
+                if(copy_parameter[i].name === event.target.name) {
                     flag = 1;
                     copy_parameter[i].to = parseFloat(event.target.value);
                 }
             }
-            if(flag == 0) {
+            if(flag === 0) {
                 copy_parameter.push({"name": event.target.name, "type": "num", "from": "" , "to": parseFloat(event.target.value), "step": ""});
             }
             this.setState({parameter: copy_parameter}, () =>
@@ -361,16 +360,16 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.getAttribute('p_type') == "batch-num-step") {
+        else if(event.target.getAttribute('p_type') === "batch-num-step") {
             const copy_parameter = this.state.parameter;
-            var flag = 0;
+            flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
-                if(copy_parameter[i].name == event.target.name) {
+                if(copy_parameter[i].name === event.target.name) {
                     flag = 1;
                     copy_parameter[i].step = parseFloat(event.target.value);
                 }
             }
-            if(flag == 0) {
+            if(flag === 0) {
                 copy_parameter.push({"name": event.target.name, "type": "num", "from": "" , "to": "", "step": parseFloat(event.target.value)});
             }
             this.setState({parameter: copy_parameter}, () =>
@@ -378,25 +377,25 @@ class SideArea extends React.Component {
                 console.log(this.state.parameter);
             });
         }
-        else if(event.target.getAttribute('p_type') == "batch-cat") {
+        else if(event.target.getAttribute('p_type') === "batch-cat") {
             const copy_parameter = this.state.parameter;
-            var flag = 0;
+            flag = 0;
             for(let i =0; i<copy_parameter.length; i++) {
-                if(copy_parameter[i].name == event.target.name) {
+                if(copy_parameter[i].name === event.target.name) {
                     flag = 1;
                     if(event.target.checked) {
                         copy_parameter[i].value.push(event.target.value);
                     }
                     else {
                         for(let j =0; j<copy_parameter[i].value.length; j++) {
-                            if(copy_parameter[i].value[j] == event.target.value) {
+                            if(copy_parameter[i].value[j] === event.target.value) {
                                 copy_parameter[i].value.splice(j,1);
                             }
                         }
                     }
                 }
             }
-            if(flag == 0) {
+            if(flag === 0) {
                 copy_parameter.push({"name": event.target.name, "type": "cat", "value": [event.target.value]});
             }
             this.setState({parameter: copy_parameter}, () =>
@@ -424,7 +423,7 @@ class SideArea extends React.Component {
             for(let i=1; i<this.state.param_format.length; i++) {
                 // console.log("single_param"+i, ": ", document.getElementById("single_param"+i));
                 document.getElementById("single_param"+i).value = "";
-                if(this.state.param_format[i].type == 'cat') {
+                if(this.state.param_format[i].type === 'cat') {
                     for(let j=0; j<this.state.param_format[i].value.length; j++)
                         document.getElementById("batch_param"+i+j).checked = false;
                 }
@@ -473,11 +472,11 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>ApplyProduct</td>
-                                    <td></td>
+                                    <td/>
                                 </tr>
                                 <tr>
                                     <td>Parameter Set ID</td>
-                                    <td></td>
+                                    <td/>
                                 </tr>
                             </tbody>
                             <thead>
@@ -496,11 +495,11 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><input class="args-input" type="date" name="startDate" id="startDate" onChange={this.handleProductInput} ref={myInput=>this.myInput=myInput} /></td>
+                                    <td><input className="args-input" type="date" name="startDate" id="startDate" onChange={this.handleProductInput} ref={myInput=>this.myInput=myInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><input class="args-input" type="date" name="endDate" id="endDate" onChange={this.handleProductInput} /></td>
+                                    <td><input className="args-input" type="date" name="endDate" id="endDate" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>
@@ -539,11 +538,11 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>ApplyProduct</td>
-                                    <td></td>
+                                    <td/>
                                 </tr>
                                 <tr>
                                     <td>Parameter Set ID</td>
-                                    <td></td>
+                                    <td/>
                                 </tr>
                             </tbody>
                             <thead>
@@ -562,11 +561,11 @@ class SideArea extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Start Date</td>
-                                    <td><input class="args-input" type="date" name="startDate" id="startDate-batch" onChange={this.handleProductInput} /></td>
+                                    <td><input className="args-input" type="date" name="startDate" id="startDate-batch" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>End Date</td>
-                                    <td><input class="args-input" type="date" name="endDate" id="endDate-batch" onChange={this.handleProductInput} /></td>
+                                    <td><input className="args-input" type="date" name="endDate" id="endDate-batch" onChange={this.handleProductInput} /></td>
                                 </tr>
                                 <tr>
                                     <td>slip(float)</td>

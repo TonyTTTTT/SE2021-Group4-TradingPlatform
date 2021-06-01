@@ -1,4 +1,3 @@
-import datetime
 from abc import abstractmethod
 from typing import List
 
@@ -10,7 +9,6 @@ class Algorithm:
 
     def __init__(self, **kwargs):
         self.init()
-        # self.initarg(kwargs)
 
     def init(self):
         self.tradelist = []

@@ -35,7 +35,7 @@ class Console extends Component {
     // will be called when Reducer update consoleState, bcz we bind props.console to consoleState
     componentDidUpdate( prevProps ) {
         // add consoleState.newlog via inner function `addLog`
-        if (prevProps.console.newlog.time != this.props.console.newlog.time) 
+        if (prevProps.console.newlog.time !== this.props.console.newlog.time)
             this.addLog(this.props.console.newlog);
     }
 

@@ -15,4 +15,3 @@ tr = cal.calculate(ta)
 ts = cal.get_all_statistics(tr)
 for i in ts:
     print(i)
-

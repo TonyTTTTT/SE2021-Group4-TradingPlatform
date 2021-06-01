@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row,Col,Dropdown, Table, Button } from 'react-bootstrap';
+import { Row,Col,Button } from 'react-bootstrap';
 import axios from "axios";
 
 class TagArea extends React.Component {

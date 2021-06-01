@@ -22,7 +22,7 @@ class ProfitBar extends Component {
     setProfitBar(result) {
         const {period} = this.props;
         const {cumulateResults: {m_results, q_results, y_results}} = result;
-        let show_result = null;
+        let show_result;
         if (period === 'Monthly') {
             show_result = m_results;
         } else if (period === 'Quarterly') {

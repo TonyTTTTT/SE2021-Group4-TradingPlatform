@@ -138,29 +138,6 @@ class DataFileManager(metaclass=Singleton):
     def get_algo_info(self, algo_id: int):
         return self._find_algorithm(algo_id)
 
-    # }
-
-    # def create_report(self, title: str, algo_id: int) -> int:
-    #     """
-    #     input:
-    #         * title: report's title
-    #         * algo_id: algo_id that this report relates to
-    #     output:
-    #         report_id: int, -1 if fail
-    #     """
-    #     report_id = self._generate_report_id()
-    #     if report_id == -1:
-    #         return -1
-    #     report_path = "report_files/{}.{}.md".format(algo_id, report_id)
-    #     report = { "id": report_id,
-    #                "algo_id": algo_id,
-    #                "title": title,
-    #                "path": report_path }
-    #     self.data['report'].append(report)
-    #     with open(report_path, 'w', encoding='utf-8-sig') as f:
-    #         f.write("# {}\n".format(title))
-    #     return report_id
-
     def save_report(self, report_id: int, content: str) -> int:
         """
         input:
@@ -208,7 +185,6 @@ class DataFileManager(metaclass=Singleton):
             * A list that contain all report info: list
         """
         res = self.data["report"]
-        
 
         return res
 
@@ -247,8 +223,9 @@ class DataFileManager(metaclass=Singleton):
         if not exists:
             report_path.touch()
             report_id = self._generate_report_id()
-            algo = self._find_algorithm(report['algo_id'])
-            report_info = ReportInfo(report_id, algo_id, title,  time.asctime(time.localtime()),str(report_path),algo['title'])
+            algo = self._find_algorithm(algo_id)
+            report_info = ReportInfo(report_id, algo_id, title, time.asctime(time.localtime()), str(report_path),
+                                     algo['title'])
 
             self.data[REPORT].append(report_info.__dict__)
             if algo_id not in self.algo_id2report_ids:
@@ -274,6 +251,5 @@ class DataFileManager(metaclass=Singleton):
 
 if __name__ == "__main__":
     fm = DataFileManager()
-    # fm.delete_report(162202302826)
     pinfo = fm.get_product_info(0)
     print(pinfo)

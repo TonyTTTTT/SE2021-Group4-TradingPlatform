@@ -255,7 +255,7 @@ class ReportTab extends Component {
     }
 
     closeEdit = (content) => {
-        const {editFilename, editReportId} = this.state
+        const {editReportId} = this.state
         axios.post('/api2/save-report', {report_id: editReportId, content}).then(
             response => {
                 if (response.data.code === 2) {
@@ -332,7 +332,7 @@ class ReportTab extends Component {
 
     render() {
         const {classes} = this.props
-        const {selected, editMode, editFilename, editReportId, openDialog, rows, text} = this.state
+        const {selected, editMode, editFilename, openDialog, rows, text} = this.state
         const rowsPerPage = rows.length
         const emptyRows = rowsPerPage - rows.length;
         return (

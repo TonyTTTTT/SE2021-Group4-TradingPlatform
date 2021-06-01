@@ -81,7 +81,7 @@ const Menu = (props) => {
           } else {
             // do componentDidUpdate logic
             if(props.menu.deleteSignal===true){
-                if(tabKey=="Algo"){
+                if(tabKey==="Algo"){
                     axios.delete('/api2/delete-algo/' + props.menu.selectedAlgoID).then(
                         response => {
                             //action dispatch to menu
@@ -128,13 +128,13 @@ const Menu = (props) => {
         )       
     };
     const onAlgoRowSelected = ()=>{
-        if(algoGridApi.getSelectedRows()[0]!=undefined){
+        if(algoGridApi.getSelectedRows()[0]!==undefined){
             setSelectedRow(algoGridApi.getSelectedRows());
             props.setSelectedAlgoID(algoGridApi.getSelectedRows()[0].AlgoID)
         }
     };
     const onAlgoDoubleClicked = ()=>{
-        if(algoGridApi.getSelectedRows()[0]!=undefined){
+        if(algoGridApi.getSelectedRows()[0]!==undefined){
             window.location.href = window.location.href+"main/"+props.menu.selectedAlgoID;
         }
     }
@@ -157,7 +157,7 @@ const Menu = (props) => {
         )
     }
     const onReportDoubleClicked = ()=>{
-        if(reportGridApi.getSelectedRows()[0]!=undefined){
+        if(reportGridApi.getSelectedRows()[0]!==undefined){
             axios.get('/api2/get-report/' + reportGridApi.getSelectedRows()[0].ID).then(
                 response => {
                     stackedit.openFile({
@@ -211,11 +211,11 @@ const Menu = (props) => {
                                 onRowDoubleClicked = {onAlgoDoubleClicked}
                                 rowData={props.menu.algoData}
                                 >
-                                <AgGridColumn field ="AlgoID" hide={true}></AgGridColumn>
-                                <AgGridColumn field ="Title" hide={true} sortable={true} filter={true} rowGroup={true}></AgGridColumn>
-                                <AgGridColumn field ="Version" filter={true} sortable={false}></AgGridColumn>
-                                <AgGridColumn field ="Description" filter={true} sortable={false}></AgGridColumn>
-                                <AgGridColumn field ="Last_Modified" filter={true} sortable={false}></AgGridColumn>
+                                <AgGridColumn field ="AlgoID" hide={true}/>
+                                <AgGridColumn field ="Title" hide={true} sortable={true} filter={true} rowGroup={true}/>
+                                <AgGridColumn field ="Version" filter={true} sortable={false}/>
+                                <AgGridColumn field ="Description" filter={true} sortable={false}/>
+                                <AgGridColumn field ="Last_Modified" filter={true} sortable={false}/>
                             </AgGridReact>
                         </div>
                         </Tab.Pane>
@@ -231,9 +231,9 @@ const Menu = (props) => {
                                 rowData = {props.menu.reportData}
                                 onRowDoubleClicked = {onReportDoubleClicked}
                                 >
-                                <AgGridColumn field ="Algo" hide={true} filter={true} sortable={true}  rowGroup={true}></AgGridColumn>
-                                <AgGridColumn field ="Title" filter={true} sortable={true}  ></AgGridColumn>
-                                <AgGridColumn field ="Last_Modified" filter={true} sortable={false}></AgGridColumn>
+                                <AgGridColumn field ="Algo" hide={true} filter={true} sortable={true}  rowGroup={true}/>
+                                <AgGridColumn field ="Title" filter={true} sortable={true}  />
+                                <AgGridColumn field ="Last_Modified" filter={true} sortable={false}/>
                             </AgGridReact>
                         </div>
                         </Tab.Pane>

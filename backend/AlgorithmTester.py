@@ -1,17 +1,16 @@
-from typing import List
-from importlib import import_module
 import inspect
-import numpy as np
+from importlib import import_module
 
-from DataFileManager import DataFileManager
 from DataClasses import *
+from DataFileManager import DataFileManager
 
 
 class AlgorithmTester:
     def __init__(self):
         self.loaded_algo = {}  # 儲存已經載入過的 algo
 
-    def single_test(self, algo_id: int, start_date: str, end_date: str, parameters: List[Parameter]) -> List[TradeAction]:
+    def single_test(self, algo_id: int, start_date: str, end_date: str, parameters: List[Parameter]) -> List[
+        TradeAction]:
 
         algo = self._create_algo(algo_id)
         algo.set_product_date(start_date=start_date, end_date=end_date)
@@ -21,7 +20,8 @@ class AlgorithmTester:
 
         return tas
 
-    def batch_test(self, algo_id: int, start_date: str, end_date: str, batch_parameter: List[List[Parameter]]) -> List[List[TradeAction]]:
+    def batch_test(self, algo_id: int, start_date: str, end_date: str, batch_parameter: List[List[Parameter]]) -> List[
+        List[TradeAction]]:
 
         tass = []
 
@@ -34,7 +34,6 @@ class AlgorithmTester:
     def _create_algo(self, algo_id: int):
 
         if algo_id not in self.loaded_algo:
-
             df_manager = DataFileManager()
             algo_info = df_manager.get_algo_info(algo_id)
 
@@ -49,8 +48,8 @@ class AlgorithmTester:
 
         return algo
 
+
 # Test
 if __name__ == "__main__":
-
     tas = AlgorithmTester().single_test(0, '2007-02-15', '2007-04-04', [Parameter('long/short', 'cat', 'long')])
     print(tas)

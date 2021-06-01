@@ -2,22 +2,22 @@ from typing import List
 from datetime import datetime
 import csv
 
-class AssetDataLoader:
 
+class AssetDataLoader:
     path = '../input-data/TXF.csv'
 
     # start & end must be 'yyyy-mm-dd'
     def load(self, id: int = 0, start: str = None, end: str = None) -> List[dict]:
         # neccesary parameter not provide
-        if id == None:
+        if id is None:
             return -1
         # data with spcified paramter not available
         if id != 0:
             return -2
-        
+
         min_date = datetime.fromisoformat('2004-07-01')
         max_date = datetime.fromisoformat('2021-04-22')
-        
+
         if start != None and end != None:
             start = datetime.fromisoformat(start)
             end = datetime.fromisoformat(end)
@@ -25,7 +25,7 @@ class AssetDataLoader:
             end = max_date
         elif start == None and end != None:
             start = min_date
-            
+
         # data with spcified paramter not available
         if start < min_date or end > max_date:
             return -2

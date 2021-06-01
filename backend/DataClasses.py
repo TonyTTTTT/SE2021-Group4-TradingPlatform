@@ -67,15 +67,15 @@ class TradeAction:
 @dataclass
 class TradeResult:
     product_id: int
-    time: datetime  # ??????
+    time: datetime
     time_stamp: str
     net_position: int
-    is_long: bool  # True: ???買�?��m, False: ???�??後買
-    is_enter: bool  # True: ??�場, False: ?��?��
-    price: float  # ??�格
-    profit: float  # ?��?�� (?��?��??��??)
+    is_long: bool
+    is_enter: bool
+    price: float
+    profit: float
     real_profit: float
-    tag: str  # 交�?��?�籤
+    tag: str
 
 
 @dataclass

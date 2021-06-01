@@ -122,13 +122,21 @@ class PivotTableUISmartWrapper extends Component {
 
     state = {pivotState: null}
 
-    componentWillReceiveProps(nextProps) {
-        const {result} = nextProps
-        let {pivotState} = nextProps
-        if (result !== null && result.length > 0) {
-            pivotState.data = result
+    static getDerivedStateFromProps(props, state) {
+        const {result, pivotState} = props
+        const prevPivotState = state.pivotState
+        if (result !== null) {
+            data = [...result]
+        } else {
+            data = []
         }
-        this.setState({pivotState: pivotState});
+        if (prevPivotState === null) {
+            pivotState.data = data
+            return {pivotState}
+        } else {
+            prevPivotState.data = data
+            return prevPivotState
+        }
     }
 
     render() {
@@ -150,7 +158,9 @@ class PivotTableUISmartWrapper extends Component {
 
 PivotTableUISmartWrapper = connect(state => ({result: state.sideArea.result}))(PivotTableUISmartWrapper)
 
-class PivotTableTab extends React.Component {
+class PivotTableTab
+    extends React
+        .Component {
 
     state = {
         mode: 'demo',
@@ -183,7 +193,7 @@ class PivotTableTab extends React.Component {
         return (
             <div>
                 <div className="row">
-                    <PivotTableUISmartWrapper pivotState={pivotState} />
+                    <PivotTableUISmartWrapper pivotState={pivotState}/>
                 </div>
             </div>
         );

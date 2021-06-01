@@ -1,14 +1,11 @@
-from os import name
 from flask import Flask, request
 from flask_cors import CORS
-from datetime import datetime
 
 from AlgorithmTester import AlgorithmTester
+from Calculator import Calculator
 from DataFileManager import DataFileManager
 from ParameterParser import ParameterParser
 from utils import CommonResult, LogLevel
-from DataClasses import TradeAction
-from Calculator import Calculator
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -18,15 +15,6 @@ cors = CORS(app)
 def index():
     return '<h1>Hello, Flask!</h1>'
 
-
-# @app.route('/report', methods=['GET'])
-# def reports():
-#     if 'name' in request.args:
-#         name = request.args['name']
-#     else:
-#         return "Error: no name field provided."
-
-#     return send_from_directory('reports', name)
 
 @app.route('/get-all-algo', methods=['GET'])
 def get_all_algo():
@@ -92,7 +80,7 @@ def get_report(report_id):
     report_id = int(report_id)
     try:
         report = df_manager.get_report(report_id)
-        if (report != -1):
+        if report != -1:
             return CommonResult(LogLevel.INFO, "Success get the report of report_id:{}".format(report_id),
                                 report).to_json()
         else:
@@ -189,12 +177,11 @@ def get_algo_info(algo_id):
 
 @app.route('/single-test', methods=['POST'])
 def single_test():
-
-    algo_id     = int(request.json['algo_id'])
-    start_date  = request.json['product']['start_date']
-    end_date    = request.json['product']['end_date']
-    slip        = float(request.json['product']['slip'])
-    parameters  = ParameterParser.single_parameters_parse(request.json)
+    algo_id = int(request.json['algo_id'])
+    start_date = request.json['product']['start_date']
+    end_date = request.json['product']['end_date']
+    slip = float(request.json['product']['slip'])
+    parameters = ParameterParser.single_parameters_parse(request.json)
 
     try:
         tester = AlgorithmTester()
@@ -231,12 +218,11 @@ def single_test():
 
 @app.route('/batch-test', methods=['POST'])
 def batch_test():
-
-    algo_id     = int(request.json.get("algo_id", None))
-    start_date  = request.json['product']['start_date']
-    end_date    = request.json['product']['end_date']
-    slip        = request.json['product']['slip']
-    parameters  = ParameterParser.batch_parameters_parse(request.json)
+    algo_id = int(request.json.get("algo_id", None))
+    start_date = request.json['product']['start_date']
+    end_date = request.json['product']['end_date']
+    slip = request.json['product']['slip']
+    parameters = ParameterParser.batch_parameters_parse(request.json)
 
     try:
         tester = AlgorithmTester()

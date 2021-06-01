@@ -20,9 +20,9 @@ class LogLevel:
 
 class CommonResult:
     def __init__(self, code: int, msg: str, data=None):
-        self.code = code  # {0: Error, 1: Warning, 2: Info, 3: Debug}
-        self.msg = msg  # log message(e.g. code==2:??ºä??éº¼å??)
-        self.data = data  # json object
+        self.code = code
+        self.msg = msg
+        self.data = data
 
     def to_json(self):
         return jsonify(code=self.code, msg=self.msg, data=self.data)

@@ -10,7 +10,6 @@ class App extends React.Component {
     }
 
     render() {
-        const {algoId} = this.props
         return (
             <BrowserRouter>
                 <div style={{background:"#E9EBED"}}>
