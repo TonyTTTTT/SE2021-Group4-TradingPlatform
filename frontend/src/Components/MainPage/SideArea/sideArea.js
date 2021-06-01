@@ -104,6 +104,8 @@ class SideArea extends React.Component {
             param_format: {},
             product: {name: "", start_date: "", end_date: "", slip: ""},
             parameter: [],
+            algo_name: '',
+            algo_version: '',
         };
     }
 
@@ -115,6 +117,8 @@ class SideArea extends React.Component {
             this.setState({algo_id: this.props.menu.selectedAlgoID});
             const res_param_format = response.data.data.parameter;
             this.setState({param_format: res_param_format});
+            this.setState({algo_name: response.data.data.name});
+            this.setState({algo_version: response.data.data.version});
             console.log(res_param_format);
             console.log(this.state.param_format);
         },
@@ -413,7 +417,7 @@ class SideArea extends React.Component {
                     <Button variant="outline-dark" href="/">Home</Button>
                 </Row>
                 <Row>
-                    <h1>{algo_info['name']}</h1>
+                    <h1>{this.state.algo_name}</h1>
                 </Row>
                 <Tab.Container defaultActiveKey="switch test" id="switch test"
                 style={{height: "100%"}} >
@@ -438,7 +442,7 @@ class SideArea extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>version</td>
-                                    <td>{algo_info['version']}</td>
+                                    <td>{this.state.algo_version}</td>
                                 </tr>
                                 <tr>
                                     <td>ApplyProduct</td>
@@ -504,7 +508,7 @@ class SideArea extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>version</td>
-                                    <td>{algo_info['version']}</td>
+                                    <td>{this.state.algo_version}</td>
                                 </tr>
                                 <tr>
                                     <td>ApplyProduct</td>
