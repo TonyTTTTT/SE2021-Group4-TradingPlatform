@@ -1,6 +1,6 @@
 import React ,{ useState, useEffect, useRef}from 'react';
 import { AgGridColumn, AgGridReact} from 'ag-grid-react';
-import { Row, Col, Nav, Tab, Spinner} from 'react-bootstrap';
+import { Row, Col, Nav, Tab, Spinner, Navbar} from 'react-bootstrap';
 import { connect } from "react-redux";
 import axios from "axios";
 import Stackedit from "stackedit-js";
@@ -81,9 +81,28 @@ const Menu = (props) => {
           } else {
             // do componentDidUpdate logic
             if(props.menu.deleteSignal===true){
-                algoGridApi.applyTransaction({ remove: algoGridApi.getSelectedRows() });
-                props.signalDeleteAlgo();
-            } 
+                if(tabKey=="Algo"){
+                    axios.delete('/api2/delete-algo/' + props.menu.selectedAlgoID).then(
+                        response => {
+                            //action dispatch to menu
+                            algoGridApi.applyTransaction({ remove: algoGridApi.getSelectedRows() });
+                            props.signalDeleteAlgo();
+                        },error =>{
+                            console.log(error.message)
+                        } 
+                    )
+                }else{
+                    axios.delete('/api2/delete-report/' + reportGridApi.getSelectedRows()[0].ID).then(
+                        response => {
+                            //action dispatch to menu
+                            reportGridApi.applyTransaction({ remove: reportGridApi.getSelectedRows() });
+                            props.signalDeleteAlgo();
+                        },error =>{
+                            console.log(error.message)
+                        } 
+                    ) 
+                }
+            }
           }
     }, [algoGridApi,selectedRow,props.menu.deleteSignal])
 
@@ -169,14 +188,15 @@ const Menu = (props) => {
             onSelect={(k) => onTabSelect(k)}>
             <Row style={{height:"100%"}}>
                <Col style={{width:"100%"}}> 
-                    <Nav variant="tabs" className="flex-row" style={{height:45}}>
-                        <Nav.Item>
-                        <Nav.Link eventKey="Algo">Algorithms{" "}<Spinner className= {algoSpinnerClass} display size='sm' animation="border" role="status"/></Nav.Link>
+                    <Nav  variant="tabs" className="flex-row" style={{height:45}}>
+                        <Nav.Item >
+                        <Nav.Link  eventKey="Algo">Algorithms{" "}<Spinner className= {algoSpinnerClass} display size='sm' animation="border" role="status"/></Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                        <Nav.Link eventKey="Report">Report{" "}<Spinner className={reportSpinnerClass} size='sm' animation="border" role="status"/></Nav.Link>
+                        <Nav.Link  eventKey="Report">Report{" "}<Spinner className={reportSpinnerClass} size='sm' animation="border" role="status"/></Nav.Link>
                         </Nav.Item>
                     </Nav>
+
                     <Tab.Content style={{height:"90%"}}>
                         <Tab.Pane eventKey="Algo" style={{height:"100%",width:"100%"}}>
                         <div className="ag-theme-alpine-dark" style={{height:"100%",width:"100%"}}>
