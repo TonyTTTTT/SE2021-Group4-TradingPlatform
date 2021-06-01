@@ -1,6 +1,6 @@
 import React ,{ useState, useEffect, useRef}from 'react';
 import { AgGridColumn, AgGridReact} from 'ag-grid-react';
-import { Row, Col, Nav, Tab } from 'react-bootstrap';
+import { Row, Col, Nav, Tab, Spinner} from 'react-bootstrap';
 import { connect } from "react-redux";
 import axios from "axios";
 import Stackedit from "stackedit-js";
@@ -64,9 +64,11 @@ const mapDispatchToProps = dispatch => {
 const Menu = (props) => {
     // algoGrid
     const [algoGridApi, setAlgoGridApi] = useState(null);
+    const [selectedRow,setSelectedRow] = useState(null);
+    const [algoSpinnerClass,setAlgoSpinnerClass] =useState("visible")
     // reportGrid
     const [reportGridApi, setReportGridApi] = useState(null);
-    const [selectedRow,setSelectedRow] = useState(null);
+    const [reportSpinnerClass,setReportSpinnerClass] =useState("visible")
     const stackedit = new Stackedit();
     
     const [tabKey, setTabKey] = useState('Algo');
@@ -102,6 +104,7 @@ const Menu = (props) => {
 
                 props.setAlgoData(data)
                 setAlgoGridApi(params.api);
+                setAlgoSpinnerClass("invisible")
             },error => {console.log(error.message)}
         )       
     };
@@ -126,9 +129,11 @@ const Menu = (props) => {
                 data.forEach((element) => {element.Algo = element.algo_title; delete element.algo_title;});
                 data.forEach((element) => {element.ID = element.id; delete element.id;});
                 data.forEach((element) => {element.Title = element.title; delete element.title;});
+                data.forEach((element) => {element.Last_Modified = element.lastModified; delete element.lastModified;});
               
                 props.setReportData(data)
                 setReportGridApi(params.api);
+                setReportSpinnerClass("invisible")
             },error => {console.log(error.message)}
         )
     }
@@ -166,10 +171,10 @@ const Menu = (props) => {
                <Col style={{width:"100%"}}> 
                     <Nav variant="tabs" className="flex-row" style={{height:45}}>
                         <Nav.Item>
-                        <Nav.Link eventKey="Algo">Algorithms</Nav.Link>
+                        <Nav.Link eventKey="Algo">Algorithms{" "}<Spinner className= {algoSpinnerClass} display size='sm' animation="border" role="status"/></Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                        <Nav.Link eventKey="Report">Report</Nav.Link>
+                        <Nav.Link eventKey="Report">Report{" "}<Spinner className={reportSpinnerClass} size='sm' animation="border" role="status"/></Nav.Link>
                         </Nav.Item>
                     </Nav>
                     <Tab.Content style={{height:"90%"}}>

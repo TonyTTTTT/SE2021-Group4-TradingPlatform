@@ -208,9 +208,7 @@ class DataFileManager(metaclass=Singleton):
             * A list that contain all report info: list
         """
         res = self.data["report"]
-        for report in res:
-            algo = self._find_algorithm(report['algo_id'])
-            report['algo_title'] = algo['title']
+        
 
         return res
 
@@ -249,7 +247,9 @@ class DataFileManager(metaclass=Singleton):
         if not exists:
             report_path.touch()
             report_id = self._generate_report_id()
-            report_info = ReportInfo(report_id, algo_id, title, str(report_path), time.asctime(time.localtime()))
+            algo = self._find_algorithm(report['algo_id'])
+            report_info = ReportInfo(report_id, algo_id, title,  time.asctime(time.localtime()),str(report_path),algo['title'])
+
             self.data[REPORT].append(report_info.__dict__)
             if algo_id not in self.algo_id2report_ids:
                 self.algo_id2report_ids[algo_id] = []
