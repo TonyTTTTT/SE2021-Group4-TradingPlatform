@@ -242,16 +242,25 @@ def batch_test():
         tester = AlgorithmTester()
         tass = tester.batch_test(algo_id, start_date, end_date, parameters)
 
-        tsss = []
-        for tas in tass:
+        output_list = []
+
+        for tas, pas in zip(tass, parameters):
             calculator = Calculator()
             calculator.set_slip(slip)
             tss = calculator.get_batch_result(tas)
-            tsss.append(tss)
+
+            output_dict = {}
+            for ts in tss:
+                output_dict[ts.stat] = ts.value
+
+            for pa in pas:
+                output_dict[pa.name] = pa.value
+
+            output_list.append(output_dict)
 
         message = 'Succeed to send trade stats'
 
-        return CommonResult(LogLevel.INFO, message, tsss).to_json()
+        return CommonResult(LogLevel.INFO, message, output_list).to_json()
     except:
         message = 'Uncertain errors occurred'
         return CommonResult(LogLevel.ERROR, message, None).to_json()
