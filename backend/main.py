@@ -69,8 +69,8 @@ def update_algorithm():
     try:
         algo_id = df_manager.update_algorithm(algo_id, content)
         if algo_id == -1:
-            return CommonResult(LogLevel.ERROR, "Error saving report", None).to_json()
-        return CommonResult(LogLevel.DEBUG, "Update algorithm No. {}".format(str(algo_id)), None).to_json()
+            return CommonResult(LogLevel.ERROR, "Error saving algoritnm", None).to_json()
+        return CommonResult(LogLevel.INFO, "Update algorithm!", None).to_json()
     except:
         return CommonResult(LogLevel.ERROR, "Error Upadating algorithm", None).to_json()
 
@@ -190,7 +190,6 @@ def get_algo_info(algo_id):
 @app.route('/single-test', methods=['POST'])
 def single_test():
 
-    # request.json是送過來的input json
     algo_id     = int(request.json['algo_id'])
     start_date  = request.json['product']['start_date']
     end_date    = request.json['product']['end_date']

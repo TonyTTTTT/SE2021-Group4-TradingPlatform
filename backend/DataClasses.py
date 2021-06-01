@@ -39,8 +39,9 @@ class ReportInfo:
     id: int
     algo_id: int
     title: str
-    path: str
     lastModified: str
+    path: str
+    algo_title:str
 
 
 # Product
@@ -69,7 +70,7 @@ class TradeResult:
     time: datetime  # ??????
     time_stamp: str
     net_position: int
-    is_long: bool  # True: ???買�?��m, False: ???�?後買
+    is_long: bool  # True: ???買�?��m, False: ???�??後買
     is_enter: bool  # True: ??�場, False: ?��?��
     price: float  # ??�格
     profit: float  # ?��?�� (?��?��??��??)

@@ -1,114 +1,48 @@
-import tkinter as tk
-import sketch as sketch
-import cartoon as cartoon
-import old as old
-import oil as oil
-import water as water
 import cv2
-# pip install pillow
-from PIL import Image, ImageTk
+import numpy as np
+from PIL import Image
 
 
-class Window(tk.Frame):
-    def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
-        self.master = master
-        self.frame1 = tk.Frame(self.master)
-        self.frame1.pack(side='left')
-        self.frame2 = tk.Frame(self.master)
-        self.frame2.pack(side ='left')
-        self.frame3 = tk.Frame(self.master)
-        self.frame3.pack(side ='right')
+def waterColor(input_filename, output_filename):
+    # Parameters
+    average_square = (5, 5)
+    sigma_x = 0
+    k=20
+    line_average = (9, 9)
+    line_sigma_x = 0
+    multi_w = 0.4
+    paint_w = 0.9
+    gamma = 1.5
+    method = 2
 
-        self.styleOption = tk.IntVar() 
-        self.styleOption.set(4)
-        self.labelImg1 = tk.Label(self.frame1,background="green")
-        self.labelImg1.pack(side='left')
-        self.labelImg2 = tk.Label(self.frame3,background="red")
-        self.labelImg2.pack(side='right')
+    image = cv2.imread(input_filename, 1)
 
-        #frame2
-        inputLabel = tk.Label(self.frame2,text = "Input image:")
-        inputLabel.grid(column=0, row=1, sticky="W")
-        self.input = tk.Entry(self.frame2)
-        self.input.insert(tk.END,'./test_image/villa.jpg')
-        self.input.grid(column=0, row=2, sticky="W")
+    # GaussianBlur
+    image_blurring = cv2.GaussianBlur(image, average_square, sigma_x)
+    w , h , channel = image_blurring.shape
+    image_reshape = np.zeros((w , h ,3), np.uint8)
+    
+    # Quantization, GaussianBlur
+    image_reshape = image_blurring // k * k
+    paint = cv2.GaussianBlur(image_reshape, average_square, sigma_x)
 
-        outputLabel = tk.Label(self.frame2,text = "Output image:")
-        outputLabel.grid(column=0, row=3, sticky="W")
-        self.output = tk.Entry(self.frame2)
-        self.output.insert(tk.END,'output.jpg')
-        self.output.grid(column=0, row=4, sticky="W")
+    # Sobel edge detection
+    image_preprocessed  = cv2.cvtColor(cv2.GaussianBlur(image, line_average, line_sigma_x), cv2.COLOR_BGR2GRAY)
 
-        r1 = tk.Radiobutton(self.frame2,  variable=self.styleOption, text='Old',value=1)
-        r2 = tk.Radiobutton(self.frame2,  variable=self.styleOption, text='Oil',value=2)
-        r3 = tk.Radiobutton(self.frame2,  variable=self.styleOption, text='Cartoon',value=3)
-        r4 = tk.Radiobutton(self.frame2,  variable=self.styleOption, text='Sketch',value=4)
-        r5 = tk.Radiobutton(self.frame2,  variable=self.styleOption, text='WaterColor',value=5)
+    # Canny edge detection
+    image_binary = cv2.Canny(image_preprocessed, threshold1 = 50, threshold2 = 55) 
+    image_binary = cv2.GaussianBlur(image_binary, average_square, sigma_x)
+    res, image_binary = cv2.threshold(image_binary, 90, 255, cv2.THRESH_BINARY_INV)
 
-        r1.grid(column=0, row=5, sticky="W")
-        r2.grid(column=0, row=6, sticky="W")
-        r3.grid(column=0, row=7, sticky="W")
-        r4.grid(column=0, row=8, sticky="W")
-        r5.grid(column=0, row=9, sticky="W")
-        self.bar = tk.Scale(self.frame2, label='Fade', from_=0.0, to=1.0, orient=tk.HORIZONTAL,
-             length=300, showvalue=0, tickinterval=0.1, resolution=0.1)
-        self.bar.grid(column=0, row=10)
-        
-        outputButton = tk.Button(self.frame2, text ="Output",height=3,width=10,command = self.outputImage)
-        outputButton.grid(column=0, row=13)
+    # Other procedures
+    w , h , channel = paint.shape
+    image_binary = np.where(image_binary > 0, 255, 0)
+    image_binary = np.dstack((image_binary, image_binary, image_binary))
+    QQ = np.multiply(paint, image_binary) // 255
+    result = np.array(QQ, np.uint8)
+    
+    d = cv2.addWeighted(result, multi_w, paint, paint_w, gamma)
+    
+    # Output the frame
+    cv2.imwrite(output_filename, d)
 
-        self.setImage1()
-        self.setImage2()
-        
-        self.pack(fill=tk.BOTH, expand=1)
-       
-    def outputImage(self):
-
-        self.setImage1()
-        self.setImage2()
-
-    def setImage1(self):
-        load = Image.open(self.input.get())
-        load.thumbnail( (500,500) )
-        render = ImageTk.PhotoImage(load)
-        self.labelImg1.configure(image = render)
-        self.labelImg1.image = render
-
-
-    def setImage2(self):
-        outImg = None
-        if  self.styleOption.get() == 1 :
-            old.oldPainting(self.input.get(),self.output.get())
-        elif self.styleOption.get() == 2:
-            oil.oilPainting(self.input.get(),self.output.get(), 3, 8, 2)
-        elif self.styleOption.get() == 3:
-            cartoon.cartoonPainting(self.input.get(),self.output.get())
-        elif self.styleOption.get() == 4:
-            sketch.sketchPainting(self.input.get(),self.output.get())
-        elif self.styleOption.get() == 5:
-            water.waterColor(self.input.get(),self.output.get())
-        # blend and resize
-        img = self.blend(cv2.imread(self.input.get()),cv2.imread(self.output.get()),self.bar.get())
-        cv2.imwrite(self.output.get(), img)
-
-        load = Image.open(self.output.get())
-        load.thumbnail((500,500),Image.ANTIALIAS)
-        render = ImageTk.PhotoImage(load)
-         
-        self.labelImg2.configure(image = render)
-
-        self.labelImg2.image = render
- 
-    def blend(self,src1,src2,fade):
-        overlapping = cv2.addWeighted(src1,fade , src2, 1.0-fade, 0)
-        return overlapping
-
-
-
-root = tk.Tk()
-app = Window(root)
-
-root.wm_title("Tkinter window")
-root.geometry("1024x768")
-root.mainloop()
