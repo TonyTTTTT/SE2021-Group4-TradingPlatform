@@ -15,8 +15,8 @@ class AssetDataLoader:
         if id != 0:
             return -2
 
-        min_date = datetime.fromisoformat('2004-07-01')
-        max_date = datetime.fromisoformat('2021-04-22')
+        min_date = datetime.fromisoformat('2000-07-01')
+        max_date = datetime.fromisoformat('2100-01-22')
 
         if start != None and end != None:
             start = datetime.fromisoformat(start)
