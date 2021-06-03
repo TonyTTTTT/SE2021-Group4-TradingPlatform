@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                 cd ~/project/school/se/Web-Application/frontend
-                pwd
+                git pull --rebase
                 '''
             }
         }
