@@ -13,6 +13,7 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                 cd frontend
+                pwd
                 npm install --force
                 '''
             }
@@ -21,6 +22,7 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                 cd frontend
+                pwd
                 CI='' npm run build 
                 '''
             }
@@ -33,8 +35,8 @@ pipeline {
 	}
 	post {
 	// Clean after build
-	always {
-		cleanWs(cleanWhenNotBuilt: false,
+	    always {
+		    cleanWs(cleanWhenNotBuilt: false,
 				deleteDirs: true,
 				disableDeferredWipeout: true,
 				notFailBuild: true,
