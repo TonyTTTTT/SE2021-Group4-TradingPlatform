@@ -20,6 +20,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''#!/bin/bash
+                cd frontend
                 CI='' npm run build 
                 '''
             }
