@@ -9,12 +9,18 @@ pipeline {
                 '''
             }
         }
-        stage('Build') {
+        stage('Install Dependency') {
             steps {
                 sh '''#!/bin/bash
                 cd frontend
                 npm install --force
-                npm run build
+                '''
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''#!/bin/bash
+                CI='' npm run build 
                 '''
             }
         }
