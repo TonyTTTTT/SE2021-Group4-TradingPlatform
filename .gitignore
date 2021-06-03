@@ -1,6 +1,8 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/macos,flask,react,vim
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,flask,react,vim
+
+### DataFileManager ###
+backend/info.json
 
 ### React.js ###
 */node_modules/
