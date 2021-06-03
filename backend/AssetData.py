@@ -21,10 +21,11 @@ class AssetDataLoader:
         if start != None and end != None:
             start = datetime.fromisoformat(start)
             end = datetime.fromisoformat(end)
-        elif start != None and end == None:
-            end = max_date
-        elif start == None and end != None:
-            start = min_date
+        else:
+            if end == None:
+                end = max_date
+            if start == None:
+                start = min_date
 
         # data with spcified paramter not available
         if start < min_date or end > max_date:
@@ -50,7 +51,7 @@ class AssetDataLoader:
                 if start <= data['time'] <= end:
                     data_new.append(data)
 
-            return data_new
+        return data_new
 
 
 if __name__ == "__main__":
