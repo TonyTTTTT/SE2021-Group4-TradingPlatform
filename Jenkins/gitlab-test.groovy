@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Install Dependency') {
             steps {
-                sh '''
+                sh '''#!/bin/bash
                 cd ~/project/school/se/Web-Application/frontend &&
                 pwd &&
                 npm install --force
@@ -19,11 +19,14 @@ pipeline {
             }
         }
         stage('Build') {
+            environment {
+                CI = false
+            }
             steps {
-                sh '''
+                sh '''#!/bin/bash
                 cd ~/project/school/se/Web-Application/frontend &&
                 pwd &&
-                CI=false npm run build
+                npm run build
                 '''
             }
         }
