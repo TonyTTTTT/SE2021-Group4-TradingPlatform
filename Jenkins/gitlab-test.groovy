@@ -17,5 +17,8 @@ pipeline {
                 '''
             }
         }
+        stage('Test') {
+            echo 'no test yet'
+        }
     }
 }
