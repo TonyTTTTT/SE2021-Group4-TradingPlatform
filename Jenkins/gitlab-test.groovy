@@ -40,6 +40,7 @@ pipeline {
 	// Clean after build
 	    always {
 		    cleanWs(cleanWhenNotBuilt: false,
+		        cleanWhenFailure: true
 				deleteDirs: true,
 				disableDeferredWipeout: true,
 				notFailBuild: true,
