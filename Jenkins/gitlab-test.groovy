@@ -4,6 +4,7 @@ pipeline {
         stage('Compile') {
             steps {
                 echo 'first stage, edit by Tony, v5' 
+                echo 'Echo test'
             }
         }
         stage('Build') {
