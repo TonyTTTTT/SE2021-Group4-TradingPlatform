@@ -10,6 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/frontend
                 pwd
                 '''
             }
