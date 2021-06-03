@@ -23,7 +23,7 @@ pipeline {
                 sh '''
                 cd ~/project/school/se/Web-Application/frontend &&
                 pwd &&
-                CI='' npm run build
+                CI= npm run build
                 '''
             }
         }
