@@ -3,28 +3,27 @@ pipeline {
     stages {
         stage('Sync') {
             steps {
-                sh 'cd ~/project/school/se/Web-Application/'
-                sh 'git clean -x -f'
-                sh 'git pull --rebase'
+                sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
+                git pull --rebase
                 '''
             }
         }
         stage('Install Dependency') {
             steps {
-                sh 'cd ~/project/school/se/Web-Application/frontend'
-                sh 'pwd'
-                sh 'npm install --force'
+                sh '''#!/bin/bash
+                cd frontend
+                pwd
+                npm install --force
                 '''
             }
         }
         stage('Build') {
-            environment {
-                CI = 'false'
-            }
             steps {
-                sh 'cd ~/project/school/se/Web-Application/frontend'
-                sh 'pwd'
-                sh 'npm run build'
+                sh '''#!/bin/bash
+                cd frontend
+                pwd
+                CI='' npm run build 
                 '''
             }
         }
