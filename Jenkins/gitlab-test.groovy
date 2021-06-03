@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Compile') {
             steps {
-                echo 'first stage, edit by Tony, v7' 
+                echo 'first stage, edit by Tony, v8' 
                 echo 'Echo test'
             }
         }
