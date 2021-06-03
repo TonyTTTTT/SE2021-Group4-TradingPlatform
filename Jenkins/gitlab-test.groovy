@@ -13,7 +13,7 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                 cd frontend
-                npm install
+                npm install --force
                 npm run build
                 '''
             }
