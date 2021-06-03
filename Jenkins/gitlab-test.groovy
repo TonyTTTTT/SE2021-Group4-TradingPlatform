@@ -3,30 +3,28 @@ pipeline {
     stages {
         stage('Sync') {
             steps {
-                sh '''#!/bin/bash
-                cd ~/project/school/se/Web-Application/
-                git pull --rebase
+                sh 'cd ~/project/school/se/Web-Application/'
+                sh 'git clean -x -f'
+                sh 'git pull --rebase'
                 '''
             }
         }
         stage('Install Dependency') {
             steps {
-                sh '''#!/bin/bash
-                cd ~/project/school/se/Web-Application/frontend &&
-                pwd &&
-                npm install --force
+                sh 'cd ~/project/school/se/Web-Application/frontend'
+                sh 'pwd'
+                sh 'npm install --force'
                 '''
             }
         }
         stage('Build') {
             environment {
-                CI = false
+                CI = 'false'
             }
             steps {
-                sh '''#!/bin/bash
-                cd ~/project/school/se/Web-Application/frontend &&
-                pwd &&
-                npm run build
+                sh 'cd ~/project/school/se/Web-Application/frontend'
+                sh 'pwd'
+                sh 'npm run build'
                 '''
             }
         }
@@ -40,7 +38,6 @@ pipeline {
 	// Clean after build
 	    always {
 		    cleanWs(cleanWhenNotBuilt: false,
-		        cleanWhenFailure: true,
 				deleteDirs: true,
 				disableDeferredWipeout: true,
 				notFailBuild: true,
