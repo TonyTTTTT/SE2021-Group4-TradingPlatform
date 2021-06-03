@@ -18,7 +18,9 @@ pipeline {
             }
         }
         stage('Test') {
-            echo 'no test yet'
+            steps {
+                echo 'no test yet'    
+            }
         }
     }
 }
