@@ -157,14 +157,16 @@ const Header = (props) => {
                         <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroup-sizing-sm">Title</InputGroup.Text>
                         </InputGroup.Prepend>
-                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" 
-                        onChange={ e => setModalInput({...modalInput, title : e.target.value })} />
+                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                        onKeyPress = { e => { if(e.charCode===32){e.preventDefault(); alert( "No white-space !")}}}
+                        onChange={  e => {setModalInput({...modalInput, title : e.target.value })}} />
                     </InputGroup>
                     <InputGroup size="sm" className="mb-3">
                         <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroup-sizing-sm">Version</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" 
+                        onKeyPress = { e => {if(e.charCode===32){e.preventDefault(); alert("No white-space !")}}}
                          onChange={ e => setModalInput({...modalInput, version : e.target.value })} />
                     </InputGroup>
                     <InputGroup size="sm" className="mb-3">

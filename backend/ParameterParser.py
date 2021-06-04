@@ -30,7 +30,7 @@ class ParameterParser:
 
         return output_parameters
 
-    # å°‡ input JSON dictionary ä¸­çš„ parameters é …ç›®è½‰æ›æˆ List[Parameter]
+    # å°? input JSON dictionary ä¸­ç?? parameters ????›®è½‰æ?›æ?? List[Parameter]
     @staticmethod
     def single_parameters_parse(input_json: dict) -> List[Parameter]:
 
@@ -143,5 +143,5 @@ print(ParameterParser.single_parameters_parse(input_json))
 """
 
 # Test #3
-ret = ParameterParser.parameter_format_parse('algo_files/BuyAndHold/first_version.py')
-print(ret)
+# ret = ParameterParser.parameter_format_parse('algo_files/BuyAndHold/first_version.py')
+# print(ret)

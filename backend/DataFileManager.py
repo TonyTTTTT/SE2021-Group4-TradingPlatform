@@ -37,6 +37,9 @@ class DataFileManager(metaclass=Singleton):
         self.report_id2report_info = {}
 
         maxAlgoID = 0
+        self.next_algo_id = 0
+        self.next_report_id = 0
+
         for i, algo_info in enumerate(self.data[ALGO]):
             maxAlgoID = max(maxAlgoID, algo_info["id"])
             if i == len(self.data[ALGO]) - 1:
@@ -94,9 +97,9 @@ class DataFileManager(metaclass=Singleton):
         return self.data["algo"]
 
     def create_algorithm(self, title: str, version: str, description: str, lastModified: str, content: str):
-        p = Path(ALGO_DIR) / title
+        p = Path(ALGO_DIR) / ('algo_'+title)
         p.mkdir(parents=True, exist_ok=True)
-        algo_path = Path(ALGO_DIR) / title / (version + '.py')
+        algo_path = Path(ALGO_DIR) / ('algo_'+title) / ('ver_'+ version + '.py')
 
         exists = algo_path.exists()
         if not exists:
