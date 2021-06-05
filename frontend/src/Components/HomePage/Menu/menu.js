@@ -205,7 +205,7 @@ const Menu = (props) => {
                                 rowSelection={'single'}
                                 animateRows={true}
                                 onGridReady={onAlgoGridReady}
-                                autoGroupColumnDef={{ minWidth: 200, headerName:"Title"}}
+                                autoGroupColumnDef={{ minWidth: 200, headerName:"Title", field:"Title"}}
                                 enableRangeSelection={true}
                                 onRowSelected={onAlgoRowSelected}
                                 onRowDoubleClicked = {onAlgoDoubleClicked}
@@ -225,7 +225,7 @@ const Menu = (props) => {
                                 defaultColDef={{flex: 1,minWidth: 180,filter: true,resizable: true,sortable: true}}
                                 rowSelection={'single'}
                                 animateRows={true}
-                                autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm"}}
+                                autoGroupColumnDef={{ minWidth: 200 , headerName:"Algorithm",field:"Algo"}}
                                 enableRangeSelection={true}
                                 onGridReady={onReportGridReady}
                                 rowData = {props.menu.reportData}
