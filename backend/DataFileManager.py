@@ -227,6 +227,7 @@ class DataFileManager(metaclass=Singleton):
         output:
             report_id: None if fail
         """
+        Path(REPORT_DIR).mkdir(parents=True, exist_ok=True)
         report_path = Path(REPORT_DIR) / (title + '.md')
         exists = report_path.exists()
         if not exists:
