@@ -72,7 +72,7 @@ class ParameterParser:
                 all_values = input_parameter.value
             elif input_parameter.type == 'num':
                 start, stop, step = input_parameter.value
-                all_values = np.arange(start, stop, step)
+                all_values = np.arange(start, stop, step).tolist()
 
             for this_value in all_values:
                 p = Parameter(name=input_parameter.name, type=input_parameter.type, value=this_value)

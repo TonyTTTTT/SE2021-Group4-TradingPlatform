@@ -48,6 +48,7 @@ class AlgorithmTester:
             algo_info = df_manager.get_algo_info(algo_id)
 
             module_name = algo_info['path'].rsplit('.', 1)[0].replace('/', '.')
+            module_name = module_name.replace('\\', '.')
             mod = import_module(module_name)
             cls = inspect.getmembers(mod, inspect.isclass)
             class_name = next(filter(lambda x: x[1].__module__ == module_name, cls), None)[0]
