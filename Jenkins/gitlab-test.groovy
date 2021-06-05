@@ -12,6 +12,7 @@ pipeline {
         stage('Install Dependency') {
             steps {
                 sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
                 cd frontend
                 pwd
                 npm install --force
@@ -21,6 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
                 cd frontend
                 pwd
                 CI='' npm run build 
