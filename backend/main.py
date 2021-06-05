@@ -153,6 +153,7 @@ def get_algo_info(algo_id):
     df_manager = DataFileManager()
     algo_id = int(algo_id)
 
+    print("gunicorn")
     try:
         algo_info = df_manager.get_algo_info(algo_id)
         if algo_info is None:
@@ -272,4 +273,3 @@ def batch_test():
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
-    print("gunicorn")
