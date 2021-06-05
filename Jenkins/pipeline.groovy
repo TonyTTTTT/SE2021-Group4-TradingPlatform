@@ -15,6 +15,7 @@ pipeline {
                 sh '''#!/bin/bash
                 echo 'cd into delivery repository to pull the latest code'
                 cd ~/project/school/se/Web-Application/
+                git reset --hard HEAD
                 git pull --rebase
                 '''
             }
