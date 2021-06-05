@@ -3,22 +3,41 @@ pipeline {
     stages {
         stage('Sync') {
             steps {
-                sh 'Jenkins/script/sync.sh'
+                sh '''#!/bin/bash
+                echo 'cd into delivery repository to pull the latest code'
+                cd ~/project/school/se/Web-Application/
+                git pull --rebase
+                '''
             }
         }
         stage('Install Dependency') {
             steps {
-                sh 'Jenkins/script/install_dependency.sh'
+                sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
+                cd frontend
+                pwd
+                npm install --force
+                '''
             }
         }
         stage('Build') {
             steps {
-                sh 'Jenkins/script/build.sh'
+                sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
+                cd frontend
+                pwd
+                CI='' npm run build 
+                '''
             }
         }
         stage('Test') {
             steps {
-                sh 'Jenkins/script/test.sh'
+                sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
+                cd backend
+                pwd
+                python3 -m pytest test_AssetData.py
+                '''
             }
         }
 	}
