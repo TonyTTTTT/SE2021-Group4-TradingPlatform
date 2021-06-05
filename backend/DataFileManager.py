@@ -185,6 +185,9 @@ class DataFileManager(metaclass=Singleton):
         if report is not None and os.path.exists(report['path']):
             os.remove(report['path'])
         print(self.data)
+        algo_id = report['algo_id']
+        self.algo_id2report_ids[algo_id].remove(report_id)
+        self.report_id2report_info[report_id] = None
 
     def get_all_report(self):
         """
