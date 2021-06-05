@@ -155,6 +155,10 @@ def get_algo_info(algo_id):
 
     try:
         algo_info = df_manager.get_algo_info(algo_id)
+        if algo_info is None:
+            message = 'Algo info #{} not exists'.format(algo_id)
+            return CommonResult(LogLevel.INFO, message, '').to_json()
+        
         parameters = ParameterParser.parameter_format_parse(algo_info['path'])
 
         output_dict = {
@@ -164,10 +168,8 @@ def get_algo_info(algo_id):
             'parameter': parameters
         }
 
-        if algo_info is None:
-            message = 'Algo info #{} not exists'.format(algo_id)
-        else:
-            message = 'Get algo info #{} successfully'.format(algo_id)
+
+        message = 'Get algo info #{} successfully'.format(algo_id)
 
         return CommonResult(LogLevel.INFO, message, output_dict).to_json()
     except:
