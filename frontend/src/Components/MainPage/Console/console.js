@@ -62,7 +62,6 @@ class Console extends Component {
             <div>
                 <div className="logbox"><ul>{renderLog}</ul></div>
                 <button onClick={this.clearConsole}>Clear</button>
-                <button onClick={()=>this.props.log({level: 2, text: 'test msg'})}>Add</button>
             </div>
         )
     }
