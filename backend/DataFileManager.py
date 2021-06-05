@@ -32,6 +32,8 @@ class DataFileManager(metaclass=Singleton):
         """
         load json data from info_path
         """
+        if not os.path.exists(self.info_path):
+            Path(self.info_path).touch()
         if os.stat(self.info_path).st_size == 0:
             self.data = {"algo": [], "report": [], "parameter_set": []}
         else:
