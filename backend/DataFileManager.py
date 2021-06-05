@@ -2,23 +2,28 @@ import atexit
 import json
 import os
 import time
+import threading
 from pathlib import Path
 
 from DataClasses import ReportInfo, AlgoInfo, Product
 from utils import META_INFO_PATH, REPORT, ALGO_ID, ID, REPORT_DIR, ALGO_DIR, PRODUCT_INFO_PATH, ALGO
 
+lock = threading.Lock()
 
 class Singleton(type):
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            with lock:
+                if cls not in cls._instances:
+                    cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
 class DataFileManager(metaclass=Singleton):
     def __init__(self):
+        print("== init ==")
         self.info_path = META_INFO_PATH
         self.product_info_path = PRODUCT_INFO_PATH
         self._load_info()
@@ -61,6 +66,7 @@ class DataFileManager(metaclass=Singleton):
         """
         with open(self.info_path, 'w') as f:
             json.dump(self.data, f, indent=2)
+            print("== saved ==")
 
     def _generate_algo_id(self) -> int:
         """
