@@ -60,7 +60,7 @@ const Header = (props) => {
     }
     const onNewButtonClick = () => {
         //reset modal input
-        setModalInput({title:null,version:null,description:null});
+        
         setShow(true);
     };
     const onUpdateButtonClick = () => {
@@ -192,7 +192,7 @@ const Header = (props) => {
                     <Button variant="primary" onClick= {onConfirmButtonClick}>
                         Confirm
                     </Button>
-                    <Button variant="secondary" onClick={()=>{setShow(false);}}>
+                    <Button variant="secondary" onClick={()=>{setModalInput({title:null,version:null,description:null});setShow(false);}}>
                         Exit
                     </Button>  
                 </Modal.Footer>
