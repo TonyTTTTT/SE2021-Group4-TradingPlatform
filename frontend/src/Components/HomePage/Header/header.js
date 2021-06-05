@@ -59,6 +59,8 @@ const Header = (props) => {
         });
     }
     const onNewButtonClick = () => {
+        //reset modal input
+        setModalInput({title:null,version:null,description:null});
         setShow(true);
     };
     const onUpdateButtonClick = () => {
@@ -68,6 +70,7 @@ const Header = (props) => {
         props.signalDeleteAlgo();
     };
     const onNewInputChange =  async (event) => {
+        
         //read file 
         var UTCtime = event.target.files[0].lastModifiedDate;
         var dateTime = UTCtime.getFullYear()+'-'+(UTCtime.getMonth()+1)+'-'+UTCtime.getDate()+' '+UTCtime.getHours() + ":" +    UTCtime.getMinutes() + ":" + UTCtime.getSeconds();
@@ -124,8 +127,14 @@ const Header = (props) => {
 
 	};
     const onConfirmButtonClick = () =>{
-        newInput.click();
-        setShow(false);
+        if(modalInput.title == null||modalInput.title == ""){
+            alert("Title is required !");
+        }else if(modalInput.version == null||modalInput.version==""){
+            alert("Version is required !");
+        }else{
+            newInput.click();
+            setShow(false);
+        }
     }
     return (
         <Container className="d-flex justify-content-between flex-column" style={{height:"100%",width:"100%"}}>
@@ -158,7 +167,7 @@ const Header = (props) => {
                             <InputGroup.Text id="inputGroup-sizing-sm">Title</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-                        onKeyPress = { e => { if(e.charCode===32){e.preventDefault(); alert( "No white-space !")}}}
+                        onKeyPress = { e => { if(e.charCode=== 32|| e.charCode===46){e.preventDefault();}}}
                         onChange={  e => {setModalInput({...modalInput, title : e.target.value })}} />
                     </InputGroup>
                     <InputGroup size="sm" className="mb-3">
@@ -166,7 +175,7 @@ const Header = (props) => {
                             <InputGroup.Text id="inputGroup-sizing-sm">Version</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" 
-                        onKeyPress = { e => {if(e.charCode===32){e.preventDefault(); alert("No white-space !")}}}
+                        onKeyPress = { e => {if(e.charCode=== 32|| e.charCode===46){e.preventDefault();}}}
                          onChange={ e => setModalInput({...modalInput, version : e.target.value })} />
                     </InputGroup>
                     <InputGroup size="sm" className="mb-3">

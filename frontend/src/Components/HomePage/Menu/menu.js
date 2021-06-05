@@ -190,7 +190,7 @@ const Menu = (props) => {
                <Col style={{width:"100%"}}> 
                     <Nav  variant="tabs" className="flex-row" style={{height:45}}>
                         <Nav.Item >
-                        <Nav.Link  eventKey="Algo">Algorithms{" "}<Spinner className= {algoSpinnerClass} display size='sm' animation="border" role="status"/></Nav.Link>
+                        <Nav.Link  eventKey="Algo">Algorithm{" "}<Spinner className= {algoSpinnerClass} display size='sm' animation="border" role="status"/></Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                         <Nav.Link  eventKey="Report">Report{" "}<Spinner className={reportSpinnerClass} size='sm' animation="border" role="status"/></Nav.Link>
