@@ -12,6 +12,7 @@ class ParameterParser:
     def parameter_format_parse(filepath: str) -> List[dict]:
 
         module_name = filepath.rsplit('.', 1)[0].replace('/', '.')
+        module_name = module_name.replace('\\', '.')
         mod = import_module(module_name)
         cls = inspect.getmembers(mod, inspect.isclass)
         class_name = next(filter(lambda x: x[1].__module__ == module_name, cls), None)[0]
@@ -30,7 +31,7 @@ class ParameterParser:
 
         return output_parameters
 
-    # å°? input JSON dictionary ä¸­ç?? parameters ????›®è½‰æ?›æ?? List[Parameter]
+    # ï¿½? input JSON dictionary ä¸­ï¿½?? parameters ????ï¿½ï¿½è½‰ï¿½?ï¿½ï¿½?? List[Parameter]
     @staticmethod
     def single_parameters_parse(input_json: dict) -> List[Parameter]:
 
