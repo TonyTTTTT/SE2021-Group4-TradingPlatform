@@ -3,6 +3,8 @@
 
 ### DataFileManager ###
 backend/info.json
+backend/report_files
+backend/algo_files
 
 ### React.js ###
 */node_modules/
