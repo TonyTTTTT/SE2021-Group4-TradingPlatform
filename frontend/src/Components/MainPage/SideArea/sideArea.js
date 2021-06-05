@@ -245,6 +245,9 @@ class SideArea extends React.Component {
             for(let i=0;i<param_set.length;i++) {
                 if(param_set[i]['name']!=='product') {
                     let param_id = 'batch_param'+i;
+                    let batch_num_from_id = 'batch-num-from'+i;
+                    let batch_num_to_id = 'batch-num-to'+i;
+                    let batch_num_step_id = 'batch-num-step'+i;
                     if(param_set[i]['type']==='cat') {
                         list.push(
                         <tr>
@@ -262,9 +265,9 @@ class SideArea extends React.Component {
                             <td>{param_set[i]['name']}({param_set[i]['value']})</td>
                             <td>
                                 <Form id={param_id}>
-                                    <input type="text" p_type="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
-                                    <input type="text" p_type="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
-                                    <input type="text" p_type="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
+                                    <input type="text" id={batch_num_from_id} p_type="batch-num-from" name={param_set[i]['name']} placeholder="from" onChange={this.handleParamInput}/>{' '}
+                                    <input type="text" id={batch_num_to_id} p_type="batch-num-to" name={param_set[i]['name']} placeholder="to" onChange={this.handleParamInput}/>{' '}
+                                    <input type="text" id={batch_num_step_id} p_type="batch-num-step" name={param_set[i]['name']} placeholder="step" onChange={this.handleParamInput}/>
                                 </Form>
                             </td>
                         </tr>)
@@ -437,7 +440,9 @@ class SideArea extends React.Component {
                         document.getElementById("batch_param"+i+j).checked = false;
                 }
                 else {
-                    document.getElementById("batch_param"+i).value = "";
+                    document.getElementById("batch-num-from"+i).value = "";
+                    document.getElementById("batch-num-to"+i).value = "";
+                    document.getElementById("batch-num-step"+i).value = "";
                 }
                 
             }
