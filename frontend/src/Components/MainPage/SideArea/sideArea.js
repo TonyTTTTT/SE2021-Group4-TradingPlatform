@@ -112,12 +112,18 @@ class SideArea extends React.Component {
         axios.get('/api2/get-algo-info/' + this.props.menu.selectedAlgoID).then(
         response => {
             // this.run(response.data)
+            this.props.addLog(response.data);
             this.setState({algo_id: this.props.menu.selectedAlgoID});
-            const res_param_format = response.data.data.parameter;
-            this.setState({param_format: res_param_format});
-            this.setState({algo_name: response.data.data.name});
-            this.setState({algo_version: response.data.data.version});
-            console.log(res_param_format);
+            try {
+                const res_param_format = response.data.data.parameter;
+                this.setState({param_format: res_param_format});
+                console.log(res_param_format);
+                this.setState({algo_name: response.data.data.name});
+                this.setState({algo_version: response.data.data.version});
+            }
+            catch(err) {
+                console.log(err);
+            }
             console.log(this.state.param_format);
         },
         error => console.log(error.message)
@@ -202,6 +208,9 @@ class SideArea extends React.Component {
     }
 
     display_param(param_set=algo_info, test_type) {
+        if(param_set == null) {
+            return;
+        }
         let list = [];
         if(test_type === "single")
         {

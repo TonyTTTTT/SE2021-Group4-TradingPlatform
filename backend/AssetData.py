@@ -8,29 +8,32 @@ class AssetDataLoader:
 
     # start & end must be 'yyyy-mm-dd'
     def load(self, id: int = 0, start: str = None, end: str = None) -> List[dict]:
-        # neccesary parameter not provide
+        # return -1 : neccesary parameter not provide
+        # return -2 : data with spcified paramter not available
+        # return -3 : end < start
         if id is None:
             return -1
-        # data with spcified paramter not available
         if id != 0:
             return -2
 
-        min_date = datetime.fromisoformat('2000-07-01')
-        max_date = datetime.fromisoformat('2100-01-22')
+        min_date = datetime.fromisoformat('2004-07-01')
+        max_date = datetime.fromisoformat('2021-04-22')
 
-        if start != None and end != None:
+        if start != None:
             start = datetime.fromisoformat(start)
+        else:
+            start = min_date
+            
+        if end != None:
             end = datetime.fromisoformat(end)
         else:
-            if end == None:
-                end = max_date
-            if start == None:
-                start = min_date
-
-        # data with spcified paramter not available
-        if start < min_date or end > max_date:
+            end = max_date
+        
+        if end < start:
+            return -3
+        elif start < min_date or end > max_date:
             return -2
-
+        
         with open(self.path, 'r') as f:
 
             # A dictionary that each element is a list

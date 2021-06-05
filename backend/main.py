@@ -157,7 +157,7 @@ def get_algo_info(algo_id):
         algo_info = df_manager.get_algo_info(algo_id)
         if algo_info is None:
             message = 'Algo info #{} not exists'.format(algo_id)
-            return CommonResult(LogLevel.INFO, message, '').to_json()
+            return CommonResult(LogLevel.INFO, message, None).to_json()
         
         parameters = ParameterParser.parameter_format_parse(algo_info['path'])
 
@@ -180,15 +180,31 @@ def get_algo_info(algo_id):
 @app.route('/single-test', methods=['POST'])
 def single_test():
     algo_id = int(request.json['algo_id'])
+
     start_date = request.json['product']['start_date']
     end_date = request.json['product']['end_date']
+
+
     slip = float(request.json['product']['slip'])
     parameters = ParameterParser.single_parameters_parse(request.json)
+    # print("algo_id: {}, strat_date: {}, end_date: {}, slip: {}, parameters: {}".format(algo_id, start_date, end_date, slip, parameters))
+    # print('start_data: {}, end_date: {}'.format(start_date=='', end_date==None))
 
     try:
         tester = AlgorithmTester()
         trade_actions = tester.single_test(algo_id, start_date, end_date, parameters)
+        # print('tarde_actions: {}'.format(trade_actions))
 
+        if trade_actions ==  -1:
+            message = 'Produt not select!'
+            return CommonResult(LogLevel.ERROR, message, None).to_json()
+        elif trade_actions ==  -2:
+            message = 'Start Date or End Date out of range!'
+            return CommonResult(LogLevel.ERROR, message, None).to_json()
+        elif trade_actions ==  -3:
+            message = 'Setting Start Date > End Date is not allowed!'
+            return CommonResult(LogLevel.ERROR, message, None).to_json()
+        
         calculator = Calculator()
         calculator.set_slip(slip)
         trade_results = calculator.calculate(trade_actions)

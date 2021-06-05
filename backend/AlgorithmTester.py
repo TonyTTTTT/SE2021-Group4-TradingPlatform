@@ -13,9 +13,19 @@ class AlgorithmTester:
         TradeAction]:
 
         algo = self._create_algo(algo_id)
+        # print('still alive')
+        # print('start_data: {}, end_date: {}'.format(start_date, end_date))
+        # print('start_data: {}, end_date: {}'.format(start_date==None, end_date==None))
         algo.set_product_date(start_date=start_date, end_date=end_date)
+        # print('still alive2')
         algo.set_parameter(parameters)
-
+        # print('algo.data: {}'.format(algo.data))
+        if algo.data == -1:
+            return -1
+        elif algo.data == -2:
+            return -2
+        elif algo.data == -3:
+            return -3
         tas = algo.run()
 
         return tas

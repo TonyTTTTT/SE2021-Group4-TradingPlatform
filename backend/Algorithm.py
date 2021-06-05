@@ -30,7 +30,14 @@ class Algorithm:
 
     def set_product_date(self, start_date=None, end_date=None):
         data_loader = AssetDataLoader()
+        # print('stil alive 3')
+        # print('start_data: {}, end_date: {}'.format(start_date==None, end_date==None))
+        if start_date == '':
+            start_date = None
+        if end_date == '':
+            end_date = None
         self.data = data_loader.load(start=start_date, end=end_date)
+        # print('stil alive 4')
 
     def run(self) -> List[TradeAction]:
         self.runtime_data = self.data.copy()
