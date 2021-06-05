@@ -31,7 +31,12 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'no test yet'    
+                sh '''#!/bin/bash
+                cd ~/project/school/se/Web-Application/
+                cd backend
+                pwd
+                python -m pytest test_AssetData.py
+                '''   
             }
         }
 	}
