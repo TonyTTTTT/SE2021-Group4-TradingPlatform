@@ -1,0 +1,7 @@
+SCENARIO3
+3
+p0 bin1
+p1 bin3
+p2 bin3
+bin1 p0
+bin3 p1 p2

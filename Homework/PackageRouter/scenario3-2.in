@@ -1,0 +1,11 @@
+SCENARIO3
+5
+p0 bin1
+p1 bin3
+p2 bin3
+p3 bin5
+p4 bin15
+bin1 p0
+bin3 p2
+bin5 p3 p1
+bin15 p4

@@ -1,0 +1,8 @@
+SCENARIO3
+3
+package0 bin3
+package1 bin10
+package2 bin9
+bin0 package1
+bin7 package2
+bin11 package0

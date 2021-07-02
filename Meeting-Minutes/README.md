@@ -1,0 +1,1 @@
+The name of each meeting minutes will be ${the date of that meeting}
