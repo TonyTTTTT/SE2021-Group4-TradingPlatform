@@ -9,7 +9,7 @@
 ```shell
 $ cd PATH/TO/backend
 $ pip install -r requirements.txt
-$ set FLASK_APP main.py
+$ set FLASK_APP=main.py
 $ python -m flask run --reload --port=5000
 ```
 - run frontend server
