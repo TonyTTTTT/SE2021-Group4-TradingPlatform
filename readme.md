@@ -15,5 +15,8 @@ $ python -m flask run --reload --port=5000
 - run frontend server
 ```shell
 $ cd PATH/TO/frontend
+$ npm install
 $ npm start
 ```
+## Demo
+Please refer to this [vedio](https://drive.google.com/file/d/1jKkP6lMltL-uGcDwWg5gQHGnt8dqaBqR/view?usp=sharing) about how to use the platform.
