@@ -5,8 +5,10 @@
 - We use Flask as backend framework and React.js as frontend framework
 ## How to run
 - run backend server
+	- for linux, replace set to export
 ```shell
 $ cd PATH/TO/backend
+$ pip install -r requirements.txt
 $ set FLASK_APP main.py
 $ python -m flask run --reload --port=5000
 ```
