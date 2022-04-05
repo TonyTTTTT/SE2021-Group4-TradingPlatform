@@ -19,4 +19,7 @@ $ npm install
 $ npm start
 ```
 ## Demo
-Please refer to this [vedio](https://drive.google.com/file/d/1jKkP6lMltL-uGcDwWg5gQHGnt8dqaBqR/view?usp=sharing) about how to use the platform.
+- Please refer to this [vedio](https://drive.google.com/file/d/1jKkP6lMltL-uGcDwWg5gQHGnt8dqaBqR/view?usp=sharing) about how to use the platform.
+	- First, see the function present in 3:45 to upload a algo.
+	- You can find two sample algorithms(_2.py, first_version.py) in backend/algo_example/BuyAndHold
+	- The algo. is written in python
