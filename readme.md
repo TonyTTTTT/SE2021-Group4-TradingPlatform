@@ -23,3 +23,11 @@ $ npm start
 	- First, see the function present in 3:45 to upload a algo.
 	- You can find two sample algorithms(_2.py, first_version.py) in backend/algo_example/BuyAndHold
 	- The algo. is written in python
+## Project Structure
+- PEP: Project Execution Plan
+	- WBS, milestone, risk management, various planing
+- SRS: Software Requirements Specification
+	- inlcude system architecture, requirements and use cases
+- SDD: Software Design Document
+	- class diagrams, Sequence Diagram design, Data design, UI design, Process design
+- Test Plan: Test cases derive from use cases
