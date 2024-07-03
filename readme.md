@@ -10,7 +10,7 @@
 $ cd PATH/TO/backend
 $ pip install -r requirements.txt
 $ set FLASK_APP=main.py
-$ python -m flask run --reload --port=5000
+$ python -m flask run --reload --port=4000
 ```
 - run frontend server
 ```shell
